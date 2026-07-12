@@ -6,6 +6,17 @@
 		"CLAUDE_CODE_SUBAGENT_MODEL": "qwen/qwen3-coder-next"
 	},
 	"permissions": {
-		"defaultMode": "plan"
+		"defaultMode": "plan",
+		"deny": [
+			"Bash(git commit:*)",
+			"Bash(git add:*)",
+			"Bash(git push:*)",
+			"Bash(git rebase:*)",
+			"Bash(git push --force:*)",
+			"Bash(gh:*)",
+			"Read(./.env)",
+			"Read(./.env.*)"
+		],
+		"ask": ["Bash(pnpm run test:*)", "Bash(pnpm run build:*)"]
 	}
 }
