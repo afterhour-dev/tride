@@ -1,0 +1,14 @@
+{
+	"files.associations": {
+		// All JSON files in packages/tsconfig/
+		// workaround so comments are allowed in json with comments (jsonc) files
+		// related to configs for TypeScript, ESLint, Prettier, etc.
+		"**/ts-config/**/*.json": "jsonc"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
+}

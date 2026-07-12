@@ -1,0 +1,42 @@
+# if you decide to publish a package which I don't want to be published, you can add it here. 
+# This is a list of files and directories that should be ignored when publishing the package to npm.
+
+# Tests
+*.test.tsx
+*.test.ts
+*.spec.tsx
+*.spec.ts
+**/__tests__/
+coverage/
+
+# Build artifacts
+dist/
+build/
+.next/
+
+# Config files users don't need
+.eslintrc*
+.prettierrc*
+tsconfig.tsbuildinfo
+vite.config.ts
+vitest.config.ts
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Docs
+docs/
+*.md
+!README.md
+
+# Dev
+.env*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

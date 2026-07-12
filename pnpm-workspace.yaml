@@ -1,0 +1,11 @@
+packages:
+  - "apps/*"
+  - "docs/*"
+  - "configs/*"
+  - "databases/*"
+  - "hybrids/*"
+  - "packages/*"
+
+onlyBuiltDependencies:
+  - "sharp"
+  - "esbuild"

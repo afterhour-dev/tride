@@ -1,0 +1,37 @@
+{
+	"name": "tride",
+	"version": "1.0.0",
+	"private": true,
+	"description": "monorepo for learning and experimenting with 3D on the web — Three.js, React Three Fiber, WebGL, WebGPU and Blender, and maybe AI.",
+	"main": "index.js",
+	"scripts": {
+		"dev": "pnpm run -r --parallel dev",
+		"dev:c": "./scripts/dev-concurrent.sh",
+		"build": "pnpm --color run -r build",
+		"typecheck": "pnpm --color run -r typecheck",
+		"format": "./scripts/format.sh",
+		"lint": "pnpm --color run -r lint"
+	},
+	"keywords": [
+		"threejs",
+		"react-three-fiber",
+		"react",
+		"typescript",
+		"webgl",
+		"shaders",
+		"glsl",
+		"blender",
+		"webgpu",
+		"webgl",
+		"ai"
+	],
+	"author": "AfterhourDev",
+	"license": "Apache-2.0",
+	"devEngines": {
+		"packageManager": {
+			"name": "pnpm",
+			"version": "^11.10.0",
+			"onFail": "download"
+		}
+	}
+}
