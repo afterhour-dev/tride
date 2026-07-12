@@ -87,3 +87,38 @@ Sad kad prelaziš na sledeći Three.js projekat (ili kad daš pristup nekome ko 
 ## Napomena za tvoj OpenRouter setup
 
 Delovi plugina koji zavise od Anthropic-specifičnih mehanizama (npr. neki hook eventi ili MCP auth flow) mogu se ponašati drugačije kroz proxy — isto ono upozorenje kao i kod `/agents` i `/usage`. Skills i sub-agent definicije unutar plugina bi trebalo da rade normalno jer su to čisto markdown/YAML fajlovi koje Claude Code čita lokalno, nezavisno od toga koji model stoji iza `ANTHROPIC_BASE_URL`.
+
+# Ne zaboravi da dodaš marketplace 
+
+```bash
+/plugin marketplace add anthropics/claude-plugins-official
+```
+
+
+ili da ga updatuješ
+
+```bash
+
+/plugin marketplace update claude-plugins-official
+```
+
+
+## Primer
+
+Ako marketplace nikada nije bio dodat
+
+```
+/plugin marketplace add anthropics/claude-plugins-official
+/plugin install skill-creator@claude-plugins-official
+/reload-plugins
+```
+
+Ako je marketplace već dodat ranije, samo:
+
+```
+/plugin marketplace update claude-plugins-official
+/plugin install skill-creator@claude-plugins-official
+/reload-plugins
+```
+
+Posle `/reload-plugins` skill treba da bude odmah dostupan bez restarta cele sesije.
