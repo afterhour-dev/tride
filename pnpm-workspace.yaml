@@ -1,5 +1,6 @@
 packages:
   - "apps/*"
+  - "experiments/*"
   - "configs/*"
   - "databases/*"
   - "hybrids/*"

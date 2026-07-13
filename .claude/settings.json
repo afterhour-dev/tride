@@ -15,7 +15,9 @@
 			"Bash(git push --force:*)",
 			"Bash(gh:*)",
 			"Read(./.env)",
-			"Read(./.env.*)"
+			"Read(./.env.*)",
+			"Bash(curl:*)",
+			"Bash(wget:*)"
 		],
 		"ask": ["Bash(pnpm run test:*)", "Bash(pnpm run build:*)"]
 	}
