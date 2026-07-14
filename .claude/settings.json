@@ -6,7 +6,7 @@
 		"CLAUDE_CODE_SUBAGENT_MODEL": "qwen/qwen3-coder-next"
 	},
 	"permissions": {
-		"defaultMode": "plan",
+		"defaultMode": "manual",
 		"deny": [
 			"Bash(git commit:*)",
 			"Bash(git add:*)",

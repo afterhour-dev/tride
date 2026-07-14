@@ -1,19 +1,16 @@
 # Триде
 
-pnpm monorepo for 3D learning and experimentation with Three.js, R3F, WebGL, WebGPU, Blender and other topics related to 3D.
+pnpm monorepo for 3D learning and experimentation with Three.js, R3F, WebGL, WebGPU, game development on the web using Three.js, Blender and other topics related to 3D.
 
 ## Role of Claude Code in This Project
 
-Claude Code here is used for **documentation and learning support only, or most of the time**:
-generating lesson docs, math explanations, and links indices from
-completed exercises. It should not write, refactor, or scaffold app code
-inside `apps/` or `experiments/` unless explicitly asked — app code is written by hand,
-by design, for practice. Interpretation and documenting from mentioned apps and experiments is more important.
+Claude Code here is used for **documentation and learning support only**:
+generating lesson docs, math explanations, and links indices from completed exercises. It should not write, refactor, or scaffold app code inside `apps/` or `experiments/` unless explicitly asked — app code is written by hand, by design, for practice. Interpretation and documenting from mentioned apps and experiments is most important thing in this monorepo.
 
 ## Structure
 
 - `apps/` — standalone apps
-- `experiments/` — experimental apps
+- `experiments/` — more experimental apps (things that need to be studied more and thir development repeated)
 - `docs/` — Obsidian vault, plain markdown, no package.json
 - `packages/` — shared code when it naturally emerges
 
@@ -25,11 +22,11 @@ by design, for practice. Interpretation and documenting from mentioned apps and 
 
 ## Current Apps
 
-- `apps/threejs-exercises/` — Three.js exercises, own variations of course material
+- `apps/<>/` — Three.js exercises
 
 ## Current Experiments
 
-- <>
+- `experiments/<>/`
 
 ## Tech
 
@@ -39,7 +36,7 @@ by design, for practice. Interpretation and documenting from mentioned apps and 
 
 ## Docs
 
-- Notes live in `docs/` as markdown
+- Notes live in `docs/` obsidian vault as markdown files
 - Lesson frontmatter fields: `title`, `date`, `tags`, `topic`, `difficulty`, `app`
 - Math frontmatter fields: `title`, `date`, `tags`, `topic`, `difficulty`, `lesson`, `app`
 - Lessons organized as `docs/{topic}/lessons/{lesson-name}.md`
@@ -56,7 +53,7 @@ Templates follow the naming convention `.{command-name}.md`:
 
 Never edit files in `templates/` directly — always copy first.
 
-## Commands
+## Commands (remove this and use skills)
 
 - `/new-lesson` — reads from `lesson-blueprints/`, creates lesson doc, updates topic index, generates links index. Never touches `docs/math/`.
 - `/math-logic` — reads from `math-blueprints/`, creates math doc with LaTeX steps, visual helpers, and links index. Never touches `docs/{topic}/lessons/`.
