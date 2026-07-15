@@ -82,8 +82,7 @@ Ask everything below as a **single** plain-text question — these are
 optional and often skipped entirely, so batching saves a round of
 back-and-forth:
 
-"Anything else worth noting for this lesson? All optional — feel free to
-answer some, all, or none:
+"Anything else worth noting for this lesson? All optional — feel free to answer some, all, or none:
 - something to emphasize
 - something to expand on / explain in more depth
 - concerns or things you're unsure about
@@ -104,15 +103,109 @@ Wait for the user's reply before continuing.
   use judgment; a slightly imperfect sort here is better than forcing them
   through five separate prompts.
 
-## Generating documentation file
+## Generation of Lesson file
 
-### Path of the document
+File needs to be generated following this convention for the path: `docs/glavno/{topic}/lessons/{lesson_number}_{lesson_name}.md`
 
-File needs to be gerated from data user provided by following this convention: `docs/glavno/{topic}/lessons/{lesson_number}_{lesson_name}.md`
+### Structure of the lesson file - frontmatter
 
-<!--  -->
-<!--  -->
-<!--  -->
+Frontmatter needs to contain next things:
 
-Then generate the lesson doc as specified by instructions below.
+```md
+title: {Lesson_number} {lesson_name}
+topic: {topic}
+date: {today's date, YYYY-MM-DD}
+tags: [{tags}]
+difficulty: {difficulty}
+app_path: {apps/$ARGUMENTS}
+```
 
+### Structure of the lesson file - `## Concept`
+
+{clear explanation of the concept in plain terms, with inline links where relevant. Make sure you cover everything user emphasised that need to be explained from the comments in users codebase}
+
+### Structure of the lesson file - `## Code`
+
+in repo - {app path we referenced}
+
+```ts
+// minimal working example
+```
+
+### Structure of the lesson file - `## Gotchas`
+
+{things that are easy to get wrong, with inline links where relevant. Also pay attention on the comments from the codebase where user explained or marked what is complicated to him or hide any gotcha}
+
+### Structure of the lesson file - `## Revisit`
+
+{things that are easy to forget, what the user should look into further, expand on, or practice again — especially informed by the comments in codebase if provided}
+
+### Structure of the lesson file - `## Outdated`
+
+{If outdated approach expalin user if his approach is outdated and provide further learning resources}
+
+{link suggestions formatted as:}
+> 💡 More up to date alternative: {url} — {reason}
+
+If project is doable with usage of WebGPU instead of WebGL, emaphasise this especially with bold letters and relevant emojis
+
+if not outdated, output this : `approach is valid`
+
+### Structure of the lesson file - `## Links & resources`
+
+external links related to the lesson. It should hold optional links provided by the user, and relevant links provided by you.
+
+Categorize all links under these categories: `### Docs`, `### Examples`, `### Tools`, `### Articles`, `### Videos`, `### Courses & Talks`, `### Repos`, `### Other`.
+
+Follow next convention in providing helpful links.
+
+```md
+### Docs
+
+{original docs of the tecnology used inside lesson}
+
+### Examples
+
+{original examples of the tecnology used inside lesson}
+
+### Tools
+
+{helpful tools that can be use in easier learning of the tecnology like some interactive online tools related for easier explanation or realization of math, or geometry or other concepts related to the lesson}
+
+### Articles
+
+{popular helpful articles if available}
+
+### Videos
+
+{popular helpful videos if available}
+
+### Courses & Talks
+
+{popular relevant courses and talks if available}
+
+### Repos
+
+{popular relevant repos if available}
+
+### Other
+
+{other stuff that can be helpfull}
+
+```
+
+## Links handling in lesson file
+
+- Place it inline in the lesson where most relevant (in Concept, Code, or Gotchas)
+- Include it in `## Links & Resources` at the bottom of the lesson, under the correct category
+- If a more up to date alternative exists, keep the original and add the suggestion below it marked as `> 💡 More up to date alternative:` — place this suggestion in the `## Revisit` section, not inline
+
+Add Claude-suggested links that are relevant to the topic (official docs, useful tools, good examples). Mark them with `> 🤖 suggested` so the user knows they came from Claude, not from their own research.
+
+## Generation of Topic file
+
+File is dedicated to be table of content for a topic with obsidian links pointing to the individual lesson files
+
+If topic file doesn't exist create it with `# {topic}` heading, followed by `> Links in this file are Obsidian wiki-links and will not work on GitHub.`, and an empty lessons list
+
+Add an Obsidian wiki-link to the new lesson (related to the {topic}) in `docs/glavno/{topic}/{topic}.md` under a `# Lessons` section, formatted as `- [[{lesson_number}_{lesson_name}]] — {today's date}`
