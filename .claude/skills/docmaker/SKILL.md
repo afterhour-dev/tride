@@ -1,6 +1,6 @@
 ---
 name: docmaker
-description: Creates lesson doc from a completed Three.js, WebGL, WebGPU, Shader application, or exercise. Use when the user complets an exercise or an app and wants it documented.
+description: Creates lesson doc from a completed Three.js, WebGL, WebGPU, Shader application, or exercise. Use when the user complets an exercise or an app, or experiment and wants it documented.
 argument-hint: [app-path]
 disable-model-invocation: true
 allowed-tools: Read, Write, Glob
@@ -35,6 +35,10 @@ Read through all dependencies to see what packages besides "three" (Three.js) we
 ## Read the entire codebase (things inside source folder: `apps/$ARGUMENTS/src` are most important)
 
 Including any other folder consisting of resources used by the app (models, images, textures, videos or other media)
+
+## Read through `README.md` of the app
+
+It holds helpful information of user intention and what needs to be expain and emphasised.
 
 ## Comments inside codebase are important
 
@@ -147,7 +151,7 @@ in repo - {app path we referenced}
 {link suggestions formatted as:}
 > 💡 More up to date alternative: {url} — {reason}
 
-If project is doable with usage of WebGPU instead of WebGL, emaphasise this especially with bold letters and relevant emojis
+Especially If project is doable with usage of WebGPU instead of WebGL, emaphasise this especially with bold letters and relevant emojis
 
 if not outdated, output this : `approach is valid`
 
@@ -209,3 +213,9 @@ File is dedicated to be table of content for a topic with obsidian links pointin
 If topic file doesn't exist create it with `# {topic}` heading, followed by `> Links in this file are Obsidian wiki-links and will not work on GitHub.`, and an empty lessons list
 
 Add an Obsidian wiki-link to the new lesson (related to the {topic}) in `docs/glavno/{topic}/{topic}.md` under a `# Lessons` section, formatted as `- [[{lesson_number}_{lesson_name}]] — {today's date}`
+
+---
+---
+
+After creating all files, confirm with:
+"Lesson created at `docs/glavno/{topic}/lessons/{lesson_number}_{lesson_name}.md`, linked in `docs/glavno/{topic}/{topic}.md`
