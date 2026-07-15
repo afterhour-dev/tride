@@ -41,8 +41,10 @@ none so far
 - Lesson frontmatter fields: `title`, `topic`, `date`, `tags`, `difficulty`, `app_path`
 - Math lessons frontmatter fields: `title`, `topic`, `date`, `tags`, `difficulty`, `app_path`
 - Lessons organized as `docs/glavno/{topic}/lessons/{lesson_name}.md`
-- Math docs organized as `docs/math/{topic}/{concept_name}.md` and `docs/math/{topic}.md`
 - Each lesson topic has an index file at `docs/glavno/{topic}/{topic}.md` with wiki-links to all its lessons
+
+<!-- rethink this -->
+- Math docs organized as `docs/math/{topic}/{concept_name}.md` and `docs/math/{topic}.md`
 
 ## Math Explanation Style
 

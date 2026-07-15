@@ -1,6 +1,6 @@
 ---
 name: docmaker
-description: Creates obsidian flavoured lesson doc from a completed Three.js, WebGL, WebGPU, Shader application, or exercise. Use when the user completes an exercise or an app, or experiment and wants it documented.
+description: Creates obsidian flavoured lesson doc from a completed Three.js, WebGL, WebGPU, Shader application, or exercise. Use when the user completes an app or experiment and wants it documented.
 argument-hint: [app-folder-name]
 disable-model-invocation: true
 allowed-tools: Read, Write, Glob, AskUserQuestion
@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Glob, AskUserQuestion
 
 # This skill is making documentation for an application
 
-Never write or modify files inside `apps/` — this skill is read-only there.
+Never write or modify files inside `apps/` or `experiments/` — this skill is read-only there.
 Its only job is producing documentation under `docs/`.
 
 ## Which app is being documented
