@@ -1,7 +1,7 @@
 ---
-topic: threejs / shaders / mechanics / trigonometry / physics / geometry
-concept: rotation-matrix / dot-product / speed / velocity
-difficulty:  beginner / intermediate / advanced / hard / very hard
+topic: # one of: threejs, shaders, mechanics, trigonometry, physics, geometry
+concept: # short-hyphenated, e.g. rotation-matrix, dot-product, speed, velocity
+difficulty: # one of: beginner, intermediate, advanced, hard, very hard
 ---
 
 ## The Problem
@@ -14,7 +14,7 @@ difficulty:  beginner / intermediate / advanced / hard / very hard
 
 ## What I Need
 
-<!-- things user needs -> these are the options you can uncomment (you can pick more than one): -->
+<!-- things user needs -> uncomment the options you want (you can pick more than one): -->
 
 <!-- Intuitive explanation before the formal one -->
 

@@ -1,62 +1,114 @@
 ---
 name: mathmaker
-description: Creates obsidian flavoured markdown doc from a completed Three.js, WebGL, WebGPU, Shader application or a game, or other kind of exercise, which is strictly related to complecated math or physics, or mechanics, or geomerty problems. Use when the user completes an app or experiment and wants it documented.
+description: Creates Obsidian-flavoured markdown doc from a completed Three.js, WebGL, WebGPU, Shader application or a game, or other kind of exercise, which is strictly related to complicated math, physics, mechanics, or geometry problems. Use when the user completes an app or experiment and wants the underlying math documented.
 argument-hint: [app-folder-name]
 disable-model-invocation: true
 allowed-tools: Read, Write, Glob, AskUserQuestion
 ---
 
-# This skill is making math, physics or mechanics related documentation for an application
+# This skill is making math, physics, or mechanics related documentation for an application
 
-Never write or modify files inside `apps/` or `experiments/` — this skill is read-only there.
-Its only job is producing documentation under `docs/math/` that is related to math, physics, mechanics or other similar things, and provide necessary helpers that makes understanding of math, physics, geometry, mechanics (related to 3D on the web and game development on the web) much easier to understand.
+Never write or modify files inside `apps/` — this skill is read-only there.
+Its only job is producing documentation under `docs/math/` that explains
+math, physics, mechanics, or geometry (related to 3D on the web and web
+game development), and provides helpers that make understanding these
+concepts easier.
 
-## From which app is math being documented
+## Which app is the math being documented from
 
-`$ARGUMENTS` is expected to be the **folder name only** (e.g. `03-trigonometry-for-circular-movement`), not a full path.
+`$ARGUMENTS` is expected to be the **folder name only** (e.g.
+`03-trigonometry-for-circular-movement`), not a full path.
 
-If `$ARGUMENTS` is empty, ask the user which folder inside `apps/` or inside `experiments/` this math lesson concerns, and wait for their answer before continuing.
+If `$ARGUMENTS` is empty, use the **AskUserQuestion** tool to ask which
+folder inside `apps/` this math lesson concerns. If AskUserQuestion is not
+available, ask in plain text and STOP — wait for the user's next message
+before continuing. If the returned answer is empty, blank, or doesn't
+look genuine, ask again in plain text and wait for a real reply.
 
-Once you have a candidate folder name (from `$ARGUMENTS` or from the user's answer):
+Once you have a candidate folder name (from `$ARGUMENTS` or the user's
+answer):
 
 - Abort if it's an empty string, with an appropriate message.
-- Abort if `apps/{folder-name}` (or `experiments/{folder-name}`) doesn't exist in this monorepo, with an appropriate message.
-- Abort if `apps/{folder-name}` (or `experiments/{folder-name}`) doesn't look like a Node.js or Bun project (no `package.json`), with an appropriate message.
+- Abort if `apps/{folder-name}` doesn't exist in this monorepo, with an
+  appropriate message.
+- Abort if `apps/{folder-name}` doesn't look like a Node.js or Bun project
+  (no `package.json`), with an appropriate message.
 
 If the app exists and looks valid, proceed to the next step.
 
 ## Important places to read in the app
 
-Use Glob and Read to inspect `apps/{folder-name}/src` (or `experiments/{folder-name}/src`) and `apps/{folder-name}/MATH.md` (or `experiments/{folder-name}/MATH.md`):
+Use Glob and Read to inspect `apps/{folder-name}/src` and
+`apps/{folder-name}/MATH.md`:
 
-- Read through files `apps/{folder-name}/src` (or `experiments/{folder-name}/src`)
-- Read `apps/{folder-name}/MATH.md` (or `experiments/{folder-name}/MATH.md`) — it holds helpful information about user intention and what needs to be explained and emphasized.
+- Read through the files in `apps/{folder-name}/src`.
+- Read `apps/{folder-name}/MATH.md` if it exists — it holds the user's
+  intention and what needs to be explained and emphasized.
 
-## About `apps/{folder-name}/MATH.md` (or `experiments/{folder-name}/MATH.md`)
+If `MATH.md` doesn't exist at that path, don't abort — it's a convenience,
+not a hard requirement. Instead, use AskUserQuestion (or plain text if
+unavailable) to ask the user directly for: the problem, their current
+understanding (if any), and what they need explained (using the same five
+options listed below under "What I Need").
+
+## About `apps/{folder-name}/MATH.md`
 
 Read the referenced file.
 
-From frontmatter extract:
-- `topic` — the subject area (e.g. `threejs`, `shaders`, `blender`)
-- `concept` — the specific concept to explain (e.g. `rotation-matrix`, `dot-product`)
-- `difficulty` — beginner / intermediate / advanced / hard / very hard
+**Frontmatter values — validate before using:**
 
-From content extract:
- 
+Extract `topic`, `concept`, and `difficulty` from frontmatter. Each of
+these fields in the template contains a placeholder list of options
+separated by ` / ` (e.g. `threejs / shaders / mechanics`). If the value
+you read still looks like that placeholder list (multiple options
+separated by " / ", not a single clean value the user picked), do NOT use
+it as-is. Use AskUserQuestion to ask the user to choose the correct single
+value for that field before continuing.
+
+**From content, extract:**
+
 - `## The Problem` — the user's raw question
-- `## My Attempt at Understanding` — the user's current mental model, even if wrong
-- `## What I Need` - things user needs to be explained for them in level of detail and a way user desires, as explained in next step
+- `## My Attempt at Understanding` — the user's current mental model, even
+  if wrong (leave empty if not filled in)
+- `## What I Need` — which explanation styles were requested
+
+**Detecting what was requested in "What I Need":**
+
+The template lists five options, each wrapped in an HTML comment
+(`<!-- -->`). An option counts as requested **only if its text appears
+outside the comment markers** (the user deleted `<!--`/`-->` around it).
+Anything still wrapped in a comment is NOT requested.
+
+If none of the five options were uncommented, use AskUserQuestion
+(`multiSelect: true`) to ask the user directly which explanation styles
+they want, using the same five options as choices:
+- Intuitive explanation before the formal one
+- Just the formal definition
+- Step by step breakdown
+- Real world example
+- Visual helper
 
 ## Explanation rules — follow these strictly
 
-- Always correct and build from `## My Attempt at Understanding` if provided — never ignore it
-- If "Intuitive explanation before the formal one" is requested: start with a plain english analogy, then move to formal notation
-- If "Just the formal definition" is requested: go straight to formal notation, skip analogies
-- If "Step by step breakdown" is requested: every step on its own line, every `=` on a new line, nothing skipped, no "it's easy to see that...", no hand-waving
-- If "Real world example" is requested: show exactly where this appears in Three.js or GLSL code with a minimal snippet
-- If "Visual helper" is requested: generate a GeoGebra or Desmos URL with parameters pre-configured for the concept where possible. For shader-related concepts, link to a relevant ShaderToy example. For concepts with a 3Blue1Brown video, include that link.
-- Use LaTeX for all math notation: `$inline$` for inline, `$$block$$` for block equations
-- Never skip steps in block equations — each transformation gets its own line:
+- Always correct and build from `## My Attempt at Understanding` if
+  provided — never ignore it.
+- If "Intuitive explanation before the formal one" was requested: start
+  with a plain-English analogy, then move to formal notation.
+- If "Just the formal definition" was requested: go straight to formal
+  notation, skip analogies.
+- If "Step by step breakdown" was requested: every step on its own line,
+  every `=` on a new line, nothing skipped, no "it's easy to see that...",
+  no hand-waving.
+- If "Real world example" was requested: show exactly where this appears
+  in Three.js or GLSL/TSL code with a minimal snippet.
+- If "Visual helper" was requested: generate a GeoGebra or Desmos URL with
+  parameters pre-configured for the concept where possible. For
+  shader-related concepts, link to a relevant ShaderToy example. For
+  concepts with a 3Blue1Brown video, include that link.
+- Use LaTeX for all math notation: `$inline$` for inline, `$$block$$` for
+  block equations.
+- Never skip steps in block equations — each transformation gets its own
+  line, e.g.:
 
 $$
 \vec{v'} = M \cdot \vec{v}
@@ -68,35 +120,26 @@ $$
 = \begin{bmatrix} ax + by \\ cx + dy \end{bmatrix}
 $$
 
-## Math, physics, mechanics Explanation Style
+## Once the explanation is ready
 
-When generating math docs, always:
-- Use LaTeX: `$inline$` and `$$block$$`
-- Write every step on its own line, every `=` on a new line
-- Never skip steps or write "it's easy to see that..."
-- Build from the user's own attempt at understanding if provided
-- Include GeoGebra/Desmos URL with params for geometry/matrix concepts
-- Include ShaderToy link for shader-related concepts
-- Include 3Blue1Brown link where a relevant video exists
-
-## Once explanation is ready
-
-- Create the file at `docs/math/{topic}/{concept}.md`
-- If `docs/math/{topic}/` does not exist, create it
+- Create the file at `docs/math/{topic}/{concept}.md`.
+- If `docs/math/{topic}/` doesn't exist, create it.
 
 ## Generate the math doc using this exact structure
 
-frontmatter:
+Frontmatter:
 
 ```md
 title: {concept}
 date: {today's date, YYYY-MM-DD}
 topic: {topic}
 difficulty: {difficulty}
-app: {app path}
+app_path: apps/{folder-name}
 ```
 
-content:
+Content — only include a section if its corresponding option was
+requested (per the detection rule above); omit sections that weren't
+requested rather than leaving them empty:
 
 ```md
 ## The Problem
@@ -105,7 +148,7 @@ content:
 
 ## Intuition
 
-{plain english explanation — only if "Intuitive explanation" was requested}
+{plain-English explanation — only if "Intuitive explanation" was requested}
 
 ## Formal Definition
 
@@ -113,19 +156,23 @@ content:
 
 ## Step by Step
 
-{every step explicit, every = on its own line, nothing skipped — only if "Step by step" was requested}
+{every step explicit, every = on its own line, nothing skipped — only if
+"Step by step" was requested}
 
 ## In Three.js / Shaders
 
-{minimal real code snippet showing exactly where this appears — only if "Real world example" was requested}
+{minimal real code snippet showing exactly where this appears — only if
+"Real world example" was requested}
 
 ## Visual Helper
 
-{GeoGebra/Desmos URL with params, or ShaderToy link, or 3Blue1Brown link — only if "Visual helper" was requested}
+{GeoGebra/Desmos URL with params, or ShaderToy link, or 3Blue1Brown link —
+only if "Visual helper" was requested}
 
 ## Revisit
 
-{what the user should practice or look into further to solidify this concept}
+{what the user should practice or look into further to solidify this
+concept}
 
 ## Links & Resources
 
@@ -139,5 +186,5 @@ content:
 ### Other
 ```
 
-After creating a file, confirm with:
+After creating the file, confirm with:
 "Math doc created at `docs/math/{topic}/{concept}.md`"
