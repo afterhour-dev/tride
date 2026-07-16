@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Glob, AskUserQuestion
 # This skill is making math and physics documentation for an application
 
 Never write or modify files inside `apps/` or `experiments/` — this skill is read-only there.
-Its only job is producing documentation under `docs/math/` that is related to math and physics and provide necessary helpers that makes understanding of math, physics, geometry (related to 3D on the web and game development) much easier to understand.
+Its only job is producing documentation under `docs/math/` that is related to math and physics, and provide necessary helpers that makes understanding of math, physics, geometry (related to 3D on the web and game development on the web) much easier to understand.
 
 ## Math Explanation Style
 
@@ -19,8 +19,7 @@ When generating math docs, always:
 - Never skip steps or write "it's easy to see that..."
 - Build from the user's own attempt at understanding if provided
 - Include GeoGebra/Desmos URL with params for geometry/matrix concepts
-<!-- move this to shadermaker skill -->
-<!-- - Include ShaderToy link for shader-related concepts -->
+- Include ShaderToy link for shader-related concepts
 - Include 3Blue1Brown link where a relevant video exists
 
 ## From which app is math being documented
@@ -37,15 +36,19 @@ Once you have a candidate folder name (from `$ARGUMENTS` or from the user's answ
 
 If the app exists and looks valid, proceed to the next step.
 
-## Reading the app
+## Reading the app is not crucial but it can help
 
-Use Glob and Read to inspect `apps/{folder-name}`:
+Use Glob and Read to inspect `apps/{folder-name}/src` and `apps/{folder-name}/MATH.md`:
 
-- List the files to understand the overall shape of the project.
-- Read `package.json` to see what dependencies besides `"three"` were used, and give a short explanation of those packages.
-- Read through the entire codebase, especially everything under `apps/{folder-name}/src`, plus any folder holding resources used by the app (models, images, textures, videos, or other media).
-- Read `README.md` if present — it holds helpful information about user intention and what needs to be explained and emphasized.
+- Read through files `apps/{folder-name}/src`
+- Read `MATH.md` — it holds helpful information about user intention and what needs to be explained and emphasized.
 
-## Comments inside the codebase are important
+## `apps/{folder-name}/MATH.md`
 
-All comments in the codebase of the given application are crucial, because inside comments the user will specify what needs to be explained in more detail, and at what level of detail. Also what topics need to be placed inside reminders as something to revisit more often than things considered to be of usual, mid-level, or easy difficulty.
+Read the referenced file. Extract:
+- `topic` — the subject area (e.g. `trygonometry`, `shaders`, `movement`, `physics`)
+- `concept` — the specific concept to explain (e.g. `rotation-matrix`, `dot-product`)
+- `difficulty` — beginner / intermediate / advanced / hard/ very hard
+- `## The Problem` — the user's raw question
+- `## My Attempt at Understanding` — the user's current mental model, even if wrong
+- `## What I Need` — which checkboxes are ticked
