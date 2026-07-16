@@ -1,7 +1,7 @@
 ---
-# topic: threejs / shaders / mechanics / trigonometry / physics / geometry
-# concept: rotation-matrix / dot-product / speed / velocity
-# difficulty:  beginner / intermediate / advanced / hard / very hard
+topic: threejs / shaders / mechanics / trigonometry / physics / geometry
+concept: rotation-matrix / dot-product / speed / velocity
+difficulty:  beginner / intermediate / advanced / hard / very hard
 ---
 
 ## The Problem
@@ -14,4 +14,15 @@
 
 ## What I Need
 
-<!-- things user needs to be explained for them  -->
+<!-- things user needs -> these are the options you can uncomment (you can pick more than one):
+  -->
+
+<!-- Intuitive explanation before the formal one -->
+
+<!-- Just the formal definition -->
+
+<!-- Step by step breakdown -->
+
+<!-- Real world example -->
+
+<!-- Visual helper -->

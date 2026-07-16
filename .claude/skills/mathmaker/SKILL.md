@@ -138,3 +138,6 @@ content:
 ### Repos
 ### Other
 ```
+
+After creating a file, confirm with:
+"Math doc created at `docs/math/{topic}/{concept}.md`"
