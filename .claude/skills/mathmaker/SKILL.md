@@ -1,6 +1,6 @@
 ---
 name: mathmaker
-description: Creates obsidian flavoured doc from a completed Three.js, WebGL, WebGPU, Shader application or a game, or other kind of exercise, which is strictly related to complecated math or physics, or mechanics, or geomerty problem. Use when the user completes an app or experiment and wants it documented.
+description: Creates obsidian flavoured markdown doc from a completed Three.js, WebGL, WebGPU, Shader application or a game, or other kind of exercise, which is strictly related to complecated math or physics, or mechanics, or geomerty problems. Use when the user completes an app or experiment and wants it documented.
 argument-hint: [app-folder-name]
 disable-model-invocation: true
 allowed-tools: Read, Write, Glob, AskUserQuestion
@@ -9,41 +9,30 @@ allowed-tools: Read, Write, Glob, AskUserQuestion
 # This skill is making math, physics or mechanics related documentation for an application
 
 Never write or modify files inside `apps/` or `experiments/` — this skill is read-only there.
-Its only job is producing documentation under `docs/math/` that is related to math, physics, mechanics, and provide necessary helpers that makes understanding of math, physics, geometry, mechanics (related to 3D on the web and game development on the web) much easier to understand.
-
-## Math Explanation Style
-
-When generating math docs, always:
-- Use LaTeX: `$inline$` and `$$block$$`
-- Write every step on its own line, every `=` on a new line
-- Never skip steps or write "it's easy to see that..."
-- Build from the user's own attempt at understanding if provided
-- Include GeoGebra/Desmos URL with params for geometry/matrix concepts
-- Include ShaderToy link for shader-related concepts
-- Include 3Blue1Brown link where a relevant video exists
+Its only job is producing documentation under `docs/math/` that is related to math, physics, mechanics or other similar things, and provide necessary helpers that makes understanding of math, physics, geometry, mechanics (related to 3D on the web and game development on the web) much easier to understand.
 
 ## From which app is math being documented
 
 `$ARGUMENTS` is expected to be the **folder name only** (e.g. `03-trigonometry-for-circular-movement`), not a full path.
 
-If `$ARGUMENTS` is empty, ask the user which folder inside `apps/` this math lesson concerns, and wait for their answer before continuing.
+If `$ARGUMENTS` is empty, ask the user which folder inside `apps/` or inside `experiments/` this math lesson concerns, and wait for their answer before continuing.
 
 Once you have a candidate folder name (from `$ARGUMENTS` or from the user's answer):
 
 - Abort if it's an empty string, with an appropriate message.
-- Abort if `apps/{folder-name}` doesn't exist in this monorepo, with an appropriate message.
-- Abort if `apps/{folder-name}` doesn't look like a Node.js or Bun project (no `package.json`), with an appropriate message.
+- Abort if `apps/{folder-name}` (or `experiments/{folder-name}`) doesn't exist in this monorepo, with an appropriate message.
+- Abort if `apps/{folder-name}` (or `experiments/{folder-name}`) doesn't look like a Node.js or Bun project (no `package.json`), with an appropriate message.
 
 If the app exists and looks valid, proceed to the next step.
 
 ## Important places to read in the app
 
-Use Glob and Read to inspect `apps/{folder-name}/src` and `apps/{folder-name}/MATH.md`:
+Use Glob and Read to inspect `apps/{folder-name}/src` (or `experiments/{folder-name}/src`) and `apps/{folder-name}/MATH.md` (or `experiments/{folder-name}/MATH.md`):
 
-- Read through files `apps/{folder-name}/src`
-- Read `MATH.md` — it holds helpful information about user intention and what needs to be explained and emphasized.
+- Read through files `apps/{folder-name}/src` (or `experiments/{folder-name}/src`)
+- Read `apps/{folder-name}/MATH.md` (or `experiments/{folder-name}/MATH.md`) — it holds helpful information about user intention and what needs to be explained and emphasized.
 
-## `apps/{folder-name}/MATH.md`
+## About `apps/{folder-name}/MATH.md` (or `experiments/{folder-name}/MATH.md`)
 
 Read the referenced file.
 
@@ -56,7 +45,7 @@ From content extract:
  
 - `## The Problem` — the user's raw question
 - `## My Attempt at Understanding` — the user's current mental model, even if wrong
-- `## What I Need` - things user needs to be explained for them
+- `## What I Need` - things user needs to be explained for them in level of detail and a way user desires, as explained in next step
 
 ## Explanation rules — follow these strictly
 
@@ -78,6 +67,17 @@ $$
 $$
 = \begin{bmatrix} ax + by \\ cx + dy \end{bmatrix}
 $$
+
+## Math, physics, mechanics Explanation Style
+
+When generating math docs, always:
+- Use LaTeX: `$inline$` and `$$block$$`
+- Write every step on its own line, every `=` on a new line
+- Never skip steps or write "it's easy to see that..."
+- Build from the user's own attempt at understanding if provided
+- Include GeoGebra/Desmos URL with params for geometry/matrix concepts
+- Include ShaderToy link for shader-related concepts
+- Include 3Blue1Brown link where a relevant video exists
 
 ## Once explanation is ready
 

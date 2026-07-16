@@ -14,8 +14,7 @@ difficulty:  beginner / intermediate / advanced / hard / very hard
 
 ## What I Need
 
-<!-- things user needs -> these are the options you can uncomment (you can pick more than one):
-  -->
+<!-- things user needs -> these are the options you can uncomment (you can pick more than one): -->
 
 <!-- Intuitive explanation before the formal one -->
 
