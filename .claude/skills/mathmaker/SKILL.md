@@ -8,31 +8,19 @@ allowed-tools: Read, Write, Glob, AskUserQuestion
 
 # This skill is making math, physics, or mechanics related documentation for an application
 
-Never write or modify files inside `apps/` — this skill is read-only there.
-Its only job is producing documentation under `docs/math/` that explains
-math, physics, mechanics, or geometry (related to 3D on the web and web
-game development), and provides helpers that make understanding these
-concepts easier.
+Never write or modify files inside `apps/` — this skill is read-only there. Its only job is producing documentation under `docs/math/` that explains math, physics, mechanics, or geometry (related to 3D on the web and web game development), and provides helpers that make understanding these concepts easier.
 
 ## Which app is the math being documented from
 
-`$ARGUMENTS` is expected to be the **folder name only** (e.g.
-`03-trigonometry-for-circular-movement`), not a full path.
+`$ARGUMENTS` is expected to be the **folder name only** (e.g. `03-trigonometry-for-circular-movement`), not a full path.
 
-If `$ARGUMENTS` is empty, use the **AskUserQuestion** tool to ask which
-folder inside `apps/` this math lesson concerns. If AskUserQuestion is not
-available, ask in plain text and STOP — wait for the user's next message
-before continuing. If the returned answer is empty, blank, or doesn't
-look genuine, ask again in plain text and wait for a real reply.
+If `$ARGUMENTS` is empty, use the **AskUserQuestion** tool to ask which folder inside `apps/` this math lesson concerns. If AskUserQuestion is not available, ask in plain text and STOP — wait for the user's next message before continuing. If the returned answer is empty, blank, or doesn't look genuine, ask again in plain text and wait for a real reply.
 
-Once you have a candidate folder name (from `$ARGUMENTS` or the user's
-answer):
+Once you have a candidate folder name (from `$ARGUMENTS` or the user's answer):
 
 - Abort if it's an empty string, with an appropriate message.
-- Abort if `apps/{folder-name}` doesn't exist in this monorepo, with an
-  appropriate message.
-- Abort if `apps/{folder-name}` doesn't look like a Node.js or Bun project
-  (no `package.json`), with an appropriate message.
+- Abort if `apps/{folder-name}` doesn't exist in this monorepo, with an appropriate message.
+- Abort if `apps/{folder-name}` doesn't look like a Node.js or Bun project (no `package.json`), with an appropriate message.
 
 If the app exists and looks valid, proceed to the next step.
 
