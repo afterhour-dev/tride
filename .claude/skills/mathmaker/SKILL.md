@@ -30,14 +30,9 @@ Use Glob and Read to inspect `apps/{folder-name}/src` and
 `apps/{folder-name}/MATH.md`:
 
 - Read through the files in `apps/{folder-name}/src`.
-- Read `apps/{folder-name}/MATH.md` if it exists — it holds the user's
-  intention and what needs to be explained and emphasized.
+- Read `apps/{folder-name}/MATH.md` if it exists — it holds the user's intention and what needs to be explained and emphasized.
 
-If `MATH.md` doesn't exist at that path, don't abort — it's a convenience,
-not a hard requirement. Instead, use AskUserQuestion (or plain text if
-unavailable) to ask the user directly for: the problem, their current
-understanding (if any), and what they need explained (using the same five
-options listed below under "What I Need").
+If `MATH.md` doesn't exist at that path, don't abort — it's a convenience, not a hard requirement. Instead, use AskUserQuestion (or plain text if unavailable) to ask the user directly for: the problem, their current understanding (if any), and what they need explained (using the same five options listed below under "What I Need").
 
 ## About `apps/{folder-name}/MATH.md`
 
@@ -45,31 +40,19 @@ Read the referenced file.
 
 **Frontmatter values — validate before using:**
 
-Extract `topic`, `concept`, and `difficulty` from frontmatter. Each of
-these fields in the template contains a placeholder list of options
-separated by ` / ` (e.g. `threejs / shaders / mechanics`). If the value
-you read still looks like that placeholder list (multiple options
-separated by " / ", not a single clean value the user picked), do NOT use
-it as-is. Use AskUserQuestion to ask the user to choose the correct single
-value for that field before continuing.
+Extract `topic`, `concept`, and `difficulty` from frontmatter. Each of these fields in the template contains a placeholder list of options separated by ` / ` (e.g. `threejs / shaders / mechanics`). If the value you read still looks like that placeholder list (multiple options separated by " / ", not a single clean value the user picked), do NOT use it as-is. Use AskUserQuestion to ask the user to choose the correct single value for that field before continuing.
 
 **From content, extract:**
 
 - `## The Problem` — the user's raw question
-- `## My Attempt at Understanding` — the user's current mental model, even
-  if wrong (leave empty if not filled in)
+- `## My Attempt at Understanding` — the user's current mental model, even if wrong (leave empty if not filled in)
 - `## What I Need` — which explanation styles were requested
 
 **Detecting what was requested in "What I Need":**
 
-The template lists five options, each wrapped in an HTML comment
-(`<!-- -->`). An option counts as requested **only if its text appears
-outside the comment markers** (the user deleted `<!--`/`-->` around it).
-Anything still wrapped in a comment is NOT requested.
+The template lists five options, each wrapped in an HTML comment (`<!-- -->`). An option counts as requested **only if its text appears outside the comment markers** (the user deleted `<!--`/`-->` around it). Anything still wrapped in a comment is NOT requested.
 
-If none of the five options were uncommented, use AskUserQuestion
-(`multiSelect: true`) to ask the user directly which explanation styles
-they want, using the same five options as choices:
+If none of the five options were uncommented, use AskUserQuestion (`multiSelect: true`) to ask the user directly which explanation styles they want, using the same five options as choices:
 - Intuitive explanation before the formal one
 - Just the formal definition
 - Step by step breakdown
@@ -78,25 +61,14 @@ they want, using the same five options as choices:
 
 ## Explanation rules — follow these strictly
 
-- Always correct and build from `## My Attempt at Understanding` if
-  provided — never ignore it.
-- If "Intuitive explanation before the formal one" was requested: start
-  with a plain-English analogy, then move to formal notation.
-- If "Just the formal definition" was requested: go straight to formal
-  notation, skip analogies.
-- If "Step by step breakdown" was requested: every step on its own line,
-  every `=` on a new line, nothing skipped, no "it's easy to see that...",
-  no hand-waving.
-- If "Real world example" was requested: show exactly where this appears
-  in Three.js or GLSL/TSL code with a minimal snippet.
-- If "Visual helper" was requested: generate a GeoGebra or Desmos URL with
-  parameters pre-configured for the concept where possible. For
-  shader-related concepts, link to a relevant ShaderToy example. For
-  concepts with a 3Blue1Brown video, include that link.
-- Use LaTeX for all math notation: `$inline$` for inline, `$$block$$` for
-  block equations.
-- Never skip steps in block equations — each transformation gets its own
-  line, e.g.:
+- Always correct and build from `## My Attempt at Understanding` if provided — never ignore it.
+- If "Intuitive explanation before the formal one" was requested: start with a plain-English analogy, then move to formal notation.
+- If "Just the formal definition" was requested: go straight to formal notation, skip analogies.
+- If "Step by step breakdown" was requested: every step on its own line, every `=` on a new line, nothing skipped, no "it's easy to see that...", no hand-waving.
+- If "Real world example" was requested: show exactly where this appears in Three.js or GLSL/TSL code with a minimal snippet.
+- If "Visual helper" was requested: generate a GeoGebra or Desmos URL with parameters pre-configured for the concept where possible. For shader-related concepts, link to a relevant ShaderToy example. For concepts with a 3Blue1Brown video, include that link.
+- Use LaTeX for all math notation: `$inline$` for inline, `$$block$$` for block equations.
+- Never skip steps in block equations — each transformation gets its own line, e.g.:
 
 $$
 \vec{v'} = M \cdot \vec{v}
@@ -115,7 +87,7 @@ $$
 
 ## Generate the math doc using this exact structure
 
-Frontmatter:
+### Frontmatter
 
 ```md
 title: {concept}
@@ -125,9 +97,9 @@ difficulty: {difficulty}
 app_path: apps/{folder-name}
 ```
 
-Content — only include a section if its corresponding option was
-requested (per the detection rule above); omit sections that weren't
-requested rather than leaving them empty:
+### Content
+
+Only include a section if its corresponding option was requested (per the detection rule above); omit sections that weren't requested rather than leaving them empty:
 
 ```md
 ## The Problem
@@ -144,23 +116,19 @@ requested rather than leaving them empty:
 
 ## Step by Step
 
-{every step explicit, every = on its own line, nothing skipped — only if
-"Step by step" was requested}
+{every step explicit, every = on its own line, nothing skipped — only if "Step by step" was requested}
 
 ## In Three.js / Shaders
 
-{minimal real code snippet showing exactly where this appears — only if
-"Real world example" was requested}
+{minimal real code snippet showing exactly where this appears — only if "Real world example" was requested}
 
 ## Visual Helper
 
-{GeoGebra/Desmos URL with params, or ShaderToy link, or 3Blue1Brown link —
-only if "Visual helper" was requested}
+{GeoGebra/Desmos URL with params, or ShaderToy link, or 3Blue1Brown link — only if "Visual helper" was requested}
 
 ## Revisit
 
-{what the user should practice or look into further to solidify this
-concept}
+{what the user should practice or look into further to solidify this concept}
 
 ## Links & Resources
 
