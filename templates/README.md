@@ -1,6 +1,6 @@
 # {App Name}
 
-> Kratak opis šta ova aplikacija/eksperiment radi, u jednoj-dve rečenice.
+> Kratak opis šta ova aplikacija radi, u jednoj-dve rečenice.
 
 ## Namera / Intent
 
