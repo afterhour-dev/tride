@@ -1,5 +1,9 @@
 # {App Name}
 
+<!-- initialized with:
+
+`npm create vite@latest` -->
+
 > Kratak opis šta ova aplikacija radi, u jednoj-dve rečenice.
 
 ## Namera / Intent

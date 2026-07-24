@@ -13,3 +13,10 @@ jul 19
 "ANTHROPIC_DEFAULT_OPUS_MODEL": "xiaomi/mimo-v2.5",
 "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen/qwen3-coder-next",
 "CLAUDE_CODE_SUBAGENT_MODEL": "qwen/qwen3-coder-next"
+
+jul 24
+
+"ANTHROPIC_DEFAULT_SONNET_MODEL": "xiaomi/mimo-v2.5",
+"ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek/deepseek-v4-flash",
+"ANTHROPIC_DEFAULT_HAIKU_MODEL": "xiaomi/mimo-v2.5",
+"CLAUDE_CODE_SUBAGENT_MODEL": "xiaomi/mimo-v2.5"

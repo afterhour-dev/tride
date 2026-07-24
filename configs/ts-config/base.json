@@ -1,0 +1,127 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"incremental": false,
+		// ------------------------------------------------------------------
+		/* ----------- Module system ----------------------- */
+		// ------------------------------------------------------------------
+		"target": "ES2022",
+		// ✅ Compile to latest JavaScript features
+		// Node.js 18+ supports all ESNext features
+		// Alternative: "ES2022" for more compatibility
+		"module": "NodeNext",
+		// ✅ Use Node.js native ESM
+		// - Respects "type": "module" in package.json
+		// - Requires .js extensions in imports
+		// - Supports both ESM and CommonJS
+		// Alternative: "ESNext" (less strict about extensions)
+		"moduleResolution": "NodeNext",
+		// ✅ How TypeScript finds modules
+		// - Matches Node.js resolution exactly
+		// - Required when using "module": "NodeNext"
+		// Alternative: "bundler" (for frontend with Vite/Webpack)
+		// "esModuleInterop": true,
+		// ✅ Allows you to import CommonJS modules using default import syntax
+		"isolatedModules": true,
+		// ✅ Forces every file to be a valid module on its own —
+		// meaning every file must have at least one import or export.
+		"moduleDetection": "force",
+		// ✅ Forces TypeScript to treat every file as a module
+		// ------------------------------------------------------------------
+		/* ------------------- Linting and type Safety ----------------------- */
+		// ------------------------------------------------------------------
+		"strict": true,
+		// ✅ Enable ALL strict type-checking options
+		// Includes:
+		// - strictNullChecks: null/undefined must be explicit
+		// - strictFunctionTypes: contravariant function parameters
+		// - strictBindCallApply: type-check bind/call/apply
+		// - strictPropertyInitialization: class properties must be initialized
+		// - noImplicitThis: 'this' must have explicit type
+		// - alwaysStrict: emit "use strict" in output
+		"noImplicitAny": true,
+		// ✅ Disallow 'any' type without explicit annotation
+		// Example:
+		// function bad(x) { return x; }  // ❌ Error: 'x' has implicit 'any'
+		// function good(x: any) { return x; }  // ✅ OK: explicit 'any'
+		"noUncheckedIndexedAccess": true,
+		// ✅ When you access an array by index or an object by dynamic key,
+		// TypeScript normally assumes the value exists.
+		// This flag adds `undefined` to the type,
+		// forcing you to handle the case where it might not.
+		// catches a real class of runtime bugs
+		//
+		// "noUnusedLocals": true,
+		// "noUnusedParameters": true,
+		// ⚠️ Controversial for base
+		// better handled by ESLint with auto-fix
+		//
+		// "noUnusedLocals
+		"noFallthroughCasesInSwitch": true,
+		// ✅ good for base
+		// ------------------------------------------------------------------
+		/* ------------------- Compatibility ----------------------- */
+		// ------------------------------------------------------------------
+		"resolveJsonModule": true,
+		// ✅ Lets you import `.json` files as modules,
+		// and gives them proper types based on their content.
+		// "allowJs": true,
+		// ✅ Allow importing .js files
+		// Useful for gradual TypeScript migration
+		// Example:
+		// import { helper } from './legacy.js';  // ✅ OK
+		// "allowSyntheticDefaultImports": true,
+		// ✅ Allow default imports from modules without default export
+		// Example:
+		// import React from 'react';  // ✅ OK (even though React has no default export)
+		// Without this: import * as React from 'react';  // Required
+		// ------------------------------------------------------------------
+		/* ------------------- Modern features ----------------------- */
+		// ------------------------------------------------------------------
+		//
+		// disabled this for nextjs projects
+		// anywhere where we import global css it trows
+		"noUncheckedSideEffectImports": true,
+		// ✅ NEW in TypeScript 5.7
+		// Prevents importing modules that only have side effects without explicit import
+		// Example:
+		// import 'some-polyfill';  // ❌ Error: unchecked side effect
+		// import {} from 'some-polyfill';  // ✅ OK: explicit empty import
+		// Good for preventing accidental global mutations
+		// ------------------------------------------------------------------
+		/* ------------------- Modern Import/Export Features ----------------------- */
+		// ------------------------------------------------------------------
+		"erasableSyntaxOnly": true,
+		// ✅ TS 5.7+ - More efficient transpilation
+		// Only allows TypeScript syntax that can be erased (not transformed)
+		// Ensures your code works with simple transpilers (esbuild, swc)
+		"verbatimModuleSyntax": true,
+		// ✅ Strict import/export syntax
+		// - Forces 'import type' for type-only imports
+		// - Prevents mixing value and type imports
+		// Example:
+		// import { User } from './types';  // ❌ If User is only a type
+		// import type { User } from './types';  // ✅ Correct
+		// import { createUser, type User } from './types';  // ✅ Mixed OK
+		// ------------------------------------------------------------------
+		/* ------------------- Other stuff ----------------------- */
+		// ------------------------------------------------------------------
+		"skipLibCheck": true
+		// ✅ Skips type-checking of all `.d.ts` files in `node_modules`.
+		// -------------------------------------------------------
+		// -------------------------------------------------------
+		// -------------------------------------------------------
+		// -------------------------------------------------------
+		// ---- only for libraries
+		// "declaration": true,
+		// "declarationMap": true,
+		// ----  allowing this to be decided per project basis
+		// but it really doesn't matter since if you leave it
+		// it would get overriden
+		// "lib": [
+		//   "es2022",
+		//   "DOM",
+		//   "DOM.Iterable"
+		// ],
+	}
+}
