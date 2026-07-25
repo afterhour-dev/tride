@@ -38,8 +38,7 @@ async function init() {
 		// in projects that are outhere on the web, this number is
 		// offten more to range of 35
 		75,
-		sizes.width,
-		sizes.height,
+		sizes.width / sizes.height,
 	);
 	camera.position.z = 3;
 	camera.position.x = 0.5;
@@ -57,6 +56,7 @@ async function init() {
 
 	// ----------------------------------------------
 	renderer.setSize(sizes.width, sizes.height);
+	renderer.setClearColor(0x000000, 1);
 	renderer.render(scene, camera);
 }
 
