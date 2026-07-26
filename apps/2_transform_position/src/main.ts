@@ -28,6 +28,9 @@ async function init() {
 	mesh.position.z = -1;
 	mesh.position.y = 1;
 
+	// EXPLAIN: what is Object3D, and what instances in our code
+	// are also instances of Object3D
+
 	// EXPLAIN: what is position
 	console.log(mesh.position);
 

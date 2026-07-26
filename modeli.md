@@ -20,3 +20,10 @@ jul 24
 "ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek/deepseek-v4-flash",
 "ANTHROPIC_DEFAULT_HAIKU_MODEL": "xiaomi/mimo-v2.5",
 "CLAUDE_CODE_SUBAGENT_MODEL": "xiaomi/mimo-v2.5"
+
+jul 26
+
+"ANTHROPIC_DEFAULT_SONNET_MODEL": "xiaomi/mimo-v2.5",
+"ANTHROPIC_DEFAULT_OPUS_MODEL": "xiaomi/mimo-v2.5",
+"ANTHROPIC_DEFAULT_HAIKU_MODEL": "xiaomi/mimo-v2.5",
+"CLAUDE_CODE_SUBAGENT_MODEL": "xiaomi/mimo-v2.5"
