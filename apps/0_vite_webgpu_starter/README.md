@@ -1,34 +1,37 @@
-```ts
-import * as THREE from 'three/webgpu';
+# Vite starter with WebGPU
 
-const canvas = document.querySelector<HTMLCanvasElement>('canvas#tride');
-if (!canvas) throw new Error('Canvas element is missing!');
+Koristiću ovo kao starter za naredne aplikacije. Ovde se po prvi put dotičem WebGPU-a.
 
-const sizes = { width: 800, height: 600 };
+## Namera / Intent
 
-async function init() {
-	const scene = new THREE.Scene();
+App je napravljen da bude starter za buduće aplikacije koje će koristiti WebGPU kao nešto što predpostavljam da će developeri usvojiti kao osnovnu tehnologiju, ako već nisu.
 
-	const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-	const material = new THREE.MeshBasicMaterial({ color: 0x4c9892 });
-	const mesh = new THREE.Mesh(boxGeometry, material);
-	scene.add(mesh);
+## Šta treba objasniti u detalje
 
-	const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
-	camera.position.z = 3;
-	camera.position.x = 0.5;
-	scene.add(camera);
+- razlika između upotrebe WebGPU i ranijeg WebGL u nasoj aplikaciji
 
-	const renderer = new THREE.WebGPURenderer({ canvas });
-	await renderer.init(); // <-- the important async step
+- objasniti i sledeće navode:
+	1. Initialization is async. WebGPURenderer needs to negotiate a GPU adapter/device before it can render — this happens asynchronously under the hood. You have two options:
+	2. Call await renderer.init() once, then render normally with renderer.render(scene, camera).
+	3. Or skip init() and just call await renderer.renderAsync(scene, camera) each frame — it'll lazily init on first call. 
 
-	const axesHelper = new THREE.AxesHelper(5);
-	axesHelper.setColors('red', 'green', 'blue');
-	scene.add(axesHelper);
+- objasniti zašto se pri korišćenju WebGPU, sledeće mora podesiti, a nije moralo pri korišćenju WebGL
+	```ts
+	renderer.setClearColor(0x000000, 1);
+	```
 
-	renderer.setSize(sizes.width, sizes.height);
-	renderer.render(scene, camera);
-}
+- u slucaju vite-a da li mi je potreban `vite-plugin-top-level-await`
 
-init();
-```
+- čuo sam da ShaderMaterial/RawShaderMaterial i onBeforeCompile() hacks nisu supported under WebGPURenderer, ovo verovatno ima veze sa shaderima i objasni kada se koriste i zašto se koriste, i zašto nisu podržani više
+
+## Šta samo ukratko pomenuti
+
+- pomeni zašto sam uradio ovaj assignment u ovom slučaju:
+	```ts
+	const canvasEl: HTMLCanvasElement | null =
+	document.querySelector('canvas#tride');
+
+	if (!canvasEl) throw new Error('Canvas element is missing!');
+
+	const canvas = canvasEl;
+	```
