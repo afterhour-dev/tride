@@ -10,3 +10,4 @@
 - [[2.2_transform-rotation]] — 2026-07-27
 - [[2.3_transform-scale]] — 2026-07-27
 - [[2.4_group-transforms]] — 2026-07-27
+- [[3.1_primitive-animation]] — 2026-07-28
