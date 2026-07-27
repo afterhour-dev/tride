@@ -22,6 +22,23 @@ async function init() {
 
 	// ------ Transformations - group ----------------------
 
+	// EXPLAIN: What is group
+	// EXPLAIN: Does group jhas any special methods that are usefil
+
+	// ---------------------------------------------
+	// EXPLAIN: Can one mesh belon to multiple groups,
+	// ondonso Da li je sledece moguce:
+	// Recimo da imam tri mesh-a i da imam dve grupe.
+	// Sva tri mesha ubacim u jednu grupu, i samo dva
+	// od tih mesh-eva ubacim u drugu grupu.
+	// Da li je ovo nemoguce?
+	// Ja sam probao pa mi nije uspelo jer mozda
+	// sam pogresio nesto.
+	// Ali imam utisak da su ona druga dva presla
+	//  u drugu grupu kada sam ih dodao zato sto transforms
+	//  koje sam radio na obe grupe nisu imale efekta
+	// ----------------------------------------------------
+
 	const group = new THREE.Group();
 	// const group2 = new THREE.Group();
 
