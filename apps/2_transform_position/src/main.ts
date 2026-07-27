@@ -68,10 +68,15 @@ async function init() {
 	mesh.position.z = 0.5;
 	mesh.position.y = -0.2;
 
+	// EXPLAIN: but this is the way we use increment decrement or similar
+	// to set it by also using old value
+	mesh.position.x -= 0.1;
+
 	// NOTE: we can use setX/Y/Z method to set individual ones
 	// EXPLAIN: how is this different than using = assignment
 	// and when is it useful
 	mesh.position.setX(0.6);
+	mesh.position.setX(mesh.position.x + 0.1);
 
 	// NOTE: we can set all at once using set method
 	// NOTE: we don't need to set all three values, minimum is setting x and y

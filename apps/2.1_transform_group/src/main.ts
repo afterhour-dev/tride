@@ -25,46 +25,12 @@ async function init() {
 	mesh.position.x = -0.5;
 	mesh.position.y = 0.6;
 
-	// ------ Transformations - rotation ----------------------
-
-	// EXPLAIN: what is rotation, also is it a Vector3 or Euler or something else?
-	// two ways of rotation
-	//     - euler:          radians = degrees * Math.PI / 180
-	// 												(problematic because of gimbal lock)
-	// 		 - quaternion      never used it
-	// 												(but eliminates
-	// 												posibility of gimbal lock from what I heard)
-
-	// EXPLAIN: this equation radians = degrees * Math.PI / 180
-
-	// EXPLAIN: list some basic values in radians
-	// 				like equivalents for 5, 15, 30, 45, 60, 90, 120, 180, 360
-
-	// rotating   45   deg by y
-	mesh.rotation.y = (45 * Math.PI) / 180;
-
-	// EXPLAIN: rotating y by 90 will create gimbal lock for
-	// x and z, they will have same rotation
-	// 45 + 45 = 90
-	mesh.rotation.y += (45 * Math.PI) / 180;
-	// now we have mentioned gimbal lock for x and z
-
-	// EXPLAIN: gimbal lock (loosing a degree of freedom)
-
-	// EXPLAIN: how reordering fixes gimbal lock
-	mesh.rotation.reorder('YXZ');
-
-	// EXPLAIN: are there any methods of rotation that are
-	// used offten and are useful
-
-	// TODO: learn quaternion. I will learn it when I get to
-	// do animation in some next lessons, but not this one
-
-	// TODO: I will write docs for gimbal lock interactivly
-	// when I adopt using gui and when I get to animation
-
-	//
-
+	// ------ Transformations - scale ----------------------
+	// EXPLAIN: what is scale, also is it a Vector3 or Euler or something else?
+	// EXPLAIN: what methods are used and how
+	mesh.scale.setScalar(0.5);
+	mesh.scale.set(2, 1.5); // can omit z if you want
+	mesh.scale.z = 1.2;
 	// --------------------------------------------------------
 
 	scene.add(mesh);
