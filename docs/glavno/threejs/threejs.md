@@ -15,3 +15,5 @@
 - [[3.2_animation-clock]] — 2026-07-28
 - [[3.3_animation-timer]] — 2026-07-28
 - [[3.4_animation-gsap]] — 2026-07-28
+- [[4.1_camera-ortho]] — 2026-07-28
+- [[4.2_camera-perspective]] — 2026-07-29

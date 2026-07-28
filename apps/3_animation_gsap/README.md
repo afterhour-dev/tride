@@ -1,1 +1,3 @@
-# Animation starter - Timer way
+# Animation - gsap
+
+
