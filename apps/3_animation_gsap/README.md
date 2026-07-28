@@ -1,0 +1,1 @@
+# Animation starter - Timer way

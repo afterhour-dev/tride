@@ -14,3 +14,4 @@
 - [[3.1_primitive-animation]] — 2026-07-28
 - [[3.2_animation-clock]] — 2026-07-28
 - [[3.3_animation-timer]] — 2026-07-28
+- [[3.4_animation-gsap]] — 2026-07-28
