@@ -4,6 +4,8 @@
 
 ## Lessons
 
+[[0.0.1 Webgpu dev setup]]
+
 - [[0.0_vite-starter]] — 2026-07-25
 - [[0.1_vite-webgpu-starter]]  — 2026-07-26
 - [[1.0_starter]]  — 2026-07-26
