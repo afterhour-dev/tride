@@ -44,6 +44,8 @@ async function init() {
 	camera.position.y = 0.5;
 	camera.position.x = 0.1;
 
+	// console.log(camera.position.length());
+
 	scene.add(camera);
 
 	// 4 - Renderer
