@@ -25,3 +25,6 @@ difficulty: # one of: beginner, intermediate, advanced, hard, very hard
 <!-- Real world example -->
 
 <!-- Visual helper -->
+
+---
+*Ovaj fajl čita mathmaker skill radi konteksta pre generisanja docsa vezanom za matematiku — popuni sekcije koje su ti relevantne, ostale slobodno izbriši ili ostavi prazne.*
