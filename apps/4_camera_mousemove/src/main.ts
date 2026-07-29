@@ -18,33 +18,35 @@ const cursor = {
 };
 
 window.addEventListener('mousemove', (ev) => {
-	// console.log(ev.clientX, ev.clientY);
-	// EXPLAIN: Do I understand this correctly:
+	// EXPLAIN: Do I understand what we enclosed in next
+	// console.log calls correctly:
 	// by doing this we ensure that when
 	// cursor is on the left top on the canvas
 	// x and y are 0
 	// and when cursor is on bottom right of the canvas
 	// x and y are 1
-	// and other values when we move acros canvas are
+	// and other values when we move across canvas are
 	// betwen 0 and 1
-	// console.log(ev.clientX / sizes.width);
-	// console.log(ev.clientY / sizes.height);
+	// and this is only whan we drag cursor across canvas
+	// if we step out values are above 1, but
+	// that is not important since we are looking
+	// just canvas
+	console.log('X ', ev.clientX / sizes.width);
+	console.log('Y', ev.clientY / sizes.height);
 
-	// EXPLAIN: Do I understand this correctly
-	// but what we do if we want 0,0 in the center of canvas
-	// to treat entire canvas as Cartesian coordinate system
-	// we substract 0.5 from the values or substract value from 0.5
-	// to have ranges betwen -0.5 and 0.5
+	// EXPLAIN: Do I understand what we enclosed in next  console.log
+	//  calls correctly: what we do if we want 0,0
+	// in the center of canvas to mimic entire canvas as
+	//  Cartesian coordinate system
+	// we subtract 0.5 from ev.clientX / sizes.width
+	// and we subtract ev.clientY / sizes.height from 0.5
+	// to have ranges betwen -0.5 and 0.5 both by vertical
+	// or horizontal of the canvas
 
-	// we don't need this like that
-	// we don't need cartesian coordinate system
-	// we need more like left to be negative
-	// rigt to be positive
-	// bottom to be negative, up to be positive no matter what
-	// so we will fix this tomorrow
-
-	console.log(ev.clientX / sizes.width - 0.5);
-	console.log(0.5 - ev.clientY / sizes.height);
+	console.log('------ cartesian -------');
+	console.log('X', ev.clientX / sizes.width - 0.5);
+	console.log('Y', 0.5 - ev.clientY / sizes.height);
+	console.log('-------------------------');
 
 	cursor.x = ev.clientX / sizes.width - 0.5;
 	cursor.y = 0.5 - ev.clientY / sizes.height;
@@ -72,8 +74,6 @@ async function init() {
 	// --------------------------------------------------------
 
 	// 3 - Perspective Camera
-	// EXPLAIN: all parameters, and what values are mostly used
-	// EXPLAIN: Doesit inherit from Camera class
 	const camera = new THREE.PerspectiveCamera(
 		75,
 		sizes.width / sizes.height,
@@ -83,7 +83,7 @@ async function init() {
 
 	camera.position.z = 3;
 	camera.position.y = 0.5;
-	camera.position.x = 0.1;
+	camera.position.x = 1;
 
 	scene.add(camera);
 
@@ -113,10 +113,13 @@ async function init() {
 		// const elapsedTime = timer.getElapsed();
 
 		// EXPLAIN: why and how we are using these values
+		// and what we acomplished
 		camera.position.x = cursor.x;
-		camera.position.z = cursor.y;
+		camera.position.y = cursor.y;
 
-		camera.lookAt(mesh.position);
+		// EXPLAIN: we may comment out this
+		// if we don't want camera to look at our mesh
+		// camera.lookAt(mesh.position);
 
 		renderer.render(scene, camera);
 

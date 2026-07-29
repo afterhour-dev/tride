@@ -17,3 +17,4 @@
 - [[3.4_animation-gsap]] — 2026-07-28
 - [[4.1_camera-ortho]] — 2026-07-28
 - [[4.2_camera-perspective]] — 2026-07-29
+- [[4.3_camera-mousemove]] — 2026-07-29
