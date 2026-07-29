@@ -101,7 +101,7 @@ async function init() {
 		// camera.position.x = Math.cos(Math.PI * cursor.x);
 		// camera.position.z = Math.sin(Math.PI * cursor.x);
 
-		// EXPLAIN: number 2 and number 4 in next exprssions; and
+		// EXPLAIN: number 2 and number 2.5 in next exprssions; and
 		// why and how we are using them, and is there a good helper to
 		// visualize this kind of trigonometry animation if
 		// I can call it like that

@@ -19,3 +19,4 @@
 - [[4.2_camera-perspective]] — 2026-07-29
 - [[4.3_camera-mousemove]] — 2026-07-29
 - [[4.4_camera-cursor-normalization]] — 2026-07-29
+- [[4.5_camera-circular-mousemove]] — 2026-07-29
