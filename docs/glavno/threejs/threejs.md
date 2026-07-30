@@ -26,3 +26,4 @@
 - [[4.7_camera-controls]] — 2026-07-30
 - [[4.8_non-camera-controls]] — 2026-07-30
 - [[4.9_pointer-lock-controls]] — 2026-07-30
+- [[5.0_resize-and-full-screen]] — 2026-07-30
