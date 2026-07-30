@@ -1,6 +1,6 @@
 # Sve kontrole
 
-Napisi dokument sa svim ostalim kontrolama pored CameraControls
+Napisi dokument sa svim ostalim kontrolama pored
 
 # Neke nedoumice
 
