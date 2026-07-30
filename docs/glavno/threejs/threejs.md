@@ -22,3 +22,5 @@
 - [[4.3_camera-mousemove]] — 2026-07-29
 - [[4.4_camera-cursor-normalization]] — 2026-07-29
 - [[4.5_camera-circular-mousemove]] — 2026-07-29
+- [[4.6_other-camera-types]] — 2026-07-29
+- [[4.7_camera-controls]] — 2026-07-30
