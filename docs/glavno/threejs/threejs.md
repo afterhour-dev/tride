@@ -28,3 +28,4 @@
 - [[4.9_pointer-lock-controls]] — 2026-07-30
 - [[5.0_resize-and-full-screen]] — 2026-07-30
 - [[6.0_geometry-basics]] — 2026-07-31
+- [[6.1_buffer-geometry]] — 2026-07-31
