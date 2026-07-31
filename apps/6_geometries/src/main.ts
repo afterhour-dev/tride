@@ -16,11 +16,23 @@ async function init() {
 	// 1 - Geometries Materials Meshes
 
 	// EXPLAIN:
-	const boxGeometry = new THREE.BoxGeometry(1, 2, 1, 1, 2, 6);
+	const boxGeometry = new THREE.BoxGeometry(
+		1,
+		3,
+		3,
+		// EXPLAIN: subdivisions or segments of the geometry
+		// how are they formed? what is the difference between segments and subdivisions?
+		// EXPLAIN: walk me through how many vertices are created for this geometry and how they are connected to form triangles
+		4,
+		2,
+		6,
+	);
 	const material = new THREE.MeshBasicMaterial({
 		color: 0x4c9892,
 		// color: 'purple',
+		// EXPLAIN: to see subdivisions or segments of the geometry
 		wireframe: true,
+		// EXPLAIN: is there a way to define tickness of wireframe
 	});
 
 	const boxMesh = new THREE.Mesh(boxGeometry, material);

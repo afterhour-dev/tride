@@ -8,6 +8,8 @@ Exploration vezan za geometrije.
 
 Odnosno za one Built in geometrije iz Three.js
 
+A konkretno u ovoj lekciji, samo cu koristiti BoxGeometry, kako bi prebrojavao segmente ili trouglove, ili vertices u slucaju materiala koji ima wireframe
+
 ## Šta treba objasniti u detalje
 
 - Kako sve geometrije nasledjuju iz BufferGemoetry klase
@@ -26,5 +28,3 @@ Odnosno za one Built in geometrije iz Three.js
 ## Šta samo ukratko pomenuti
 
 Geometrije se mogu koristiti kako bi se napravili Mesh-ovi ali takodje i particles (Sa particles se necu baviti u ovoj lekciji)
-
-
