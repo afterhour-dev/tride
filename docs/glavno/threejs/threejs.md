@@ -30,3 +30,4 @@
 - [[6.0_geometry-basics]] — 2026-07-31
 - [[6.1_buffer-geometry]] — 2026-07-31
 - [[6.2_random-vertices]] — 2026-07-31
+- [[7.0_debug-ui]] — 2026-08-01

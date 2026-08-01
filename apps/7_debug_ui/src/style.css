@@ -1,18 +1,3 @@
-/* EXPLAIN: one way to fix margins and padding problem 
-but it wasn't good since I had scrollbars and viewport didn't fit */
-/* body {
-	margin: 0;
-	padding:0;
-} */
-/* EXPLAIN: also this wasn't good in a same way */
-/* * {
-	margin: 0;
-	padding:0;
-} */
-
-/* EXPLAIN: see what I did here
-depending on the website we could also pick absolute
-but I want canvas to take all available space */
 canvas#tride {
 	position: fixed;
 	left: 0;
@@ -21,21 +6,13 @@ canvas#tride {
 	any problems */
 	outline: none;
 }
-/* EXPLAIN: see what we did here 
-problem can be when we don't have orbit controls or you have 
-them disabled, and we try to scroll with a trackpad,
- some problem can happen, you can explain what, but I think it is Mac Book problem
-*/
+
 html, body {
 	overflow: hidden;
 }
 
 
 
-/* body{
-	background-color: var(--color-inkbl-400);
-}
-*/
 :root {
 	/* colors for easy copy to be tried with materials */
 	--color-accent-100: #fdf6e3;
