@@ -2,6 +2,7 @@ import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 // EXPLAIN: tell something about this package, provide links
 import GUI from 'lil-gui';
+import gsap from 'gsap';
 
 import { getRequiredElement } from './util';
 
@@ -14,17 +15,30 @@ const sizes = {
 	height: window.innerHeight,
 };
 
+// EXPLAIN: used for the color problem we mentioned
+const debugObject = {
+	color: '',
+	// EXPLAIN: function/button
+	spin: () => {},
+};
+
 async function init() {
 	const scene = new THREE.Scene();
 
+	// EXPLAIN:
+	debugObject.color = '#527eaa';
+
 	// 1 - Geometries Materials Meshes
 
-	// EXPLAIN:
 	const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
 	const material = new THREE.MeshBasicMaterial({
-		color: 0x4c9892,
+		// color: 0x4c9892,
+		// color: '#ac78b6',
 		// color: 'purple',
-		// wireframe: true,
+		// EXPLAIN: next lines
+		color: debugObject.color,
+
+		wireframe: false,
 	});
 
 	const boxMesh = new THREE.Mesh(boxGeometry, material);
@@ -34,10 +48,10 @@ async function init() {
 
 	scene.add(boxMesh);
 
-	// EXPLAIN: all parameters
+	// EXPLAIN: range -> explain all parameters
 	// gui.add(boxMesh.position, 'y', -3, 3, 0.01);
 
-	// EXPLAIN: chaining function calls is more declarative, also I asume this is range
+	// EXPLAIN: chaining function calls is more declarative
 	gui
 		.add(boxMesh.position, 'y')
 		.min(-3)
@@ -55,6 +69,43 @@ async function init() {
 	gui.add(myObject, 'myProp');
 
 	// EXPLAIN: checkbox
+	gui.add(boxMesh, 'visible').name('boxMesh visible');
+	// EXPLAIN: you can also access material from boxMesh
+	// gui.add(material, 'wireframe').name('material wireframe');
+	gui.add(boxMesh.material, 'wireframe').name('material wireframe');
+
+	// EXPLAIN: colors (explain especiallty that color property is THREE.Color instance)
+	gui
+		// EXPLAIN: instead of this
+		// .addColor(material, 'color')
+		// do it on the object
+		.addColor(debugObject, 'color')
+		// EXPLAIN: one way that w eobtain color heh to use it in code
+		// to be exact right one we chosen
+		.onChange((colorVal: THREE.Color) => {
+			// EXPLAIN: we copy this from the console and, set it
+			// to material in code to have exact same color
+			// console.log(colorVal.getHexString());
+			// EXPLAIN: we don't need to manully copy from console
+			// anymore
+			// boxMesh.material.color.set(colorVal);
+			// EXPLAIN: or without argument
+			material.color.set(colorVal);
+		});
+
+	// EXPLAIN: function/button
+	const mojaFunkcije = () => {
+		// console.log('moja funkcija');
+		console.log(boxMesh.rotation.y);
+		gsap.to(boxMesh.rotation, {
+			duration: 1.5,
+			y: boxMesh.rotation.y + Math.PI * 2,
+		});
+	};
+	debugObject.spin = mojaFunkcije;
+	gui.add(debugObject, 'spin');
+
+	// EXPLAIN: tweaking the geometry
 
 	// --------------------------------------------------------
 
