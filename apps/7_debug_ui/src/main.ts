@@ -20,6 +20,10 @@ const debugObject = {
 	color: '',
 	// EXPLAIN: function/button
 	spin: () => {},
+	// EXPLAIN: se what I did with it and explain
+	lookAtMesh: false,
+	// EXPLAIN: next line
+	subdivisions: 2,
 };
 
 async function init() {
@@ -30,7 +34,8 @@ async function init() {
 
 	// 1 - Geometries Materials Meshes
 
-	const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
+	// EXPLAIN: why we use let here
+	let boxGeometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
 	const material = new THREE.MeshBasicMaterial({
 		// color: 0x4c9892,
 		// color: '#ac78b6',
@@ -38,7 +43,7 @@ async function init() {
 		// EXPLAIN: next lines
 		color: debugObject.color,
 
-		wireframe: false,
+		wireframe: true,
 	});
 
 	const boxMesh = new THREE.Mesh(boxGeometry, material);
@@ -64,9 +69,9 @@ async function init() {
 	// let myVariable = 256;
 	// gui.add(myVariable, "???")
 	const myObject = {
-		myProp: 256,
+		myStupidProp: 256,
 	};
-	gui.add(myObject, 'myProp');
+	gui.add(myObject, 'myStupidProp');
 
 	// EXPLAIN: checkbox
 	gui.add(boxMesh, 'visible').name('boxMesh visible');
@@ -93,12 +98,13 @@ async function init() {
 			material.color.set(colorVal);
 		});
 
-	// EXPLAIN: function/button
+	// EXPLAIN: next function/button
 	const mojaFunkcije = () => {
 		// console.log('moja funkcija');
-		console.log(boxMesh.rotation.y);
+		// console.log(boxMesh.rotation.y);
 		gsap.to(boxMesh.rotation, {
 			duration: 1.5,
+			// EXPLAIN: it's like boxMesh.rotation.y += Math.PI * 2, but with animation
 			y: boxMesh.rotation.y + Math.PI * 2,
 		});
 	};
@@ -106,6 +112,33 @@ async function init() {
 	gui.add(debugObject, 'spin');
 
 	// EXPLAIN: tweaking the geometry
+	// it is bad to use onChange, we use onFinishChange instead
+	debugObject.subdivisions = 2;
+	gui
+		.add(debugObject, 'subdivisions')
+		.min(1)
+		.max(20)
+		.step(1)
+		.onFinishChange((subdivs: number) => {
+			// EXPLAIN: Should we dispose old geometry?
+			// Yes, we should
+			// should we dispose it here or after
+			// creating new geometry? It doesn't matter, but we should do it before creating new geometry
+			boxGeometry.dispose();
+
+			boxMesh.geometry = new THREE.BoxGeometry(
+				1,
+				1,
+				1,
+				subdivs,
+				subdivs,
+				subdivs,
+			);
+
+			// EXPLAIN: should we also reassign new geometry to
+			// old variable? Yes, we should
+			boxGeometry = boxMesh.geometry;
+		});
 
 	// --------------------------------------------------------
 
@@ -121,7 +154,19 @@ async function init() {
 	camera.position.y = 1.5;
 	camera.position.x = 1;
 
-	camera.lookAt(boxMesh.position);
+	// camera.lookAt(boxMesh.position);
+	// EXPLAIN: I used this bit differently
+	// just a boolean but since I have animations
+	// I must use boolean value there too
+	gui.add(debugObject, 'lookAtMesh');
+	if (debugObject.lookAtMesh) {
+		camera.lookAt(boxMesh.position);
+	}
+	// EXPLAIN: no need for this since this is default
+	/* 
+	else{
+		camera.lookAt(new THREE.Vector3(0,0,0))
+	} */
 
 	scene.add(camera);
 
@@ -144,6 +189,9 @@ async function init() {
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
 	axesHelper.visible = false;
+
+	// EXPLAIN: show this example also
+	gui.add(axesHelper, 'visible').name('axesHelper visible');
 
 	// ----------------------------------------------------
 	renderer.setSize(sizes.width, sizes.height);
@@ -204,6 +252,13 @@ async function init() {
 
 		// camera.lookAt(boxMesh.position);
 		// camera.lookAt(new THREE.Vector3());
+		// EXPLAIN: we used this here
+		// Aand tell me is this bad for performance?
+		if (debugObject.lookAtMesh) {
+			camera.lookAt(boxMesh.position);
+		} else {
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+		}
 
 		renderer.render(scene, camera);
 
