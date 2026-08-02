@@ -31,3 +31,4 @@
 - [[6.1_buffer-geometry]] — 2026-07-31
 - [[6.2_random-vertices]] — 2026-07-31
 - [[7.0_debug-ui]] — 2026-08-01
+- [[7.1_gui-range]] — 2026-08-02
