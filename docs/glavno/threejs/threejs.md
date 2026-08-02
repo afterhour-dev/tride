@@ -37,3 +37,4 @@
 - [[7.4_gui-geometry-tweak]] — 2026-08-02
 - [[7.5_gui-button]] — 2026-08-02
 - [[7.6_gui-options]] — 2026-08-02
+- [[7.7_gui-folders]] — 2026-08-03
