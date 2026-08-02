@@ -35,3 +35,5 @@
 - [[7.2_gui-checkbox]] — 2026-08-02
 - [[7.3_gui-color]] — 2026-08-02
 - [[7.4_gui-geometry-tweak]] — 2026-08-02
+- [[7.5_gui-button]] — 2026-08-02
+- [[7.6_gui-options]] — 2026-08-02
