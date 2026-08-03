@@ -39,3 +39,4 @@
 - [[7.6_gui-options]] — 2026-08-02
 - [[7.7_gui-folders]] — 2026-08-03
 - [[7.8_lil-gui-parameters]] — 2026-08-03
+- [[8.0_texture-basics]] — 2026-08-03

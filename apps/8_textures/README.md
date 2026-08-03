@@ -1,6 +1,6 @@
 # textures
 
-Exploring textures.
+Exploring textures. Primarly learning about mostly used types or formats. And also learning about ways to load textures.
 
 We used sample texture downloaded from [here](https://3dtextures.me/2019/04/16/door-wood-001/), which is very popular texture.
 
