@@ -1,0 +1,302 @@
+import * as THREE from 'three/webgpu';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
+import GUI from 'lil-gui';
+import gsap from 'gsap';
+
+import { getRequiredElement } from './util';
+
+// EXPLAIN:
+// import baseColor from './assets/Door_Wood_001_basecolor.jpg';
+// console.log({ baseColor }); // path would be printed
+// EXPLAIN: our textures are inside public folder already
+// albeda (color) map is inside /public/textures/wooden_door
+// to check this open browser on:
+// http://localhost:5173/textures/wooden_door/Door_Wood_001_basecolor.jpg
+
+// EXPLAIN: ways of loading texture
+
+// EXPLAIN: native javascript Image way
+const colorImage = new Image();
+
+// EXPLAIN: next line
+// and we will be using this in the material
+const colorTexture = new THREE.Texture(colorImage);
+
+// EXPLAIN: you can use addEventListener instead of this
+colorImage.onload = (ev) => {
+	// console.log('color (albeda) map loaded');
+	// EXPLAIN: next line
+	colorTexture.needsUpdate = true;
+};
+// EXPLAIN: pass path of the image here
+colorImage.src = '/textures/wooden_door/Door_Wood_001_basecolor.jpg';
+
+// EXPLAIN: loading with loading manager
+const loadingManager = new THREE.LoadingManager();
+
+// EXPLAIN: TextureLoader way of loading texture
+// we can use loading manager or not, explain this
+const textureLoader = new THREE.TextureLoader(loadingManager);
+const colorMap = textureLoader.load(
+	'/textures/wooden_door/Door_Wood_001_basecolor.jpg',
+	// EXPLAIN: load. progress and error callbacks
+	/* () => {
+		console.log('color map loading finished');
+	},
+	// EXPLAIN: why we don't see any logs in progress one
+	// and I hear people don't use this one
+	() => {
+		console.log('color map loading progressing');
+	},
+	() => {
+		console.error('color map loading error');
+	}, */
+);
+
+// EXPLAIN: so this is cool about loading manger - onStart, onLoaded, onProgress
+loadingManager.onStart = (path) => {
+	// EXPLAIN: this wasn't printed, tell me why
+	console.log('loading started');
+};
+loadingManager.onLoad = () => {
+	console.log('loading finished');
+};
+loadingManager.onProgress = (path) => {
+	console.log('loading progressing');
+};
+loadingManager.onError = (e) => {
+	console.error('Loading failed', e);
+};
+
+const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
+
+const gui = new GUI({
+	width: 350,
+	title: 'Nice debug UI',
+	closeFolders: true,
+});
+
+const cubeTweaks = gui.addFolder('Awsome cube');
+
+cubeTweaks.close();
+
+window.addEventListener('keydown', (ev) => {
+	if (ev.key === 'h') {
+		gui.show(gui._hidden);
+	}
+});
+
+const sizes = {
+	width: window.innerWidth,
+	height: window.innerHeight,
+};
+
+const debugObject = {
+	color: '',
+	spin: () => {},
+	lookAtMesh: true,
+	subdivisions: 2,
+	speed: 2,
+};
+
+async function init() {
+	const scene = new THREE.Scene();
+
+	debugObject.color = '#527eaa';
+
+	// 1 - Geometries Materials Meshes
+
+	let boxGeometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
+	const material = new THREE.MeshBasicMaterial({
+		// color: 0x4c9892,
+		// EXPLAIN: instead of next line becaue we can't use color anymore
+		// color: debugObject.color,
+		// we use this
+		// map: colorTexture,
+		// EXPLAIN: next line
+		map: colorMap,
+
+		wireframe: false,
+	});
+
+	const boxMesh = new THREE.Mesh(boxGeometry, material);
+
+	boxMesh.position.x = -1.5;
+	boxMesh.position.z = 1.5;
+
+	scene.add(boxMesh);
+
+	// ------------- Tweaks ----------------------------------
+
+	cubeTweaks
+		.add(boxMesh.position, 'y')
+		.min(-3)
+		.max(3)
+		.step(0.01)
+		// .name('elevation')
+		.name('boxMesh.position.y');
+	const myObject = {
+		myStupidProp: 256,
+	};
+	cubeTweaks.add(myObject, 'myStupidProp');
+	cubeTweaks.add(boxMesh, 'visible').name('boxMesh visible');
+	cubeTweaks
+		.add(boxMesh.material, 'wireframe')
+		.name('material wireframe');
+
+	cubeTweaks
+		.addColor(debugObject, 'color')
+		.onChange((colorVal: THREE.Color) => {
+			material.color.set(colorVal);
+		});
+
+	const mojaFunkcije = () => {
+		gsap.to(boxMesh.rotation, {
+			duration: 1.5,
+
+			y: boxMesh.rotation.y + Math.PI * debugObject.speed,
+		});
+	};
+	debugObject.spin = mojaFunkcije;
+	cubeTweaks.add(debugObject, 'spin');
+	cubeTweaks.add(debugObject, 'speed', { sporo: 2, brzo: 8 });
+	debugObject.subdivisions = 2;
+	cubeTweaks
+		.add(debugObject, 'subdivisions')
+		.min(1)
+		.max(20)
+		.step(1)
+		.onFinishChange((subdivs: number) => {
+			boxGeometry.dispose();
+
+			boxMesh.geometry = new THREE.BoxGeometry(
+				1,
+				1,
+				1,
+				subdivs,
+				subdivs,
+				subdivs,
+			);
+
+			boxGeometry = boxMesh.geometry;
+		});
+
+	// --------------------------------------------------------
+	// --------------------------------------------------------
+
+	// 3 - Perspective Camera
+	const camera = new THREE.PerspectiveCamera(
+		75,
+		sizes.width / sizes.height,
+		0.1,
+		100,
+	);
+
+	camera.position.z = 3;
+	camera.position.y = 1.5;
+	camera.position.x = 1;
+
+	// camera.lookAt(boxMesh.position);
+
+	cubeTweaks.add(debugObject, 'lookAtMesh');
+	if (debugObject.lookAtMesh) {
+		camera.lookAt(boxMesh.position);
+	}
+
+	scene.add(camera);
+
+	// 4 - Orbit Controls
+	const orbitControls = new OrbitControls(camera, canvas);
+
+	orbitControls.enableDamping = true;
+	// orbitControls.enabled = false;
+	// orbitControls.update()
+
+	// ------------------------------------------------
+	// 5 - Renderer
+	const renderer = new THREE.WebGPURenderer({ canvas });
+	await renderer.init();
+
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+	// 6 - axes helper
+	const axesHelper = new THREE.AxesHelper(5);
+	axesHelper.setColors('red', 'green', 'blue');
+	scene.add(axesHelper);
+	axesHelper.visible = false;
+
+	cubeTweaks.add(axesHelper, 'visible').name('axesHelper visible');
+
+	// ----------------------------------------------------
+	renderer.setSize(sizes.width, sizes.height);
+	renderer.setClearColor(0x000000, 1);
+	renderer.render(scene, camera);
+
+	// --------------------------------------------------------------
+	window.addEventListener('resize', () => {
+		sizes.width = window.innerWidth;
+		sizes.height = window.innerHeight;
+
+		camera.aspect = sizes.width / sizes.height;
+
+		camera.updateProjectionMatrix();
+
+		renderer.setSize(sizes.width, sizes.height);
+
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+	});
+	// --------------------------------------------------------------
+
+	window.addEventListener('dblclick', () => {
+		const fullScreenElement =
+			// @ts-expect-error can't find it on document but it is there
+			document.fullscreenElement || document.webkitExitFullscreenExit;
+
+		if (!fullScreenElement) {
+			if (canvas.requestFullscreen) {
+				canvas.requestFullscreen();
+				// @ts-expect-error can't find it on document but it is there
+			} else if (canvas.webkitRequestFullScreen) {
+				// @ts-expect-error can't fid it on document but it is there
+				canvas.webkitRequestFullScreen();
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+				// @ts-expect-error can't find it on document but it is there
+			} else if (document.webkitExitFullscreen) {
+				// @ts-expect-error can't find it on document but it is there
+				document.webkitExitFullscreen();
+			}
+		}
+	});
+
+	// --------------------------------------------------------------
+	const timer = new THREE.Timer();
+
+	window.requestAnimationFrame(tick);
+	// ----------------------------------------------------
+
+	function tick(timestamp: number) {
+		timer.update(timestamp);
+
+		// const elapsedTime = timer.getElapsed();
+
+		orbitControls.update();
+
+		// camera.lookAt(boxMesh.position);
+		// camera.lookAt(new THREE.Vector3());
+
+		if (debugObject.lookAtMesh) {
+			camera.lookAt(boxMesh.position);
+		} else {
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+		}
+
+		renderer.render(scene, camera);
+
+		window.requestAnimationFrame(tick);
+	}
+}
+
+await init();
