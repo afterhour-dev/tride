@@ -43,3 +43,4 @@
 - [[8.1_uv-unwrapping]] — 2026-08-04
 - [[8.2_transforming-texture]] — 2026-08-04
 - [[8.3_filtering-and-mipmapping]] — 2026-08-04
+- [[8.4_format-and-optimisation]] — 2026-08-04
