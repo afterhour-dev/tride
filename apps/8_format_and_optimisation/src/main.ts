@@ -5,33 +5,24 @@ import gsap from 'gsap';
 
 import { getRequiredElement } from './util';
 
-// EXPLAIN: We learned about this in previous lesson
 const loadingManager = new THREE.LoadingManager();
 
-// EXPLAIN: We learned about this in previous lesson
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
-// EXPLAIN we are adding all these textures
-const colorMap = textureLoader.load(
+/* const colorMap = textureLoader.load(
 	'/textures/wooden_door/Door_Wood_001_basecolor.jpg',
-	/* () => {
-		console.log('color map loading finished');
-	},
-	() => {
-		console.log('color map loading progressing');
-	},
-	() => {
-		console.error('color map loading error');
-	}, */
-);
+); */
+
+/* const colorMap = textureLoader.load(
+	'/textures/checkerboard-1024x1024.png',
+); */
+// const colorMap = textureLoader.load('/textures/checkerboard-8x8.png');
+const colorMap = textureLoader.load('/textures/minecraft.png');
+
 const alphaMap = textureLoader.load(
-	// EXPLAIN: this is alpha texture but it is named
-	// as opacity texture, I think it is the same thing. What is
-	// the naming convention? I think it is alpha texture because it is black and white
 	'/textures/wooden_door/Door_Wood_001_opacity.jpg',
 );
 const heightMap = textureLoader.load(
-	// EXPLAIN: this format is png, different than others
 	'/textures/wooden_door/Door_Wood_001_height.png',
 );
 const normalMap = textureLoader.load(
@@ -47,7 +38,6 @@ const roughnessMap = textureLoader.load(
 	'/textures/wooden_door/Door_Wood_001_roughness.jpg',
 );
 
-// EXPLAIN: We learned about this in previous lesson
 loadingManager.onStart = (url) => {
 	console.log('loading started');
 };
@@ -64,14 +54,14 @@ loadingManager.onError = (err) => {
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
 
 const gui = new GUI({
-	width: 350,
+	width: 250,
 	title: 'Nice debug UI',
 	closeFolders: true,
 });
 
 const cubeTweaks = gui.addFolder('Awsome cube');
 
-cubeTweaks.close();
+// cubeTweaks.close();
 
 window.addEventListener('keydown', (ev) => {
 	if (ev.key === 'h') {
@@ -97,53 +87,92 @@ async function init() {
 
 	debugObject.color = '#527eaa';
 
+	// 0 - texture stuff
+
+	// colorMap.repeat.x = 2;
+	// colorMap.repeat.y = 3;
+
+	/* colorMap.wrapS = THREE.RepeatWrapping;
+	colorMap.wrapT = THREE.RepeatWrapping; */
+
+	/* colorMap.wrapS = THREE.MirroredRepeatWrapping;
+	colorMap.wrapT = THREE.MirroredRepeatWrapping;*/
+
+	// colorMap.offset.x = 0.5;
+	// colorMap.offset.y = 0.5;
+
+	// colorMap.rotation = Math.PI * 0.25; // 45 deg Math.PI / 4
+
+	// colorMap.center.x = 0.5;
+	// colorMap.center.y = 0.5;
+
+	colorMap.minFilter = THREE.NearestFilter;
+
+	colorMap.generateMipmaps = false;
+	colorMap.magFilter = THREE.NearestFilter;
+
 	// 1 - Geometries Materials Meshes
 
-	// EXPLAIN: I increased default number of subdivisions
-	// because as we speak in previous lessons some require more
-	// vertices (height one for example). I don't think our current
-	// texture requires more because we have pretty flat wooden
-	// surface? What do you think
-	const subs = 6;
-	let boxGeometry = new THREE.BoxGeometry(1, 1, 1, subs, subs, subs);
+	let boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+
+	/* 
+	const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+	const coneGeometry = new THREE.ConeGeometry(1, 1, 32);
+	const torusGeometry = new THREE.TorusGeometry(1, 0.35, 32, 100); 
+	*/
+
 	const material = new THREE.MeshBasicMaterial({
 		// color: debugObject.color,
-		// EXPLAIN: not using color because we are using textures
-		// but we could, since I tried and color actually
-		// was applied, I could see color map changing it's default color?
-		// EXPLAIN: Is albeda (color) texture transparent to some extent?
 		// color: 0x4c9892,
 		//
-		// EXPLAIN: we are adding all these textures
 		map: colorMap,
 		//
 
 		// wireframe: true,
 	});
 
-	const boxMesh = new THREE.Mesh(boxGeometry, material);
+	const myMesh = new THREE.Mesh(boxGeometry, material);
 
-	// boxMesh.position.x = -1.5;
-	// boxMesh.position.z = 1.5;
+	// myMesh.position.x = -1.5;
+	// myMesh.position.z = 1.5;
 
-	scene.add(boxMesh);
+	scene.add(myMesh);
 
+	/* cubeTweaks
+		.add(myMesh, 'geometry', {
+			boxGeometry,
+			sphereGeometry,
+			coneGeometry,
+			torusGeometry,
+		})
+		.name('GEOMETRY')
+		.onChange((geo: THREE.BufferGeometry) => {
+			// console.log(geo instanceof THREE.BufferGeometry);
+			console.log(geo.attributes);
+			console.log(geo.attributes.uv);
+		}); */
+
+	/* cubeTweaks
+		.add({ '-': '' }, '-')
+		.name(
+			"Don't pay attention to these fields bellow,\n only above field is important,\n because we are learning about UV unwrapping\n Make sure to switch geometries above\n in order to see logs about uv coordinates",
+		); */
 	// ------------- Tweaks ----------------------------------
 
 	cubeTweaks
-		.add(boxMesh.position, 'y')
+		.add(myMesh.position, 'y')
 		.min(-3)
 		.max(3)
 		.step(0.01)
 		// .name('elevation')
-		.name('boxMesh.position.y');
+		.name('myMesh.position.y');
 	const myObject = {
 		myStupidProp: 256,
 	};
 	cubeTweaks.add(myObject, 'myStupidProp');
-	cubeTweaks.add(boxMesh, 'visible').name('boxMesh visible');
+	cubeTweaks.add(myMesh, 'visible').name('myMesh visible');
 	cubeTweaks
-		.add(boxMesh.material, 'wireframe')
+		.add(myMesh.material, 'wireframe')
 		.name('material wireframe');
 
 	cubeTweaks
@@ -153,17 +182,17 @@ async function init() {
 		});
 
 	const mojaFunkcije = () => {
-		gsap.to(boxMesh.rotation, {
+		gsap.to(myMesh.rotation, {
 			duration: 1.5,
 
-			y: boxMesh.rotation.y + Math.PI * debugObject.speed,
+			y: myMesh.rotation.y + Math.PI * debugObject.speed,
 		});
 	};
 	debugObject.spin = mojaFunkcije;
 	cubeTweaks.add(debugObject, 'spin');
 	cubeTweaks.add(debugObject, 'speed', { sporo: 2, brzo: 8 });
-	// debugObject.subdivisions = 2;
-	debugObject.subdivisions = subs;
+	debugObject.subdivisions = 2;
+	// debugObject.subdivisions = subs;
 	cubeTweaks
 		.add(debugObject, 'subdivisions')
 		.min(1)
@@ -172,7 +201,7 @@ async function init() {
 		.onFinishChange((subdivs: number) => {
 			boxGeometry.dispose();
 
-			boxMesh.geometry = new THREE.BoxGeometry(
+			myMesh.geometry = new THREE.BoxGeometry(
 				1,
 				1,
 				1,
@@ -181,7 +210,7 @@ async function init() {
 				subdivs,
 			);
 
-			boxGeometry = boxMesh.geometry;
+			boxGeometry = myMesh.geometry;
 		});
 
 	// --------------------------------------------------------
@@ -199,11 +228,11 @@ async function init() {
 	camera.position.y = 1.5;
 	camera.position.x = 1;
 
-	// camera.lookAt(boxMesh.position);
+	// camera.lookAt(myMesh.position);
 
 	cubeTweaks.add(debugObject, 'lookAtMesh');
 	if (debugObject.lookAtMesh) {
-		camera.lookAt(boxMesh.position);
+		camera.lookAt(myMesh.position);
 	}
 
 	scene.add(camera);
@@ -287,11 +316,11 @@ async function init() {
 
 		orbitControls.update();
 
-		// camera.lookAt(boxMesh.position);
+		// camera.lookAt(myMesh.position);
 		// camera.lookAt(new THREE.Vector3());
 
 		if (debugObject.lookAtMesh) {
-			camera.lookAt(boxMesh.position);
+			camera.lookAt(myMesh.position);
 		} else {
 			camera.lookAt(new THREE.Vector3(0, 0, 0));
 		}
