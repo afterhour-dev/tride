@@ -40,3 +40,4 @@
 - [[7.7_gui-folders]] — 2026-08-03
 - [[7.8_lil-gui-parameters]] — 2026-08-03
 - [[8.0_texture-basics]] — 2026-08-03
+- [[8.1_uv-unwrapping]] — 2026-08-04

@@ -21,9 +21,7 @@ const colorMap = textureLoader.load(
 		console.error('color map loading error');
 	}, */
 );
-// EXPLAIN: these textures aren't important in this lesson
-// we are just looking at uv unwrapping and example is
-// color map, but I will load them to show that they are working
+
 const alphaMap = textureLoader.load(
 	'/textures/wooden_door/Door_Wood_001_opacity.jpg',
 );
@@ -61,7 +59,7 @@ const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
 const gui = new GUI({
 	width: 250,
 	title: 'Nice debug UI',
-	// closeFolders: true,
+	closeFolders: true,
 });
 
 const cubeTweaks = gui.addFolder('Awsome cube');
@@ -92,20 +90,44 @@ async function init() {
 
 	debugObject.color = '#527eaa';
 
+	// 0 - textures transforming
+	// EXPLAIN: repeat
+	// EXPLAIN: should I do this inside init here, or outside
+	// colorMap.repeat.x = 2;
+	// colorMap.repeat.y = 3;
+	// EXPLAIN: next line
+	// EXPLAIN: why are they named with S and T
+	/* colorMap.wrapS = THREE.RepeatWrapping;
+	colorMap.wrapT = THREE.RepeatWrapping; */
+	// EXPLAIN: what effect this next wrapping has
+	// colorMap.wrapS = THREE.MirroredRepeatWrapping;
+	// colorMap.wrapT = THREE.MirroredRepeatWrapping;
+
+	// EXPLAIN: offset
+	// colorMap.offset.x = 0.5;
+	// colorMap.offset.y = 0.5;
+
+	// EXPLAIN: rotation
+	colorMap.rotation = Math.PI * 0.25; // 45 deg Math.PI / 4
+
+	// EXPLAIN: center
+	// EXPLAIN: For this example, comment out repeat, offset and wrapS/T and
+	// leave roation we set
+	// why? because we want to show where is center of roatation
+	// in case of wrapping box, center is in the corner, but we want to
+	// be in the center, that's why values are 0.5 and 0.5
+	colorMap.center.x = 0.5;
+	colorMap.center.y = 0.5;
+
 	// 1 - Geometries Materials Meshes
 
-	// EXPLAIN: we will try bunch of the geometries as we
-	// explore the uv unwrapping concept
 	let boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-	// EXPLAIN: texture will be streched. To be precise, in the
-	// middle really stretched, and at the poles it will be densed
+
+	/* 
 	const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
-	// EXPLAIN: on the top it will be dense, and on the bottom
-	// streched, also on one side with some strange patterns;
-	// door of the texture will be on the bottom
 	const coneGeometry = new THREE.ConeGeometry(1, 1, 32);
-	// EXPLAIN: all streatched and repeating it self
-	const torusGeometry = new THREE.TorusGeometry(1, 0.35, 32, 100);
+	const torusGeometry = new THREE.TorusGeometry(1, 0.35, 32, 100); 
+	*/
 
 	const material = new THREE.MeshBasicMaterial({
 		// color: debugObject.color,
@@ -124,10 +146,7 @@ async function init() {
 
 	scene.add(myMesh);
 
-	// EXPLAIN: I set this up to easily change geometries as we
-	// explore concept of uv unwrapping, you can mentioned user
-	// that he can switch geometries in gui
-	cubeTweaks
+	/* cubeTweaks
 		.add(myMesh, 'geometry', {
 			boxGeometry,
 			sphereGeometry,
@@ -137,21 +156,15 @@ async function init() {
 		.name('GEOMETRY')
 		.onChange((geo: THREE.BufferGeometry) => {
 			// console.log(geo instanceof THREE.BufferGeometry);
-			// EXPLAIN: lets explore attributes
-			// EXPLAIN: normal, position attributes
 			console.log(geo.attributes);
-
-			// EXPLAIN: lets explore UV coordinates
-			// EXPLAIN: explain uv attribute (Float32BufferAttribute)
-			// EXPLAIN: importatnt properties of the uv attribute
 			console.log(geo.attributes.uv);
-		});
+		}); */
 
-	cubeTweaks
+	/* cubeTweaks
 		.add({ '-': '' }, '-')
 		.name(
 			"Don't pay attention to these fields bellow,\n only above field is important,\n because we are learning about UV unwrapping\n Make sure to switch geometries above\n in order to see logs about uv coordinates",
-		);
+		); */
 	// ------------- Tweaks ----------------------------------
 
 	cubeTweaks
