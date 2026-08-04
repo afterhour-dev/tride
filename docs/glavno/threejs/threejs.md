@@ -42,3 +42,4 @@
 - [[8.0_texture-basics]] — 2026-08-03
 - [[8.1_uv-unwrapping]] — 2026-08-04
 - [[8.2_transforming-texture]] — 2026-08-04
+- [[8.3_filtering-and-mipmapping]] — 2026-08-04
