@@ -9,7 +9,6 @@ const loadingManager = new THREE.LoadingManager();
 
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
-// EXPLAIN: We will load door textures, some matcaps, some gradients
 const doorAlbedaTexture = textureLoader.load(
 	'/textures/wooden_door/Door_Wood_001_basecolor.jpg',
 );
@@ -67,19 +66,9 @@ const sizes = {
 async function init() {
 	const scene = new THREE.Scene();
 
-	// 0 - texture stuff -------------------------
-	// EXPLAIN: textures used as map and matcap are supposed to be
-	// encoded in sRGB; we need to set their colorSpace to
-	// THREE.SRGBColorSpace; and explain me is this approach up to date
-	// EXPLAIN: change values of THREE.SRGBColorSpace and
-	// THREE.NoColorSpace (this is th default for colorSpace)
-	// to test it how it looks than get back to THREE.SRGBColorSpace
-	// because it looks better
 	doorAlbedaTexture.colorSpace = THREE.SRGBColorSpace;
-	// doorAlbedaTexture.colorSpace = THREE.NoColorSpace; // EXPLAIN: like I said this is defaut, and I'm using it here only for the sake of example (commenting in and out)
 	matcapTexture.colorSpace = THREE.SRGBColorSpace;
-	// EXPLAIN: we can try these abouve by setting it on
-	// map property of the material
+
 	// -------------------------------------------
 
 	// 1 - Geometries Materials Meshes
@@ -93,13 +82,12 @@ async function init() {
 		// color: debugObject.color,
 		// color: 0x4c9892,
 		// wireframe: true,
-		// EXPLAIN: map
-		map: doorAlbedaTexture,
+		// EXPLAIN: we can set properties when instatiating, like this map property
+		// map: doorAlbedaTexture,
 	});
-
-	// EXLAIN: we have three geometries and we use them to make three
-	// meshes with same material and material is what is important in
-	// this lesson
+	// EXPLAIN: we can also set properties on the instance
+	// and we will use this approach for the rest of the lesson
+	material.map = doorAlbedaTexture;
 
 	const boxMesh = new THREE.Mesh(boxGeometry, material);
 
@@ -116,7 +104,6 @@ async function init() {
 	const torusMesh = new THREE.Mesh(torusGeometry, material);
 	torusMesh.position.x = 1.5;
 
-	// EXPLAIN: you can add multiple meshes to the scene at once
 	scene.add(torusMesh, sphereMesh, boxMesh, planeMeash);
 
 	// ------------- Tweaks ----------------------------------
@@ -223,8 +210,6 @@ async function init() {
 		// camera.lookAt(boxMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
 
-		// EXPLAIN: we want to rotate the meshes as we examinre the
-		// material
 		planeMeash.rotation.y = elapsedTime * 0.1;
 		sphereMesh.rotation.y = elapsedTime * 0.1;
 		torusMesh.rotation.y = elapsedTime * 0.1;
