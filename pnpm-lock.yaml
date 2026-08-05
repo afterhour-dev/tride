@@ -207,7 +207,7 @@ importers:
 
   .: {}
 
-  apps/0_vite_starter:
+  apps/0_0_vite_starter:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -232,7 +232,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/0_vite_webgpu_starter:
+  apps/0_1_vite_webgpu_starter:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -257,7 +257,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/1_starter:
+  apps/1_0_starter:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -282,7 +282,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/2_transform_group:
+  apps/2_1_transform_position:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -307,7 +307,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/2_transform_position:
+  apps/2_2_transform_rotation:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -332,7 +332,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/2_transform_rotation:
+  apps/2_3_transforms_scale:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -357,7 +357,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/2_transforms_scale:
+  apps/2_4_transform_group:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -382,7 +382,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/3_animation:
+  apps/3_1_primitive_animation:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -407,7 +407,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/3_animation_clock:
+  apps/3_2_animation_clock:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -432,35 +432,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/3_animation_gsap:
-    dependencies:
-      gsap:
-        specifier: ^3.15.0
-        version: 3.15.0
-      three:
-        specifier: ^0.185.1
-        version: 0.185.1
-    devDependencies:
-      '@td/lint-config':
-        specifier: workspace:*
-        version: link:../../configs/lint-config
-      '@td/ts-config':
-        specifier: workspace:*
-        version: link:../../configs/ts-config
-      '@types/three':
-        specifier: ^0.185.1
-        version: 0.185.1
-      eslint:
-        specifier: ^10.7.0
-        version: 10.7.0
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
-      vite:
-        specifier: ^8.1.5
-        version: 8.1.5
-
-  apps/3_animation_starter:
+  apps/3_3_animation_timer:
     dependencies:
       three:
         specifier: ^0.185.1
@@ -485,32 +457,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/3_animation_timer:
-    dependencies:
-      three:
-        specifier: ^0.185.1
-        version: 0.185.1
-    devDependencies:
-      '@td/lint-config':
-        specifier: workspace:*
-        version: link:../../configs/lint-config
-      '@td/ts-config':
-        specifier: workspace:*
-        version: link:../../configs/ts-config
-      '@types/three':
-        specifier: ^0.185.1
-        version: 0.185.1
-      eslint:
-        specifier: ^10.7.0
-        version: 10.7.0
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
-      vite:
-        specifier: ^8.1.5
-        version: 8.1.5
-
-  apps/4_camera_controls:
+  apps/3_4_animation_gsap:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -538,7 +485,32 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/4_camera_mousemove:
+  apps/3_5_animation_starter:
+    dependencies:
+      three:
+        specifier: ^0.185.1
+        version: 0.185.1
+    devDependencies:
+      '@td/lint-config':
+        specifier: workspace:*
+        version: link:../../configs/lint-config
+      '@td/ts-config':
+        specifier: workspace:*
+        version: link:../../configs/ts-config
+      '@types/three':
+        specifier: ^0.185.1
+        version: 0.185.1
+      eslint:
+        specifier: ^10.7.0
+        version: 10.7.0
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+      vite:
+        specifier: ^8.1.5
+        version: 8.1.5
+
+  apps/4_1_camera_ortho:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -566,7 +538,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/4_camera_move:
+  apps/4_2_camera_perspective:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -594,7 +566,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/4_camera_move_circular:
+  apps/4_3_camera_mousemove:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -622,7 +594,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/4_camera_ortho:
+  apps/4_4_camera_move:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -650,7 +622,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/4_camera_perspective:
+  apps/4_5_camera_move_circular:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -678,7 +650,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/5_resize_and_full_screen:
+  apps/4_7_camera_controls:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -706,7 +678,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/6_buffer_geometry:
+  apps/5_0_resize_and_full_screen:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -734,7 +706,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/6_geometries:
+  apps/6_0_geometries:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -762,7 +734,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/6_random_buffer_geometries:
+  apps/6_1_buffer_geometry:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -790,14 +762,11 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_debug_ui:
+  apps/6_2_random_buffer_geometries:
     dependencies:
       gsap:
         specifier: ^3.15.0
         version: 3.15.0
-      lil-gui:
-        specifier: ^0.21.0
-        version: 0.21.0
       three:
         specifier: ^0.185.1
         version: 0.185.1
@@ -821,7 +790,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_folder_gui:
+  apps/7_0_debug_ui:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -852,7 +821,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_gui_button:
+  apps/7_1_gui_range:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -883,7 +852,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_gui_checkbox:
+  apps/7_2_gui_checkbox:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -914,7 +883,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_gui_color:
+  apps/7_3_gui_color:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -945,7 +914,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_gui_geometry_tweak:
+  apps/7_4_gui_geometry_tweak:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -976,7 +945,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_gui_options:
+  apps/7_5_gui_button:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -1007,7 +976,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_gui_parameters:
+  apps/7_6_gui_options:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -1038,7 +1007,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/7_gui_range:
+  apps/7_7_folder_gui:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -1069,7 +1038,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/8_filtering_and_mipmapping:
+  apps/7_8_gui_parameters:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -1100,7 +1069,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/8_format_and_optimisation:
+  apps/8_0_textures:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -1131,7 +1100,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/8_texture_transforming:
+  apps/8_1_textures_uv_unwrapping:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -1162,7 +1131,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/8_textures:
+  apps/8_2_texture_transforming:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -1193,7 +1162,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/8_textures_uv_unwrapping:
+  apps/8_3_filtering_and_mipmapping:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -1224,7 +1193,38 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/9_milestone_starter:
+  apps/8_4_format_and_optimisation:
+    dependencies:
+      gsap:
+        specifier: ^3.15.0
+        version: 3.15.0
+      lil-gui:
+        specifier: ^0.21.0
+        version: 0.21.0
+      three:
+        specifier: ^0.185.1
+        version: 0.185.1
+    devDependencies:
+      '@td/lint-config':
+        specifier: workspace:*
+        version: link:../../configs/lint-config
+      '@td/ts-config':
+        specifier: workspace:*
+        version: link:../../configs/ts-config
+      '@types/three':
+        specifier: ^0.185.1
+        version: 0.185.1
+      eslint:
+        specifier: ^10.7.0
+        version: 10.7.0
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+      vite:
+        specifier: ^8.1.5
+        version: 8.1.5
+
+  apps/9_0_milestone_starter:
     dependencies:
       gsap:
         specifier: ^3.15.0
