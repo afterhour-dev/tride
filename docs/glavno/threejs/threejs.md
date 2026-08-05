@@ -44,4 +44,4 @@
 - [[8.2_transforming-texture]] — 2026-08-04
 - [[8.3_filtering-and-mipmapping]] — 2026-08-04
 - [[8.4_format-and-optimisation]] — 2026-08-04
-- [[10.0_material_basic-scene-setup]] — 2026-08-05
+- [[10.0_material-scene-setup]] — 2026-08-05
