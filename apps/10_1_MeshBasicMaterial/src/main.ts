@@ -87,7 +87,51 @@ async function init() {
 	});
 	// EXPLAIN: we can also set properties on the instance
 	// and we will use this approach for the rest of the lesson
-	material.map = doorAlbedaTexture;
+	// material.map = doorAlbedaTexture;
+
+	// EXPLAIN: color property and how unlike when instatiating
+	// you are not allowed the color string or hexadecimal
+	// it must be THREE.Color instance where you pass
+	// different formats of color strings or hehadecimal
+	/* 	material.color = new THREE.Color('#59b4af');
+	material.color = new THREE.Color(0x59b4af);
+	material.color = new THREE.Color('cyan');
+	material.color = new THREE.Color('rgb(89, 180, 175)'); */
+	// EXPLAIN: combining color and map will tint the texture with the color
+
+	// EXPLAIN: wireframe property
+	// people don't tend to use this in production because
+	// line ticknes is always one pixeel; mostly used as helper to
+	// see all subdivisions
+	material.wireframe = false;
+
+	// EXPLAIN: opacity and transparent
+	// Well not realluy intuitive to me
+	// material.transparent = true; // EXPLAIN: By itself will not
+	// 															make material transparent
+	// EXPLAIN: if want opacity setting you must use opacity propery
+	// EXPLAIN: now it is completly transparent
+	// material.opacity = 0.0;
+
+	// EXPLAIN: now it barely opaque
+	// material.opacity = 0.1;
+
+	// EXPLAIN: alphaMap (leave irt to be transparet=true and observe)
+	// material.alphaMap = doorAlphaTexture;
+
+	// EXPLAIN: side property (which side is visible)
+	material.side = THREE.FrontSide; // default
+	material.side = THREE.BackSide; // you will se bonly back side of the plane
+	material.side = THREE.DoubleSide; // you will see both sides of the plane
+	// EXPLAIN: I think using DoubleSide is bad for performances, explain why
+	material.side = THREE.FrontSide; // default
+
+	// EXPLAIN: make sure when you export from blender to not
+	// expor it with double side
+
+	// EXPLAIN: how some properties like opacity and wireframe can be used with
+	// different materials, and that is why in next lessons for other material types we won't cover those
+	//  ------------------------------------------------------
 
 	const boxMesh = new THREE.Mesh(boxGeometry, material);
 
