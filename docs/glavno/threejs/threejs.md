@@ -46,3 +46,4 @@
 - [[8.4_format-and-optimisation]] — 2026-08-04
 - [[10.0_material-scene-setup]] — 2026-08-05
 - [[10.1_mesh-basic-material]] — 2026-08-05
+- [[10.2_mesh-normal-material]] — 2026-08-05
