@@ -31,7 +31,17 @@ const doorRoughnessTexture = textureLoader.load(
 	'/textures/wooden_door/Door_Wood_001_roughness.jpg',
 );
 //
-const matcapTexture = textureLoader.load('/matcaps/1.png');
+const matcapTexture = textureLoader.load(
+	// EXPLAIN: trying different textures
+	// '/matcaps/1.png'
+	// '/matcaps/2.png',
+	// '/matcaps/3.png',
+	// '/matcaps/4.png',
+	// '/matcaps/5.png',
+	// '/matcaps/6.png',
+	// '/matcaps/7.png',
+	'/matcaps/8.png',
+);
 const gradieantTexture = textureLoader.load('/gradients/3.jpg');
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
@@ -108,7 +118,12 @@ async function init() {
  	*/
 
 	// EXPLAIN: MeshMatcapMaterial
-	const material = new THREE.MeshMatcapMaterial();
+	const material = new THREE.MeshMatcapMaterial({
+		// matcap: matcapTexture
+	});
+
+	// EXPLAIN: matcap property on onstance vs passing when instatiating
+	material.matcap = matcapTexture;
 	//  ------------------------------------------------------
 
 	const boxMesh = new THREE.Mesh(boxGeometry, material);
