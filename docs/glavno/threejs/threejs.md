@@ -49,3 +49,4 @@
 - [[10.2_mesh-normal-material]] — 2026-08-05
 - [[10.3_mesh-matcap-material]] — 2026-08-06
 - [[10.4_mesh-depth-material-webgpu]] — 2026-08-06
+- [[10.5_mesh-lambert-material]] — 2026-08-06
