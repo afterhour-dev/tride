@@ -27,3 +27,12 @@ jul 26
 "ANTHROPIC_DEFAULT_OPUS_MODEL": "xiaomi/mimo-v2.5",
 "ANTHROPIC_DEFAULT_HAIKU_MODEL": "xiaomi/mimo-v2.5",
 "CLAUDE_CODE_SUBAGENT_MODEL": "xiaomi/mimo-v2.5"
+
+aug 6
+
+"ANTHROPIC_DEFAULT_SONNET_MODEL": "xiaomi/mimo-v2.5",
+"ANTHROPIC_DEFAULT_OPUS_MODEL": "xiaomi/mimo-v2.5",
+"ANTHROPIC_DEFAULT_HAIKU_MODEL": "xiaomi/mimo-v2.5",
+"CLAUDE_CODE_SUBAGENT_MODEL": "xiaomi/mimo-v2.5",
+<!-- mora i velicin context-a -->
+"CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1050000"

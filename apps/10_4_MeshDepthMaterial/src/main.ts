@@ -123,7 +123,13 @@ async function init() {
 	*/
 
 	// EXPLAIN: MeshDepthMaterial doesn't work for me because
-	// I'm using WebGPU
+	// I'm using WebGPU, is this true?
+	// I am having this error in console:
+	/* 
+	installHook.js:1 THREE.NodeBuilder: Material "MeshDepthMaterial" is not compatible.
+
+	*/
+
 	const material = new THREE.MeshDepthMaterial();
 
 	//  ------------------------------------------------------
