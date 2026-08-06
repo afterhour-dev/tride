@@ -42,7 +42,6 @@ Go to `chrome://flags` and set:
 | Flag | Setting |
 |---|---|
 | **Force enable WebGPU interop** | **Enabled** (was: Default) |
-| **Unsafe WebGPU Support** | **Enabled** (was: Disabled) |
 
 Then click **Relaunch** at the bottom (a full Chrome restart, not
 just a tab reload).
@@ -54,12 +53,30 @@ await navigator.gpu?.requestAdapter()
 // → should now return a real GPUAdapter object, not null
 ```
 
-If flags alone don't do it, the command-line equivalent (occasionally
-unlocks slightly different code paths than the flags UI):
+**Note:** we initially also enabled **Unsafe WebGPU Support**, but
+tested afterward and confirmed it's unnecessary on this hardware —
+`Force enable WebGPU interop` alone is enough to get a working
+adapter. Leave **Unsafe WebGPU Support** OFF.
 
-```bash
-google-chrome --enable-unsafe-webgpu --enable-features=Vulkan,VulkanFromANGLE
+### About the "unsupported command line flag" banner
+
+Any flag set via `chrome://flags` gets persisted and silently
+re-applied as a command-line flag on every launch, regardless of how
+you start Chrome (terminal, app launcher, clicking a dev-server link
+— it doesn't matter). If you ever see a yellow/orange banner across
+the top of *every* tab saying something like:
+
 ```
+You are using an unsupported command line flag --enable-unsafe-webgpu.
+Stability and security will suffer
+```
+
+that's Chrome flagging that a flag explicitly named "unsafe" is
+active — it's not related to whatever page you're viewing (it won't
+be selectable in devtools, since it renders at the browser-chrome
+level, not the page level). Since **Unsafe WebGPU Support** turned
+out to be unnecessary here, keeping it off avoids this banner
+entirely while keeping WebGPU working via the interop flag alone.
 
 ## Important: this is a local override, not shippable
 
