@@ -1,6 +1,6 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
-// EXPLAIN:we will use RGBELoader (deprecated)
+// EXPLAIN:won't use RGBELoader (deprecated)
 // EXPLAIN: we will use HDRLoader instead
 import { HDRLoader } from 'three/examples/jsm/Addons.js';
 import GUI from 'lil-gui';
@@ -81,11 +81,33 @@ const sizes = {
 async function init() {
 	const scene = new THREE.Scene();
 
+	// 0.1 - Renderer (first part)
+	// EXPLAIN: I moved renderer overhere because I followed some advice
+	const renderer = new THREE.WebGPURenderer({ canvas });
+	await renderer.init();
+
+	// Explain: loading environment map
+	const hdrLoader = new HDRLoader();
+	const hdrTexture = await hdrLoader.loadAsync(
+		'/envmap/2k.hdr',
+		(ev) => {
+			console.log(ev);
+		},
+	);
+	// EXPLAIN: mapping
+	hdrTexture.mapping = THREE.EquirectangularReflectionMapping;
+
+	// EXPLAIN: environment (I guess this will bring only lighting
+	// from environment map)
+	scene.environment = hdrTexture;
+	// EXPLAIN: background (this will give us background)
+	scene.background = hdrTexture;
+
 	//   texture stuff
 	doorAlbedaTexture.colorSpace = THREE.SRGBColorSpace;
 	matcapTexture.colorSpace = THREE.SRGBColorSpace;
 
-	// 0 - Lights
+	// 1 - Lights
 
 	// EXPLAIN: material requires light
 	const ambientLight = new THREE.AmbientLight(
@@ -103,7 +125,7 @@ async function init() {
 
 	// -------------------------------------------
 
-	// 1 - Geometries Materials Meshes
+	// 2 - Geometries Materials Meshes
 
 	const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 	const sphereGemoetry = new THREE.SphereGeometry(0.5, 16, 16);
@@ -171,9 +193,13 @@ async function init() {
 	// EXPLAIN: MeshStandardMaterial
 	const material = new THREE.MeshStandardMaterial();
 
-	// EXPLAIN: next properties
-	material.metalness = 0.45;
-	material.roughness = 0.65;
+	// EXPLAIN: next properties (was tweaking them to see how theiy look)
+	// material.metalness = 0.45;
+	// material.roughness = 0.65;
+	// EXPLAIN: but these values I would set to be defaults
+	// first time we see environment map effects
+	material.metalness = 0.7;
+	material.roughness = 0.2;
 
 	// EXPLAIN: exploring material through changing
 	// it's properties in debugui
@@ -240,11 +266,6 @@ async function init() {
 	// orbitControls.update()
 
 	// ------------------------------------------------
-	// 5 - Renderer
-	const renderer = new THREE.WebGPURenderer({ canvas });
-	await renderer.init();
-
-	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 	// 6 - axes helper
 	const axesHelper = new THREE.AxesHelper(5);
@@ -255,6 +276,8 @@ async function init() {
 	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
 
 	// ----------------------------------------------------
+	// 0.2 - Renderer (second part)
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 	renderer.setSize(sizes.width, sizes.height);
 	renderer.setClearColor(0x000000, 1);
 	renderer.render(scene, camera);
@@ -301,7 +324,10 @@ async function init() {
 	// --------------------------------------------------------------
 	const timer = new THREE.Timer();
 
-	window.requestAnimationFrame(tick);
+	// optiong out
+	// window.requestAnimationFrame(tick);
+	// using
+	renderer.setAnimationLoop(tick);
 	// ----------------------------------------------------
 
 	function tick(timestamp: number) {
@@ -324,7 +350,8 @@ async function init() {
 
 		renderer.render(scene, camera);
 
-		window.requestAnimationFrame(tick);
+		// Ok, this might be unneccessary because maybe is called under the hood
+		// window.requestAnimationFrame(tick);
 	}
 }
 
