@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 // EXPLAIN: we will use HDRLoader instead
 import { HDRLoader } from 'three/examples/jsm/Addons.js';
 import GUI from 'lil-gui';
-import gsap from 'gsap';
+// import gsap from 'gsap';
 
 import { getRequiredElement } from './util';
 
@@ -79,13 +79,17 @@ const sizes = {
 };
 
 async function init() {
+	// 0 - Scene
 	const scene = new THREE.Scene();
 
-	// 0.1 - Renderer (first part)
+	// ------------------------------------------------------
+	// 1.1 - Renderer (first part)
 	// EXPLAIN: I moved renderer overhere because I followed some advice
 	const renderer = new THREE.WebGPURenderer({ canvas });
 	await renderer.init();
 
+	// ------------------------------------------------------
+	// 2 - Environment map
 	// Explain: loading environment map
 	const hdrLoader = new HDRLoader();
 	const hdrTexture = await hdrLoader.loadAsync(
@@ -103,13 +107,21 @@ async function init() {
 	// EXPLAIN: background (this will give us background)
 	scene.background = hdrTexture;
 
-	//   texture stuff
+	// ----------------------------------------------------
+	// 3 -  texture stuff
+	// EXPLAIN: not important in this lesson
 	doorAlbedaTexture.colorSpace = THREE.SRGBColorSpace;
 	matcapTexture.colorSpace = THREE.SRGBColorSpace;
 
-	// 1 - Lights
+	// --------------------------------------------------
+	// 4 - Lights
 
-	// EXPLAIN: material requires light
+	// EXPLAIN: ambient and point light would add more light
+	// despite we are using lighting from env map
+	// but since we are using lighting from environment map
+	// we will comment out these two lights, because we just want
+	// to explore lighting from env map
+	/* 
 	const ambientLight = new THREE.AmbientLight(
 		0xffffff,
 		// '#b694d4',
@@ -122,10 +134,10 @@ async function init() {
 	pointLight.position.y = 3;
 	pointLight.position.z = 4;
 	scene.add(pointLight);
+	*/
 
-	// -------------------------------------------
-
-	// 2 - Geometries Materials Meshes
+	// -----------------------------------------------------
+	// 5 - Geometries Materials Meshes
 
 	const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 	const sphereGemoetry = new THREE.SphereGeometry(0.5, 16, 16);
@@ -190,19 +202,16 @@ async function init() {
 	material.gradientMap = gradieantTexture;
 	*/
 
-	// EXPLAIN: MeshStandardMaterial
+	// EXPLAIN: MeshStandardMaterial again
 	const material = new THREE.MeshStandardMaterial();
 
-	// EXPLAIN: next properties (was tweaking them to see how theiy look)
-	// material.metalness = 0.45;
-	// material.roughness = 0.65;
-	// EXPLAIN: but these values I would set to be defaults
+	// EXPLAIN: good defaults for
 	// first time we see environment map effects
 	material.metalness = 0.7;
 	material.roughness = 0.2;
 
-	// EXPLAIN: exploring material through changing
-	// it's properties in debugui
+	// EXPLAIN: we are still exploring material through changing
+	// it's properties in debugui, like in previous lesson
 	awsomeTweaks
 		.add(material, 'metalness')
 		.min(0)
@@ -217,7 +226,7 @@ async function init() {
 		.name('roughness');
 	awsomeTweaks.open();
 
-	//  ------------------------------------------------------
+	//  // // //
 
 	const boxMesh = new THREE.Mesh(boxGeometry, material);
 
@@ -237,12 +246,11 @@ async function init() {
 	scene.add(torusMesh, sphereMesh, boxMesh, planeMeash);
 
 	// ------------- Tweaks ----------------------------------
-
+	// 6 - gui tweaks
 	// awsomeTweaks.add(debugObject, 'placeholder', 4);
 
 	// --------------------------------------------------------
-
-	// 3 - Perspective Camera
+	// 7 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
 		75,
 		sizes.width / sizes.height,
@@ -258,7 +266,8 @@ async function init() {
 
 	scene.add(camera);
 
-	// 4 - Orbit Controls
+	// -----------------------------------------------------
+	// 8 - Orbit Controls
 	const orbitControls = new OrbitControls(camera, canvas);
 
 	orbitControls.enableDamping = true;
@@ -266,8 +275,7 @@ async function init() {
 	// orbitControls.update()
 
 	// ------------------------------------------------
-
-	// 6 - axes helper
+	// 9 - axes helper
 	const axesHelper = new THREE.AxesHelper(5);
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
@@ -324,9 +332,7 @@ async function init() {
 	// --------------------------------------------------------------
 	const timer = new THREE.Timer();
 
-	// optiong out
 	// window.requestAnimationFrame(tick);
-	// using
 	renderer.setAnimationLoop(tick);
 	// ----------------------------------------------------
 
@@ -350,7 +356,6 @@ async function init() {
 
 		renderer.render(scene, camera);
 
-		// Ok, this might be unneccessary because maybe is called under the hood
 		// window.requestAnimationFrame(tick);
 	}
 }
