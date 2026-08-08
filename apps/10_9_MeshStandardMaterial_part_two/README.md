@@ -1,12 +1,12 @@
-# MeshStandardMaterial
+# MeshStandardMaterial - Part two
 
-About MeshStandardMaterial
+Continuing with About MeshStandardMaterial
 
 ## Namera / Intent
 
-Learnig about MeshStandardMaterial
+Continuing Learnig about MeshStandardMaterial
 
-and examining it with debugui
+And examining it with debugui
 
 also we are putting environment map for this lesson.
 Downloaded  2k environment map:
@@ -36,3 +36,4 @@ Downloaded  2k environment map:
 - Isto tako, negde sam procitao da bi bitrebalo da koristim `renderer.setAnimationLoop` umesto `requestAnimationFrame`, tako da cu to koristiti po prvi put u ivom primeru (za ovu temu cu da napravim poseban app i lesson, a ti mi samo reci da li sam napravio neku gresku pri koriscenju)
 
 - besids lighting of environment map, does ambient and point light still bring light when added to the scene
+- env map is also compatibile with phong and lambert materials we aalready wrote a lessons about (is it because they support light?)
