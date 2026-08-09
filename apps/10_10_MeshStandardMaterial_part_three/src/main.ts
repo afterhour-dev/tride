@@ -68,6 +68,9 @@ const debugObject = {
 	// torusRadialSegments: 64,
 	// torusTubularSegments: 128,
 	torusSegments: 128,
+
+	// EXPLAIN: for tweaking Vector2 of normal scale
+	normalScale: 0.5,
 };
 // awsomeTweaks.close();
 
@@ -110,6 +113,9 @@ async function init() {
 	// ----------------------------------------------------
 	// 3 -  texture stuff
 	// EXPLAIN: switch this to see effect on texture
+	// EXPLAIN: when I comment this out, I am using NoColorSpace and in that
+	// case it looks lighter and wood texture looks fine; you
+	// tell me what is better to pick
 	doorAlbedaTexture.colorSpace = THREE.SRGBColorSpace; // NO/Linear
 	// mot using this one in this lesson
 	// matcapTexture.colorSpace = THREE.SRGBColorSpace;
@@ -229,6 +235,7 @@ async function init() {
 
 	// EXPLAIN: normalMap and normalScale
 	material.normalMap = doorNormalTexture;
+	// EXPLAIN: range of values for Vector2 instance of normalScale
 	material.normalScale.set(0.5, 0.5);
 
 	// EXPLAIN: alphaMap and transparent
@@ -249,6 +256,17 @@ async function init() {
 		.max(1)
 		.step(0.0001)
 		.name('roughness'); */
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'set transparent to false\n and you will see white from alpha map texture\n and white should be transparent',
+		)
+		.disable();
 	awsomeTweaks.add(material, 'transparent');
 	awsomeTweaks
 		.add(
@@ -258,7 +276,7 @@ async function init() {
 			'message',
 		)
 		.name(
-			"'Lower these bellow ones and see what happens\n with displacementMap'",
+			'lowering number of segments will have\n negative imapct on displacement map',
 		)
 		.disable();
 	awsomeTweaks
@@ -308,6 +326,49 @@ async function init() {
 			planeGeometry = planeMeash.geometry;
 		})
 		.name('plane segments');
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'-----------------------------------------------------------------------------------------',
+		);
+	awsomeTweaks
+		.add(debugObject, 'normalScale')
+		.max(1)
+		.min(0)
+		.step(0.1)
+		.onFinishChange((scaleVal: number) => {
+			material.normalScale.set(scaleVal, scaleVal);
+		});
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'-----------------------------------------------------------------------------------------',
+		);
+	awsomeTweaks
+		.add(material, 'aoMapIntensity')
+		.max(1)
+		.min(0)
+		.step(0.1);
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'-----------------------------------------------------------------------------------------',
+		);
 
 	awsomeTweaks.open();
 
