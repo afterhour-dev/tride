@@ -53,3 +53,4 @@
 - [[10.6_mesh-phong-material]] — 2026-08-06
 - [[10.7_mesh-toon-material]] — 2026-08-06
 - [[10.8_mesh-standard-material-part-one]] — 2026-08-08
+- [[10.9_mesh-standard-material-part-two]] — 2026-08-09
