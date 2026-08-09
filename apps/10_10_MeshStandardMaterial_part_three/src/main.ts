@@ -60,7 +60,14 @@ const gui = new GUI({
 const awsomeTweaks = gui.addFolder('Awsome tweaking');
 
 const debugObject = {
-	placeholder: false,
+	// placeholder: false,
+	// EXPLAIN: for geometry tweaking in order to explore
+	// displacementMap properly (to be precise, the lack of dubdivisions can cause problems)
+	sphereSegments: 64,
+	planeSegments: 100,
+	// torusRadialSegments: 64,
+	// torusTubularSegments: 128,
+	torusSegments: 128,
 };
 // awsomeTweaks.close();
 
@@ -132,11 +139,11 @@ async function init() {
 	// EXPLAIN: increasing subdivisons for displacementMap (height texture)
 	// because I don't want that vertices all over the place
 	// const sphereGemoetry = new THREE.SphereGeometry(0.5, 16, 16);
-	const sphereGemoetry = new THREE.SphereGeometry(0.5, 64, 64);
+	let sphereGemoetry = new THREE.SphereGeometry(0.5, 64, 64);
 	// const planeGeometry = new THREE.PlaneGeometry(1, 1 /* 2, 2 */);
-	const planeGeometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+	let planeGeometry = new THREE.PlaneGeometry(1, 1, 100, 100);
 	// const torusGeometry = new THREE.TorusGeometry(0.3, 0.2, 16, 32);
-	const torusGeometry = new THREE.TorusGeometry(0.3, 0.2, 64, 128);
+	let torusGeometry = new THREE.TorusGeometry(0.3, 0.2, 64, 128);
 
 	/* 
 	const material = new THREE.MeshBasicMaterial({
@@ -242,6 +249,66 @@ async function init() {
 		.max(1)
 		.step(0.0001)
 		.name('roughness'); */
+	awsomeTweaks.add(material, 'transparent');
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			"'Lower these bellow ones and see what happens\n with displacementMap'",
+		)
+		.disable();
+	awsomeTweaks
+		.add(debugObject, 'torusSegments')
+		.min(32)
+		.max(128)
+		.step(16)
+		.onFinishChange((segments: number) => {
+			torusGeometry.dispose();
+			torusMesh.geometry = new THREE.TorusGeometry(
+				0.3,
+				0.2,
+				segments / 2,
+				segments,
+			);
+			torusGeometry = torusMesh.geometry;
+		})
+		.name('torus segments');
+	awsomeTweaks
+		.add(debugObject, 'sphereSegments')
+		.min(16)
+		.max(64)
+		.step(16)
+		.onFinishChange((segments: number) => {
+			sphereGemoetry.dispose();
+			sphereMesh.geometry = new THREE.SphereGeometry(
+				0.5,
+				segments,
+				segments,
+			);
+			sphereGemoetry = sphereMesh.geometry;
+		})
+		.name('sphere segments');
+	awsomeTweaks
+		.add(debugObject, 'planeSegments')
+		.min(2)
+		.max(100)
+		.step(2)
+		.onFinishChange((segments: number) => {
+			planeGeometry.dispose();
+			planeMeash.geometry = new THREE.PlaneGeometry(
+				1,
+				1,
+				segments,
+				segments,
+			);
+			planeGeometry = planeMeash.geometry;
+		})
+		.name('plane segments');
+
 	awsomeTweaks.open();
 
 	//  // // //
