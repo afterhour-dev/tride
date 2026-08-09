@@ -24,3 +24,7 @@ We have environment map we set up in previous lesson.
   - but you still need to lower `displacementScale` propery (what are ranges for this); explain why
   - metalnessMap instead of value for metalness
   - roughnessMaap instead of value for metalness
+  - or is it better to leave roughness and metallnes wit both value of 1
+- normalMap will fake the noraml orientation and add details to the surface regardless of the subdivision. You can comment out displacementMap and displacementScale for a moment to see that still you will have nice details just with normalMap
+  - normalScale is Vector2 instance, and you can use set method to set normal intensity
+- alphaMap (don't forget to set transparent to true ); when setting black parts of the texture that cover our mesh will not be visible and white ones will be visible 

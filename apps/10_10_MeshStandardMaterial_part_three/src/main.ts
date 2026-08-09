@@ -199,9 +199,6 @@ async function init() {
 	// EXPLAIN: MeshStandardMaterial again
 	const material = new THREE.MeshStandardMaterial();
 
-	material.metalness = 0.7;
-	material.roughness = 0.2;
-
 	// EXPLAIN:  color map
 	material.map = doorAlbedaTexture;
 	// EXPLAIN: aoMap and aoMapIntesity, what range of values I can define
@@ -210,11 +207,30 @@ async function init() {
 	// material.aoMapIntensity = 3;
 	// EXPLAIN: displacementMap and disolacementScale (what are ranges for displacementScale )
 	material.displacementMap = doorHeightTesture;
-	material.displacementScale = 0.1;
+	material.displacementScale = 0.08;
+
+	// EXPLAIN: not sure if we want to keep metalness and roughness
+	// values at all but I saw someone did it but set them both to 1
+	// material.metalness = 0.7;
+	// material.roughness = 0.2;
+	material.metalness = 1;
+	material.roughness = 1;
+
+	// EXPLAIN: metalnessMap and roughnessMap
+	material.metalnessMap = doorMetallnessTexture;
+	material.roughnessMap = doorRoughnessTexture;
+
+	// EXPLAIN: normalMap and normalScale
+	material.normalMap = doorNormalTexture;
+	material.normalScale.set(0.5, 0.5);
+
+	// EXPLAIN: alphaMap and transparent
+	material.transparent = true;
+	material.alphaMap = doorAlphaTexture;
 
 	// EXPLAIN: we are still exploring material through changing
 	// it's properties in debugui, like in previous lesson
-	awsomeTweaks
+	/* awsomeTweaks
 		.add(material, 'metalness')
 		.min(0)
 		.max(1)
@@ -225,7 +241,7 @@ async function init() {
 		.min(0)
 		.max(1)
 		.step(0.0001)
-		.name('roughness');
+		.name('roughness'); */
 	awsomeTweaks.open();
 
 	//  // // //
