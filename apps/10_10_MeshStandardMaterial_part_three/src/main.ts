@@ -257,6 +257,11 @@ async function init() {
 		.step(0.0001)
 		.name('roughness'); */
 	awsomeTweaks
+		.add(material, 'displacementScale')
+		.min(0)
+		.max(1)
+		.step(0.01);
+	awsomeTweaks
 		.add(
 			{
 				message: '',
@@ -359,6 +364,17 @@ async function init() {
 		.max(1)
 		.min(0)
 		.step(0.1);
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'-----------------------------------------------------------------------------------------',
+		);
+	awsomeTweaks.add(material, 'wireframe');
 	awsomeTweaks
 		.add(
 			{
