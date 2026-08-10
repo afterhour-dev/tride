@@ -232,48 +232,73 @@ async function init() {
 	// const material = new THREE.MeshStandardMaterial();
 	const material = new THREE.MeshPhysicalMaterial();
 
+	// EXPLAIN: when you get to looking at transmission
+	// comment all these texture related properties here
+	// from map to alphaMap
 	material.map = doorAlbedaTexture;
 	material.aoMap = doorAmbientOcclusionTexture;
 	material.aoMapIntensity = 1;
 	// material.aoMapIntensity = 3;
 	material.displacementMap = doorHeightTesture;
 	material.displacementScale = 0.08;
-
-	// material.metalness = 0.7;
-	// material.roughness = 0.2;
-	material.metalness = 1;
-	material.roughness = 1;
-
 	material.metalnessMap = doorMetallnessTexture;
 	material.roughnessMap = doorRoughnessTexture;
-
 	material.normalMap = doorNormalTexture;
 	material.normalScale.set(0.5, 0.5);
-
 	material.transparent = true;
 	material.alphaMap = doorAlphaTexture;
 
 	// EXPLAIN: clearcoat and clearcoatRoughness
 	material.clearcoat = 1;
 	material.clearcoatRoughness = 0;
+	// EXPLAIN: sheen, sheenRoughness, sheenColor
+	// EXPLAIN: we commented them out because we want to
+	// see iridescence
+	// material.sheen = 1;
+	// material.sheenRoughness = 0.25;
+	// material.sheenColor.set(1, 1, 1);
+	// EXPLAIN: iridescence, iridescenceIOR, iredescenceThicknessRange
+	// EXPLAIN: commented out to see transmission
+	// material.iridescence = 1;
+	// material.iridescenceIOR = 1;
+	// material.iridescenceThicknessRange = [100, 800];
+	// EXPLAIN: transmission, ior, thickness
+	material.transmission = 1;
+	material.ior = 1.5;
+	material.thickness = 0.5;
+	// EXPLAIN: metalness and roughnes for transmission to look good
+	material.metalness = 0;
+	material.roughness = 0;
 
-	/* awsomeTweaks
-		.add(material, 'metalness')
-		.min(0)
-		.max(1)
-		.step(0.0001)
-		.name('metalness');
+	awsomeTweaks.add(material, 'wireframe');
 	awsomeTweaks
-		.add(material, 'roughness')
-		.min(0)
-		.max(1)
-		.step(0.0001)
-		.name('roughness'); */
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'-----------------------------------------------------------------------------------------',
+		)
+		.disable();
+
 	awsomeTweaks
 		.add(material, 'displacementScale')
 		.min(0)
 		.max(1)
 		.step(0.01);
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'-----------------------------------------------------------------------------------------',
+		)
+		.disable();
 	/* awsomeTweaks
 		.add(
 			{
@@ -286,7 +311,8 @@ async function init() {
 		)
 		.disable(); */
 	awsomeTweaks.add(material, 'transparent');
-	/* awsomeTweaks
+
+	awsomeTweaks
 		.add(
 			{
 				message: '',
@@ -294,9 +320,10 @@ async function init() {
 			'message',
 		)
 		.name(
-			'lowering number of segments will have\n negative imapct on displacement map',
+			'-----------------------------------------------------------------------------------------',
 		)
-		.disable(); */
+		.disable();
+
 	awsomeTweaks
 		.add(debugObject, 'torusSegments')
 		.min(32)
@@ -328,7 +355,9 @@ async function init() {
 			);
 			sphereGemoetry = sphereMesh.geometry;
 		})
-		.name('sphere segments');
+		.name('sphere segments')
+		.disable();
+
 	awsomeTweaks
 		.add(debugObject, 'planeSegments')
 		.min(2)
@@ -344,7 +373,8 @@ async function init() {
 			);
 			planeGeometry = planeMeash.geometry;
 		})
-		.name('plane segments');
+		.name('plane segments')
+		.disable();
 	awsomeTweaks
 		.add(
 			{
@@ -354,7 +384,8 @@ async function init() {
 		)
 		.name(
 			'-----------------------------------------------------------------------------------------',
-		);
+		)
+		.disable();
 	awsomeTweaks
 		.add(debugObject, 'normalScale')
 		.max(1)
@@ -372,7 +403,8 @@ async function init() {
 		)
 		.name(
 			'-----------------------------------------------------------------------------------------',
-		);
+		)
+		.disable();
 	awsomeTweaks
 		.add(material, 'aoMapIntensity')
 		.max(1)
@@ -387,8 +419,89 @@ async function init() {
 		)
 		.name(
 			'-----------------------------------------------------------------------------------------',
-		);
-	awsomeTweaks.add(material, 'wireframe');
+		)
+		.disable();
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'MeshPhysicalMaterial realted tweaks (current lesson).\nIgnore ones above',
+		)
+		.disable();
+	// EXPLAIN: tweaking clearcoat and clearcoatRoughness
+	awsomeTweaks.add(material, 'clearcoat').min(0).max(1).step(0.0001);
+	awsomeTweaks
+		.add(material, 'clearcoatRoughness')
+		.min(0)
+		.max(1)
+		.step(0.0001);
+	// EXPLAIN: tweaking sheen, sheenRoughness, sheenColor
+	awsomeTweaks.add(material, 'sheen').min(0).max(2).step(0.0001);
+	awsomeTweaks
+		.add(material, 'sheenRoughness')
+		.min(0)
+		.max(2)
+		.step(0.0001);
+	awsomeTweaks.addColor(material, 'sheenColor');
+	// EXPLAIN: tweaking iridescence, iridescenceIOR, iredescenceThicknessRange
+	awsomeTweaks
+		.add(material, 'iridescence')
+		.min(0)
+		.max(1)
+		.step(0.0001);
+	awsomeTweaks
+		.add(material, 'iridescenceIOR')
+		.min(0)
+		.max(2.333)
+		.step(0.0001);
+	awsomeTweaks
+		.add(material.iridescenceThicknessRange, '0')
+		.min(1)
+		.max(1000)
+		.step(1);
+	awsomeTweaks
+		.add(material.iridescenceThicknessRange, '1')
+		.min(1)
+		.max(1000)
+		.step(1);
+	// EXPLAIN: tweaking transmission, ior, thickness
+	awsomeTweaks
+		.add(material, 'transmission')
+		.min(0)
+		.max(1)
+		.step(0.0001);
+	awsomeTweaks.add(material, 'ior').min(0).max(10).step(0.0001);
+	awsomeTweaks.add(material, 'thickness').min(0).max(1).step(0.0001);
+	awsomeTweaks
+		.add(
+			{
+				message: '',
+			},
+			'message',
+		)
+		.name(
+			'In case of transmission properties,\nslide metalness and roughness to 0',
+		)
+		.disable();
+	// EXPLAIN: metalness and roughness in relation to transmission
+	// why we should them to 0
+	awsomeTweaks
+		.add(material, 'metalness')
+		.min(0)
+		.max(1)
+		.step(0.0001)
+		.name('metalness');
+	awsomeTweaks
+		.add(material, 'roughness')
+		.min(0)
+		.max(1)
+		.step(0.0001)
+		.name('roughness');
+
 	awsomeTweaks
 		.add(
 			{
@@ -398,8 +511,8 @@ async function init() {
 		)
 		.name(
 			'-----------------------------------------------------------------------------------------',
-		);
-
+		)
+		.disable();
 	awsomeTweaks.open();
 
 	//  // // //
