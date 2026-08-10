@@ -53,6 +53,7 @@ const debugObject = {
 	// torusRadialSegments: 64,
 	// torusTubularSegments: 128,
 	torusSegments: 128,
+
 	normalScale: 0.5,
 };
 // awsomeTweaks.close();
@@ -162,22 +163,22 @@ async function init() {
 	// material.aoMapIntensity = 3;
 	material.displacementMap = doorHeightTesture;
 	material.displacementScale = 0.08;
-	// EXPLAIN: what are the best values for metalness and roughnes
-	// when we are doing clearcoat effect
-	// our texture is wooden door with some metal hinges
+	material.metalnessMap = doorMetallnessTexture;
+	material.roughnessMap = doorRoughnessTexture;
+	//
+	// EXPLAIN: what values for metalness and roughness are good in
+	// case of sheen effect
 	material.metalness = 1;
 	material.roughness = 1;
 	//
-	material.metalnessMap = doorMetallnessTexture;
-	material.roughnessMap = doorRoughnessTexture;
 	material.normalMap = doorNormalTexture;
 	material.normalScale.set(0.5, 0.5);
 	material.transparent = true;
 	material.alphaMap = doorAlphaTexture;
 
-	// EXPLAIN: clearcoat and clearcoatRoughness
-	material.clearcoat = 1;
-	material.clearcoatRoughness = 0;
+	material.sheen = 1;
+	material.sheenRoughness = 0.25;
+	material.sheenColor.set(1, 1, 1);
 
 	awsomeTweaks.add(material, 'wireframe');
 	awsomeTweaks
@@ -191,6 +192,7 @@ async function init() {
 			'-----------------------------------------------------------------------------------------',
 		)
 		.disable();
+
 	awsomeTweaks
 		.add(material, 'displacementScale')
 		.min(0)
@@ -318,10 +320,12 @@ async function init() {
 			},
 			'message',
 		)
+		.disable()
 		.name(
-			'-----------------------------------------------------------------------------------------',
+			'-----------------------------------------------------------------------------------------\n-----------------------------------------------------------------------------------------',
 		)
 		.disable();
+
 	awsomeTweaks
 		.add(material, 'metalness')
 		.min(0)
@@ -342,16 +346,18 @@ async function init() {
 			'message',
 		)
 		.name(
-			'MeshPhysicalMaterial clearcoat effect related tweaks (current lesson).\nIgnore ones above, they are mostly disabled except metalness\nand roughness',
+			'MeshPhysicalMaterial sheen effect realted tweaks (current lesson).\nIgnore ones above, they are mostly disabled except metalness\nand roughness',
 		)
 		.disable();
-	// EXPLAIN: tweaking clearcoat and clearcoatRoughness
-	awsomeTweaks.add(material, 'clearcoat').min(0).max(1).step(0.0001);
+
+	// EXPLAIN: tweaking sheen, sheenRoughness, sheenColor
+	awsomeTweaks.add(material, 'sheen').min(0).max(2).step(0.0001);
 	awsomeTweaks
-		.add(material, 'clearcoatRoughness')
+		.add(material, 'sheenRoughness')
 		.min(0)
-		.max(1)
+		.max(2)
 		.step(0.0001);
+	awsomeTweaks.addColor(material, 'sheenColor');
 
 	// // // // // // // // // // // // // // // // // // // // // //
 
@@ -407,7 +413,6 @@ async function init() {
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
 	axesHelper.visible = false;
-
 	awsomeTweaks
 		.add(
 			{
@@ -419,10 +424,9 @@ async function init() {
 			'-----------------------------------------------------------------------------------------\n-----------------------------------------------------------------------------------------',
 		)
 		.disable();
-
-	awsomeTweaks.open();
 	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
 
+	awsomeTweaks.open();
 	// ----------------------------------------------------
 	// 0.2 - Renderer (second part)
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
