@@ -167,18 +167,19 @@ async function init() {
 	material.roughnessMap = doorRoughnessTexture;
 	//
 	// EXPLAIN: what values for metalness and roughness are good in
-	// case of sheen effect
+	// case of iridescence effect
 	material.metalness = 0;
-	material.roughness = 1;
+	material.roughness = 0.5;
 	//
 	material.normalMap = doorNormalTexture;
 	material.normalScale.set(0.5, 0.5);
 	material.transparent = true;
 	material.alphaMap = doorAlphaTexture;
 
-	material.sheen = 1;
-	material.sheenRoughness = 0.25;
-	material.sheenColor.set(1, 1, 1);
+	// EXPLAIN: iridescence, iridescenceIOR, iredescenceThicknessRange
+	material.iridescence = 1;
+	material.iridescenceIOR = 1;
+	material.iridescenceThicknessRange = [100, 800];
 
 	awsomeTweaks.add(material, 'wireframe');
 	awsomeTweaks
@@ -324,7 +325,6 @@ async function init() {
 			'-----------------------------------------------------------------------------------------\n-----------------------------------------------------------------------------------------',
 		)
 		.disable();
-
 	awsomeTweaks
 		.add(material, 'metalness')
 		.min(0)
@@ -345,18 +345,32 @@ async function init() {
 			'message',
 		)
 		.name(
-			'MeshPhysicalMaterial sheen effect realted tweaks (current lesson).\nIgnore ones above, they are mostly disabled except metalness\nand roughness',
+			'MeshPhysicalMaterial iridescence effect realted tweaks (current lesson).\nIgnore ones above, they are mostly disabled except metalness\nand roughness',
 		)
 		.disable();
-
-	// EXPLAIN: tweaking sheen, sheenRoughness, sheenColor
-	awsomeTweaks.add(material, 'sheen').min(0).max(2).step(0.0001);
+	// EXPLAIN: tweaking iridescence, iridescenceIOR, iredescenceThicknessRange
 	awsomeTweaks
-		.add(material, 'sheenRoughness')
+		.add(material, 'iridescence')
 		.min(0)
-		.max(2)
+		.max(1)
 		.step(0.0001);
-	awsomeTweaks.addColor(material, 'sheenColor');
+	awsomeTweaks
+		.add(material, 'iridescenceIOR')
+		.min(0)
+		.max(2.333)
+		.step(0.0001);
+	awsomeTweaks
+		.add(material.iridescenceThicknessRange, '0')
+		.name('iridescenceThicknessRange[0]')
+		.min(1)
+		.max(1000)
+		.step(1);
+	awsomeTweaks
+		.add(material.iridescenceThicknessRange, '1')
+		.name('iridescenceThicknessRange[1]')
+		.min(1)
+		.max(1000)
+		.step(1);
 
 	// // // // // // // // // // // // // // // // // // // // // //
 
@@ -424,8 +438,8 @@ async function init() {
 		)
 		.disable();
 	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
-
 	awsomeTweaks.open();
+
 	// ----------------------------------------------------
 	// 0.2 - Renderer (second part)
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
