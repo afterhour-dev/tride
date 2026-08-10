@@ -57,3 +57,4 @@
 - [[10.10_mesh-standard-material-part-three]] — 2026-08-10
 - [[10.11.0_mesh-physical-material]] — 2026-08-10
 - [[10.11.1_clearcoat-effect]] — 2026-08-10
+- [[10.11.2_sheen]] — 2026-08-10

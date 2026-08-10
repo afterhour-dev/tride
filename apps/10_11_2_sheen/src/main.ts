@@ -168,7 +168,7 @@ async function init() {
 	//
 	// EXPLAIN: what values for metalness and roughness are good in
 	// case of sheen effect
-	material.metalness = 1;
+	material.metalness = 0;
 	material.roughness = 1;
 	//
 	material.normalMap = doorNormalTexture;
