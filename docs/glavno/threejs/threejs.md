@@ -55,4 +55,4 @@
 - [[10.8_mesh-standard-material-part-one]] — 2026-08-08
 - [[10.9_mesh-standard-material-part-two]] — 2026-08-09
 - [[10.10_mesh-standard-material-part-three]] — 2026-08-10
-- [[10.11_mesh-physical-material]] — 2026-08-10
+- [[10.11.0_mesh-physical-material]] — 2026-08-10
