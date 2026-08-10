@@ -191,12 +191,12 @@ async function init() {
 			'-----------------------------------------------------------------------------------------',
 		)
 		.disable();
-
 	awsomeTweaks
 		.add(material, 'displacementScale')
 		.min(0)
 		.max(1)
-		.step(0.01);
+		.step(0.01)
+		.disable();
 	awsomeTweaks
 		.add(
 			{
@@ -209,7 +209,7 @@ async function init() {
 		)
 		.disable();
 
-	awsomeTweaks.add(material, 'transparent');
+	awsomeTweaks.add(material, 'transparent').disable();
 
 	awsomeTweaks
 		.add(
@@ -292,7 +292,8 @@ async function init() {
 		.step(0.1)
 		.onFinishChange((scaleVal: number) => {
 			material.normalScale.set(scaleVal, scaleVal);
-		});
+		})
+		.disable();
 	awsomeTweaks
 		.add(
 			{
@@ -308,7 +309,8 @@ async function init() {
 		.add(material, 'aoMapIntensity')
 		.max(1)
 		.min(0)
-		.step(0.1);
+		.step(0.1)
+		.disable();
 	awsomeTweaks
 		.add(
 			{
@@ -340,7 +342,7 @@ async function init() {
 			'message',
 		)
 		.name(
-			'MeshPhysicalMaterial realted tweaks (current lesson).\nIgnore ones above',
+			'MeshPhysicalMaterial clearcoat effect realted tweaks (current lesson).\nIgnore ones above, they are mostly disabled except metalness\nand roughness',
 		)
 		.disable();
 	// EXPLAIN: tweaking clearcoat and clearcoatRoughness
