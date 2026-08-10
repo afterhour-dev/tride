@@ -319,7 +319,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/10_11_MeshPhysicalMaterial:
+  apps/10_11_0_MeshPhysicalMaterial:
     dependencies:
       gsap:
         specifier: ^3.15.0
