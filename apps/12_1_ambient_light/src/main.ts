@@ -1,30 +1,12 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
 
 import { getRequiredElement } from './util';
 
-const loadingManager = new THREE.LoadingManager();
-const textureLoader = new THREE.TextureLoader(loadingManager);
-
-// EXPLAIN: loading matcap texture
-const matcapTexture = textureLoader.load(
-	'/textures/matcaps/moje/8.png',
-);
-const otherMatcapTexture = textureLoader.load(
-	'/textures/matcaps/moje/2.png',
-);
-
-// loadingManager.onProgress = (prog) => {
-// 	console.log(prog);
-// };
-loadingManager.onLoad = () => {
-	console.log('textures loaded');
-};
-//
+// const loadingManager = new THREE.LoadingManager();
+// const textureLoader = new THREE.TextureLoader(loadingManager);
 
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
@@ -71,123 +53,66 @@ async function init() {
 	// ------------------------------------------------------
 	// 3 -  texture stuff
 	// colorSpace and stuff
-	// EXPLAIN: I changed colorSpace
-	matcapTexture.colorSpace = THREE.SRGBColorSpace;
 
 	// ------------------------------------------------------
-	// 4 - Text -  loading, TextGeometry, material, mesh
+	// 4 - Text - font loading, TextGeometry, material, mesh
 
-	const fontLoader = new FontLoader();
-	// console.log(fontLoader);
-	// console.log(TextGeometry);
-	const font = await fontLoader.loadAsync(
-		'/fonts/bitter/Bitter_Regular.json',
-		(progEv) => {
-			console.log('font - ', progEv);
-		},
-	);
-
-	// EXPLAIN: these are variables because of centering
-	// we are using these in calculation
-	const bevelSize = 0.02;
-	const bevelThickness = 0.03;
-
-	const textGeometry = new TextGeometry('Ћао из Три.џејеса!', {
-		font,
-		size: 0.5,
-		depth: 0.2,
-		// curveSegments: 12,
-		// bevelSegments: 5,
-		curveSegments: 5,
-		bevelSegments: 4,
-		//
-		bevelEnabled: true,
-		bevelThickness,
-		bevelSize,
-		// bevelThickness: 0.03,
-		// bevelSize: 0.02,
-		//
-		bevelOffset: 0,
-	});
-
-	// EXPLAIN: instead of Basic we use Matcap
-	// const textMaterial = new THREE.MeshBasicMaterial();
-	// don't make a mistake and set texture as map, use matcap property
-	const textMaterial = new THREE.MeshMatcapMaterial({
-		matcap: matcapTexture,
-	});
-	// or on instance
-	// textMaterial.matcap = matcapTexture;
-
-	awsomeTweaks.add(textMaterial, 'wireframe');
-
-	textGeometry.center();
-
-	const text = new THREE.Mesh(textGeometry, textMaterial);
-
-	scene.add(text);
 	// --------------------------------------------------
 	// 5 - Lights
+
+	// EXPALIN: parameters - color and intensity, what is the range of intensity
+	// const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+	// const ambientLight = new THREE.AmbientLight('#a51c81', 8);
+
+	// EXPLAIN: we can instantiate without parameters and add them later
+	const ambientLight = new THREE.AmbientLight();
+	ambientLight.color = new THREE.Color(0xffffff);
+	ambientLight.intensity = 0.5;
+
+	scene.add(ambientLight);
 
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	// const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+	const boxGeometry = new THREE.BoxGeometry(0.75, 0.75, 0.75);
+	const torusGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64);
+	const sphereGreometry = new THREE.SphereGeometry(0.5, 32, 32);
+	const floorGeometry = new THREE.PlaneGeometry(5, 5);
 
-	// const material = new THREE.MeshBasicMaterial();
+	const material = new THREE.MeshStandardMaterial();
 
-	console.time('krafne');
-	// EXPLAIN: adding bunch of toruses
-	// randomizing their position and rotation and scale a bit
-	// EXPLAIN: this next block can be optimized in a way
-	// that we create geometry just once and also the material
-	const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
-	const donutMaterial = new THREE.MeshMatcapMaterial();
+	material.roughness = 0.4;
 
-	for (let i = 0; i < 100; i++) {
-		donutMaterial.matcap = otherMatcapTexture;
-		const donut = new THREE.Mesh(donutGeometry, donutMaterial);
-		// donut.position.x = Math.random() * 10 - 5;
-		// EXPLAIN: in detail math behind this
-		// randomizations we have here on poition,rotation,scale
-		donut.position.x = (Math.random() - 0.5) * 10;
-		donut.position.y = (Math.random() - 0.5) * 10;
-		donut.position.z = (Math.random() - 0.5) * 10;
-		donut.rotation.x = Math.random() * Math.PI;
-		donut.rotation.y = Math.random() * Math.PI;
-		const scale = Math.random();
-		donut.scale.set(scale, scale, scale);
-		scene.add(donut);
-	}
+	const boxMesh = new THREE.Mesh(boxGeometry, material);
+	const torusMesh = new THREE.Mesh(torusGeometry, material);
+	const sphereMesh = new THREE.Mesh(sphereGreometry, material);
+	const floorMesh = new THREE.Mesh(floorGeometry, material);
 
-	console.timeEnd('krafne');
-
-	awsomeTweaks
-		.add(
-			{
-				message: '',
-			},
-			'message',
-		)
-		.name(
-			'-----------------------------------------------------------------------------------------\n-----------------------------------------------------------------------------------------',
-		)
-		.disable();
-
-	// // // // // // // // // // // // // // // // // // // // // //
-
-	// const boxMesh = new THREE.Mesh(boxGeometry, material);
-
-	// boxMesh.position.x = 1.5 * 8;
+	// boxMesh.position.x = 1.5;
 	// boxMesh.position.z = 3;
 	// boxMesh.position.z = 1.5;
+	torusMesh.position.x = 1.5;
+	sphereMesh.position.x = -1.5;
+	floorMesh.rotation.x = -Math.PI / 2;
+	floorMesh.position.y = -0.65;
 
-	// scene.add(boxMesh);
+	scene.add(boxMesh, torusMesh, sphereMesh, floorMesh);
 
 	// ------------- Tweaks ----------------------------------
 	// 7 - gui tweaks
 	// awsomeTweaks.add(material, 'wireframe');
 
+	// EXPLAIN: tweaking the ambient light
+	awsomeTweaks
+		.add(ambientLight, 'intensity')
+		.min(0)
+		.max(1)
+		.step(0.001)
+		.name('ambient light intensity');
+
+	awsomeTweaks
+		.addColor(ambientLight, 'color')
+		.name('ambient light color');
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
@@ -197,9 +122,12 @@ async function init() {
 		100,
 	);
 
-	camera.position.z = 3;
-	camera.position.y = 1.5;
-	camera.position.x = 1;
+	// camera.position.z = 3;
+	// camera.position.y = 1.5;
+	// camera.position.x = 1;
+	camera.position.z = 1;
+	camera.position.y = 1;
+	camera.position.x = 2;
 
 	// camera.lookAt(boxMesh.position);
 
@@ -220,17 +148,6 @@ async function init() {
 	scene.add(axesHelper);
 	axesHelper.visible = false;
 
-	awsomeTweaks
-		.add(
-			{
-				message: '',
-			},
-			'message',
-		)
-		.name(
-			'-----------------------------------------------------------------------------------------\n-----------------------------------------------------------------------------------------',
-		)
-		.disable();
 	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
 
 	awsomeTweaks.open();
@@ -291,12 +208,20 @@ async function init() {
 	function tick(timestamp: number) {
 		timer.update(timestamp);
 
-		// const elapsedTime = timer.getElapsed();
+		const elapsedTime = timer.getElapsed();
 
 		orbitControls.update();
 
 		// camera.lookAt(boxMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
+
+		boxMesh.rotation.y = elapsedTime * 0.1;
+		sphereMesh.rotation.y = elapsedTime * 0.1;
+		torusMesh.rotation.y = elapsedTime * 0.1;
+
+		boxMesh.rotation.x = 0.15 * elapsedTime;
+		sphereMesh.rotation.x = 0.15 * elapsedTime;
+		torusMesh.rotation.x = 0.15 * elapsedTime;
 
 		renderer.render(scene, camera);
 

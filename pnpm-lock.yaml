@@ -877,7 +877,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/12_1_lights_intro:
+  apps/12_1_ambient_light:
     dependencies:
       gsap:
         specifier: ^3.15.0
