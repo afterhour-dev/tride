@@ -1,10 +1,6 @@
 import * as THREE from 'three/webgpu';
-// import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// EXPLAIN: importing FontLoader, which of these two imports are more up to data
-// import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-// EXPLAIN: importing TextGeometry
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
@@ -12,7 +8,6 @@ import GUI from 'lil-gui';
 import { getRequiredElement } from './util';
 
 // const loadingManager = new THREE.LoadingManager();
-
 // const textureLoader = new THREE.TextureLoader(loadingManager);
 
 //
@@ -63,8 +58,9 @@ async function init() {
 	// 3 -  texture stuff
 	// colorSpace and stuff
 
+	// ------------------------------------------------------
 	// 4 - Text -  loading, TextGeometry, material, mesh
-	// EXPLAIN: FontLoader
+
 	const fontLoader = new FontLoader();
 	// console.log(fontLoader);
 	// console.log(TextGeometry);
@@ -76,28 +72,21 @@ async function init() {
 	);
 
 	// EXPLAIN: these are variables because of centering
+	// we are using these in calculation
 	const bevelSize = 0.02;
 	const bevelThickness = 0.03;
 
 	const textGeometry = new TextGeometry('Ћао из Три.џејеса!', {
 		font,
-		// EXPLAIN: all used parameters and ones which we didn't use
-		// for whom you think that can be also nice and useful to know
-		// how they work
 		size: 0.5,
-		// EXPLAIN: height removel; it is renamed to depth
 		depth: 0.2,
-		// EXPLAIN: initial values for curveSegments was 12
-		// and for bevelSegments was 5 and that was too much
 		// curveSegments: 12,
 		// bevelSegments: 5,
-		// EXPLAIN: and after playing around with changing values
-		// I decided to lower it to next values
 		curveSegments: 5,
 		bevelSegments: 4,
 		//
 		bevelEnabled: true,
-		// EXPLAIN: these are variables because we need to use them in centerin
+		// EXPLAIN: these are variables because we need to use them in centering
 		bevelThickness,
 		bevelSize,
 		// bevelThickness: 0.03,
@@ -112,22 +101,24 @@ async function init() {
 	// EXPLAIN: does boundingBox property only gets its value after computation above
 	console.log(textGeometry.boundingBox);
 	// EXPLAIN: now textGeometry.boundingSphere is null
-	// EXPLAIN: wha kind of value os boundingBox, from what data is built?
+	// EXPLAIN: what kind of value is boundingBox, from what data is built?
 
 	// EXPLAIN: next line
 	const textMaterial = new THREE.MeshBasicMaterial();
 	// textMaterial.wireframe = true;
 	awsomeTweaks.add(textMaterial, 'wireframe');
 
+	// EXPLAIN: hard way
 	// EXPLAIN: translate usage, and values that we are using, and what we will produce
+	/* 
 	// EXPLAIN: method translate is from which class?
 	if (textGeometry.boundingBox && textGeometry.boundingBox.max) {
 		// EXPLAIN: now text will look centered, but not exactly
-		/* textGeometry.translate(
-			-textGeometry.boundingBox.max.x * 0.5,
-			-textGeometry.boundingBox.max.y * 0.5,
-			-textGeometry.boundingBox.max.z * 0.5,
-		); */
+		// textGeometry.translate(
+		// 	-textGeometry.boundingBox.max.x * 0.5,
+		// 	-textGeometry.boundingBox.max.y * 0.5,
+		// 	-textGeometry.boundingBox.max.z * 0.5,
+		// );
 		// EXPLAIN: because bevelTickness and bevelSize
 		// text is not centered, so we must use bevelSize and
 		// bevelTickness
@@ -136,9 +127,14 @@ async function init() {
 			-(textGeometry.boundingBox.max.y - bevelSize) * 0.5,
 			-(textGeometry.boundingBox.max.z - bevelThickness) * 0.5,
 		);
-	}
+	} 
+		
+	*/
 
-	// EXPLAIN: text mesh
+	// EXPLAIN: easy way, we comment out previous if statemnt
+	// and use center method on textGeometry
+	textGeometry.center();
+
 	const text = new THREE.Mesh(textGeometry, textMaterial);
 
 	scene.add(text);
