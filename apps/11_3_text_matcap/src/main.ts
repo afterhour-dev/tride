@@ -39,9 +39,9 @@ const gui = new GUI({
 
 const awsomeTweaks = gui.addFolder('Awsome tweaking');
 
-// const debugObject = {
-// 	//
-// };
+const debugObject = {
+	//
+};
 // awsomeTweaks.close();
 
 window.addEventListener('keydown', (ev) => {
