@@ -1,4 +1,4 @@
-# Text
+# Text - lesson two
 
 Learning about `TextGeometry` (former TextBufferGeometry), and font format we are using is called **typeface**
 

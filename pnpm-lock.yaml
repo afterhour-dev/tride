@@ -753,7 +753,38 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/11_0_text:
+  apps/11_1_text_one:
+    dependencies:
+      gsap:
+        specifier: ^3.15.0
+        version: 3.15.0
+      lil-gui:
+        specifier: ^0.21.0
+        version: 0.21.0
+      three:
+        specifier: ^0.185.1
+        version: 0.185.1
+    devDependencies:
+      '@td/lint-config':
+        specifier: workspace:*
+        version: link:../../configs/lint-config
+      '@td/ts-config':
+        specifier: workspace:*
+        version: link:../../configs/ts-config
+      '@types/three':
+        specifier: ^0.185.1
+        version: 0.185.1
+      eslint:
+        specifier: ^10.7.0
+        version: 10.7.0
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+      vite:
+        specifier: ^8.1.5
+        version: 8.1.5
+
+  apps/11_2_text_two:
     dependencies:
       gsap:
         specifier: ^3.15.0
