@@ -250,7 +250,7 @@ async function init() {
 		.name('point light distance');
 	awsomeTweaks
 		.add(pointLight, 'decay')
-		.min(0)
+		.min(-1)
 		.max(20)
 		.step(0.01)
 		.name('point light decey');
