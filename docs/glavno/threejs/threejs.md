@@ -66,3 +66,4 @@
 - [[12.0_lights-setup]] — 2026-08-12
 - [[12.1_ambient-light]] — 2026-08-13
 - [[12.2_directional-light]] — 2026-08-13
+- [[12.3_hemisphere-light]] — 2026-08-13

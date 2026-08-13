@@ -78,15 +78,27 @@ async function init() {
 
 	scene.add(directionalLight);
 
-	// EXPLAIN: HemisphereLight (explain arguments also) and
-	// what's the range for intensity
 	const hemisphereLight = new THREE.HemisphereLight();
 	hemisphereLight.color = new THREE.Color(0xff0000);
 	hemisphereLight.groundColor = new THREE.Color(0x0000ff);
 	hemisphereLight.intensity = 0.3;
 
+	hemisphereLight.visible = false;
+
 	scene.add(hemisphereLight);
 
+	// EXPLAIN: PointLight, its parameters and major props
+	const pointLight = new THREE.PointLight(0xff9000, 0.5);
+	// EXPLAIN: with distance and decay as arguments
+	// const pointLight = new THREE.PointLight(0xff9000, 0.5, 10, 2);
+
+	pointLight.distance = 10;
+	pointLight.decay = 2;
+
+	// EXPLAIN: positioning of poit light
+	pointLight.position.set(1, -0.5, 1);
+
+	scene.add(pointLight);
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
@@ -179,7 +191,7 @@ async function init() {
 		.name(
 			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
 		);
-	// EXPLAIN: tweaking hemisphere light with gui
+
 	awsomeTweaks
 		.add(hemisphereLight, 'intensity')
 		.name('hemispere light intesnity')
@@ -187,14 +199,63 @@ async function init() {
 		.max(1)
 		.step(0.001);
 	awsomeTweaks
-		.add(hemisphereLight, 'visible')
-		.name('show hemisphere light');
-	awsomeTweaks
 		.addColor(hemisphereLight, 'color')
 		.name('hem sky color');
 	awsomeTweaks
 		.addColor(hemisphereLight, 'groundColor')
 		.name('hem ground color');
+	awsomeTweaks
+		.add(hemisphereLight, 'visible')
+		.name('show hemisphere light');
+
+	awsomeTweaks
+		.add({ a: '' }, 'a')
+		.name(
+			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+		);
+
+	// EXPLAIN: tweaking PointLight with gui
+	awsomeTweaks
+		.add(pointLight, 'intensity')
+		.name('point light intensity')
+		.min(0)
+		.max(1)
+		.step(0.001);
+	awsomeTweaks
+		.addColor(pointLight, 'color')
+		.name('point light color');
+	awsomeTweaks
+		.add(pointLight.position, 'x')
+		.step(0.001)
+		.name('point light x')
+		.min(-3)
+		.max(3);
+	awsomeTweaks
+		.add(pointLight.position, 'y')
+		.step(0.001)
+		.name('point light y')
+		.min(-3)
+		.max(3);
+	awsomeTweaks
+		.add(pointLight.position, 'z')
+		.step(0.001)
+		.name('point light z')
+		.min(-3)
+		.max(3);
+	awsomeTweaks
+		.add(pointLight, 'distance')
+		.min(0)
+		.max(20)
+		.step(0.01)
+		.name('point light distance');
+	awsomeTweaks
+		.add(pointLight, 'decay')
+		.min(0)
+		.max(20)
+		.step(0.01)
+		.name('point light decey');
+	awsomeTweaks.add(pointLight, 'visible').name('point light visible');
+
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
