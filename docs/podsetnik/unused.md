@@ -1,0 +1,1 @@
+# Remove unused images and textures per app
