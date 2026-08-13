@@ -1,10 +1,10 @@
 {
 	"env": {
-		"ANTHROPIC_DEFAULT_SONNET_MODEL": "xiaomi/mimo-v2.5",
-		"ANTHROPIC_DEFAULT_OPUS_MODEL": "xiaomi/mimo-v2.5",
-		"ANTHROPIC_DEFAULT_HAIKU_MODEL": "xiaomi/mimo-v2.5",
-		"CLAUDE_CODE_SUBAGENT_MODEL": "xiaomi/mimo-v2.5",
-		"CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1050000"
+		"ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek/deepseek-v4-flash-0731",
+		"ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek/deepseek-v4-flash-0731",
+		"ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek/deepseek-v4-flash-0731",
+		"CLAUDE_CODE_SUBAGENT_MODEL": "deepseek/deepseek-v4-flash-0731",
+		"CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1048576"
 	},
 	"permissions": {
 		"defaultMode": "manual",

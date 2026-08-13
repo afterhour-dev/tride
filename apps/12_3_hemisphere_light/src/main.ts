@@ -315,6 +315,8 @@ async function init() {
 		torusMesh.rotation.x = 0.15 * elapsedTime;
 
 		renderer.render(scene, camera);
+
+		// window.requestAnimationFrame(tick);
 	}
 }
 
