@@ -12,10 +12,7 @@ example:
 curl -s https://openrouter.ai/api/v1/models | jq '.data[] | select(.id=="deepseek/deepseek-v4-flash-0731") | .context_length'
 ```
 
-
-
 ## Change
-
 
 ### jul 16
 
@@ -58,7 +55,7 @@ curl -s https://openrouter.ai/api/v1/models | jq '.data[] | select(.id=="deepsee
 
 "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek/deepseek-v4-flash-0731",
 "ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek/deepseek-v4-flash-0731",
-"ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek/deepseek-v4-flash-0731",
+"ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen/qwen3-coder-next",
 "CLAUDE_CODE_SUBAGENT_MODEL": "deepseek/deepseek-v4-flash-0731",
 "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1048576"
 

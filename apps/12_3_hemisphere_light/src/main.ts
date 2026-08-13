@@ -198,6 +198,8 @@ async function init() {
 
 	// ------------------------------------------------
 	// 10 - helpes
+
+	// EXPLAIN: usage of this axesHelper t odetermine from what direction is light comming from
 	const axesHelper = new THREE.AxesHelper(5);
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
@@ -205,7 +207,7 @@ async function init() {
 
 	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
 
-	// EXPLAIN: we can visualize the light source with a helper
+	// EXPLAIN: we can visualize the light source with a directional light helper
 	const directionalLightHelper = new THREE.DirectionalLightHelper(
 		directionalLight,
 		5,
@@ -315,8 +317,6 @@ async function init() {
 		torusMesh.rotation.x = 0.15 * elapsedTime;
 
 		renderer.render(scene, camera);
-
-		// window.requestAnimationFrame(tick);
 	}
 }
 
