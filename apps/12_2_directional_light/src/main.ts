@@ -189,13 +189,50 @@ async function init() {
 	// orbitControls.update()
 
 	// ------------------------------------------------
-	// 10 - axes helper
+	// 10 - helpes
 	const axesHelper = new THREE.AxesHelper(5);
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
 	axesHelper.visible = false;
 
 	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
+
+	// EXPLAIN: we can visualize the light source with a helper
+	const directionalLightHelper = new THREE.DirectionalLightHelper(
+		directionalLight,
+		5,
+	);
+
+	directionalLightHelper.visible = false;
+
+	awsomeTweaks
+		.add(directionalLightHelper, 'visible')
+		.name('visualize directional light');
+
+	scene.add(directionalLightHelper);
+
+	// EXPLAIN: to see direction of the light
+	const arrowHelper = new THREE.ArrowHelper(
+		directionalLight.position.clone().normalize(), // direction
+		new THREE.Vector3(0, 0, 0), // origin
+		1, // length
+		0xffffff, // color
+	);
+
+	arrowHelper.visible = false;
+
+	awsomeTweaks
+		.add(arrowHelper, 'visible')
+		.name('what direction is light comming from');
+
+	scene.add(arrowHelper);
+
+	awsomeTweaks
+		.add({ a: '' }, 'a')
+		.name(
+			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+		)
+		.disable();
 
 	awsomeTweaks.open();
 
