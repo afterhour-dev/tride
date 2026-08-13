@@ -66,18 +66,25 @@ async function init() {
 	ambientLight.color = new THREE.Color(0xffffff);
 	ambientLight.intensity = 0.5;
 
+	ambientLight.visible = false;
+
 	scene.add(ambientLight);
 
-	// EXPLAIN: DirectionalLight
-	// EXPLAIN: range of the intensity
 	const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.3);
 
-	// EXPLAIN: Since default is 0,1,0, I wanted that light emits
-	// from the right side; so we lowered y and increased x
-	// (lower ambien light intensity in gui to see the effect of directional light)
 	directionalLight.position.set(1, 0.25, 0);
 
+	directionalLight.visible = false;
+
 	scene.add(directionalLight);
+
+	// EXPLAIN: HemisphereLight (explain arguments also)
+	const hemisphereLight = new THREE.HemisphereLight();
+	hemisphereLight.color = new THREE.Color(0xff0000);
+	hemisphereLight.groundColor = new THREE.Color(0x0000ff);
+	hemisphereLight.intensity = 0.3;
+
+	scene.add(hemisphereLight);
 
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
@@ -131,8 +138,7 @@ async function init() {
 			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
 		)
 		.disable();
-	// EXPLAIN: added directional light properties to the
-	// tweaks
+
 	awsomeTweaks
 		.add(directionalLight, 'intensity')
 		.min(0)
@@ -144,8 +150,6 @@ async function init() {
 		.addColor(directionalLight, 'color')
 		.name('directional light color');
 
-	// EXPLAIN: adding directional light position to the gui so I can also find out
-	// what is the defaoult
 	awsomeTweaks
 		.add(directionalLight.position, 'x')
 		.step(0.5)
@@ -199,15 +203,11 @@ async function init() {
 	// ------------------------------------------------
 	// 10 - helpes
 
-	// EXPLAIN: usage of this axesHelper t odetermine from what direction is light comming from
 	const axesHelper = new THREE.AxesHelper(5);
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
 	axesHelper.visible = false;
 
-	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
-
-	// EXPLAIN: we can visualize the light source with a directional light helper
 	const directionalLightHelper = new THREE.DirectionalLightHelper(
 		directionalLight,
 		5,
@@ -221,7 +221,6 @@ async function init() {
 
 	scene.add(directionalLightHelper);
 
-	// EXPLAIN: to see direction of the light
 	const arrowHelper = new THREE.ArrowHelper(
 		directionalLight.position.clone().normalize(), // direction
 		new THREE.Vector3(0, 0, 0), // origin
@@ -243,6 +242,7 @@ async function init() {
 			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
 		)
 		.disable();
+	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
 
 	awsomeTweaks.open();
 

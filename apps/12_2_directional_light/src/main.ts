@@ -205,8 +205,6 @@ async function init() {
 	scene.add(axesHelper);
 	axesHelper.visible = false;
 
-	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
-
 	// EXPLAIN: we can visualize the light source with a directional light helper
 	const directionalLightHelper = new THREE.DirectionalLightHelper(
 		directionalLight,
@@ -243,6 +241,8 @@ async function init() {
 			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
 		)
 		.disable();
+
+	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
 
 	awsomeTweaks.open();
 
