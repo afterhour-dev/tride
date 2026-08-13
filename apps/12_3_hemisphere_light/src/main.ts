@@ -78,7 +78,8 @@ async function init() {
 
 	scene.add(directionalLight);
 
-	// EXPLAIN: HemisphereLight (explain arguments also)
+	// EXPLAIN: HemisphereLight (explain arguments also) and
+	// what's the range for intensity
 	const hemisphereLight = new THREE.HemisphereLight();
 	hemisphereLight.color = new THREE.Color(0xff0000);
 	hemisphereLight.groundColor = new THREE.Color(0x0000ff);
@@ -172,6 +173,28 @@ async function init() {
 	awsomeTweaks
 		.add(directionalLight, 'visible')
 		.name('show directional light');
+
+	awsomeTweaks
+		.add({ a: '' }, 'a')
+		.name(
+			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+		);
+	// EXPLAIN: tweaking hemisphere light with gui
+	awsomeTweaks
+		.add(hemisphereLight, 'intensity')
+		.name('hemispere light intesnity')
+		.min(0)
+		.max(1)
+		.step(0.001);
+	awsomeTweaks
+		.add(hemisphereLight, 'visible')
+		.name('show hemisphere light');
+	awsomeTweaks
+		.addColor(hemisphereLight, 'color')
+		.name('hem sky color');
+	awsomeTweaks
+		.addColor(hemisphereLight, 'groundColor')
+		.name('hem ground color');
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
