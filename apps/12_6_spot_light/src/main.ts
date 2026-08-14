@@ -1,6 +1,6 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// EXPLAIN: needed for rect area light to work
+// needed for rect area light to work in case of WebGPU
 import { RectAreaLightTexturesLib } from 'three/addons/lights/RectAreaLightTexturesLib.js';
 
 import GUI from 'lil-gui';
@@ -22,7 +22,21 @@ const gui = new GUI({
 	closeFolders: true,
 });
 
-const awsomeTweaks = gui.addFolder('Awsome tweaking');
+// EXPLAIN: dividing all lights twaeaks into folders becase I
+// have too much setting in my gui
+const ambientTweaks = gui.addFolder('Ambient Light tweaks');
+ambientTweaks.close();
+const directionalTweaks = gui.addFolder('Directional Light tweaks');
+directionalTweaks.close();
+const hemisphereTweaks = gui.addFolder('Hemisphere Light tweaks');
+hemisphereTweaks.close();
+const pointTweaks = gui.addFolder('Point Light tweaks');
+pointTweaks.close();
+const rectAreaTweaks = gui.addFolder('Rect Area Light tweaks');
+rectAreaTweaks.close();
+
+const spotTweaks = gui.addFolder('Spot Light tweaks');
+spotTweaks.open();
 
 const debugObject = {
 	rectLookAtBox: () => {},
@@ -30,7 +44,6 @@ const debugObject = {
 	rectLookAtSphere: () => {},
 	rectLookAtTorus: () => {},
 };
-// awsomeTweaks.close();
 
 window.addEventListener('keydown', (ev) => {
 	if (ev.key === 'h') {
@@ -53,7 +66,7 @@ async function init() {
 	const renderer = new THREE.WebGPURenderer({ canvas });
 	await renderer.init();
 
-	// EXPLAIN: for react area light to work
+	// needed for react area light to work in case of WebGPU
 	THREE.RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
 
 	// ------------------------------------------------------
@@ -107,22 +120,23 @@ async function init() {
 
 	scene.add(pointLight);
 
-	// EXPLAIN: RectAreaLight and it's parameters and props
 	const rectAreaLight = new THREE.RectAreaLight();
 	rectAreaLight.color = new THREE.Color(0x4e00ff);
 	rectAreaLight.intensity = 2;
 	rectAreaLight.width = 1;
 	rectAreaLight.height = 1;
 
-	// EXPALIN: we can position it
 	rectAreaLight.position.set(-1.5, 0, 1.5);
-
-	// EXPLAIN: you can also rotate it
-
-	// EXPLAIN: we can use `lookAt`
 	// rectAreaLight.lookAt(new THREE.Vector3());
+	rectAreaLight.visible = false;
 
 	scene.add(rectAreaLight);
+
+	// EXPLAIN: Spot Light and its arguments and properties
+	const spotLight = new THREE.SpotLight();
+
+	scene.add(spotLight);
+
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
@@ -150,192 +164,167 @@ async function init() {
 
 	scene.add(boxMesh, torusMesh, sphereMesh, floorMesh);
 
-	// // EXPLAIN: we can use `lookAt`
-	// rectAreaLight.lookAt(sphereMesh.position);
-
 	// ------------- Tweaks ----------------------------------
 	// 7 - gui tweaks
-	// awsomeTweaks.add(material, 'wireframe');
+	// ambientTweaks.add(material, 'wireframe');
 
-	awsomeTweaks
+	ambientTweaks
 		.add(ambientLight, 'intensity')
 		.min(0)
 		.max(1)
 		.step(0.001)
 		.name('ambient light intensity');
 
-	awsomeTweaks
+	ambientTweaks
 		.addColor(ambientLight, 'color')
 		.name('ambient light color');
 
-	awsomeTweaks
+	ambientTweaks
 		.add(ambientLight, 'visible')
 		.name('show ambient light');
 
-	awsomeTweaks
-		.add({ a: '' }, 'a')
-		.name(
-			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-		)
-		.disable();
+	// // // // // // // // // // // // // // // // // // //
 
-	awsomeTweaks
+	directionalTweaks
 		.add(directionalLight, 'intensity')
 		.min(0)
 		.max(1)
 		.step(0.001)
 		.name('directional light intensity');
 
-	awsomeTweaks
+	directionalTweaks
 		.addColor(directionalLight, 'color')
 		.name('directional light color');
 
-	awsomeTweaks
+	directionalTweaks
 		.add(directionalLight.position, 'x')
 		.step(0.5)
 		.name('directional light x')
 		.min(-100)
 		.max(100);
-	awsomeTweaks
+	directionalTweaks
 		.add(directionalLight.position, 'y')
 		.step(0.5)
 		.name('directional light y')
 		.min(-100)
 		.max(100);
-	awsomeTweaks
+	directionalTweaks
 		.add(directionalLight.position, 'z')
 		.step(0.5)
 		.name('directional light z')
 		.min(-100)
 		.max(100);
 
-	awsomeTweaks
+	directionalTweaks
 		.add(directionalLight, 'visible')
 		.name('show directional light');
 
-	awsomeTweaks
-		.add({ a: '' }, 'a')
-		.name(
-			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-		);
+	// // // // // // // // // // // // // // // // // // //
 
-	awsomeTweaks
+	hemisphereTweaks
 		.add(hemisphereLight, 'intensity')
 		.name('hemispere light intesnity')
 		.min(0)
 		.max(1)
 		.step(0.001);
-	awsomeTweaks
+	hemisphereTweaks
 		.addColor(hemisphereLight, 'color')
 		.name('hem sky color');
-	awsomeTweaks
+	hemisphereTweaks
 		.addColor(hemisphereLight, 'groundColor')
 		.name('hem ground color');
-	awsomeTweaks
+	hemisphereTweaks
 		.add(hemisphereLight, 'visible')
 		.name('show hemisphere light');
 
-	awsomeTweaks
-		.add({ a: '' }, 'a')
-		.name(
-			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-		);
+	// // // // // // // // // // // // // // // // // // //
 
-	awsomeTweaks
+	pointTweaks
 		.add(pointLight, 'intensity')
 		.name('point light intensity')
 		.min(0)
 		.max(1)
 		.step(0.001);
-	awsomeTweaks
-		.addColor(pointLight, 'color')
-		.name('point light color');
-	awsomeTweaks
+	pointTweaks.addColor(pointLight, 'color').name('point light color');
+	pointTweaks
 		.add(pointLight.position, 'x')
 		.step(0.001)
 		.name('point light x')
 		.min(-3)
 		.max(3);
-	awsomeTweaks
+	pointTweaks
 		.add(pointLight.position, 'y')
 		.step(0.001)
 		.name('point light y')
 		.min(-3)
 		.max(3);
-	awsomeTweaks
+	pointTweaks
 		.add(pointLight.position, 'z')
 		.step(0.001)
 		.name('point light z')
 		.min(-3)
 		.max(3);
-	awsomeTweaks
+	ambientTweaks
 		.add(pointLight, 'distance')
 		.min(0)
 		.max(20)
 		.step(0.01)
 		.name('point light distance');
-	awsomeTweaks
+	pointTweaks
 		.add(pointLight, 'decay')
 		.min(-1)
 		.max(20)
 		.step(0.01)
 		.name('point light decey');
-	awsomeTweaks.add(pointLight, 'visible').name('point light visible');
+	pointTweaks.add(pointLight, 'visible').name('point light visible');
 
-	awsomeTweaks
-		.add({ a: '' }, 'a')
-		.name(
-			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-		);
+	// // // // // // // // // // // // // // // // // // //
 
-	// EXPLAIN: tweaking rectAreaLight with gui
-	awsomeTweaks
+	rectAreaTweaks
 		.add(rectAreaLight, 'intensity')
 		.name('rectArea light intensity')
 		.min(0)
 		.max(10)
 		.step(0.001);
-	awsomeTweaks
+	rectAreaTweaks
 		.addColor(rectAreaLight, 'color')
 		.name('rectArea light color');
 
-	awsomeTweaks
+	rectAreaTweaks
 		.add(rectAreaLight, 'width')
 		.min(0)
 		.max(10)
 		.name('rectArea light width');
-	awsomeTweaks
+	rectAreaTweaks
 		.add(rectAreaLight, 'height')
 		.min(0)
 		.max(10)
 		.name('rectArea light height');
 
-	awsomeTweaks
+	rectAreaTweaks
 		.add(rectAreaLight.position, 'x')
 		.step(0.001)
 		.name('rectArea light x')
 		.min(-3)
 		.max(3);
-	awsomeTweaks
+	rectAreaTweaks
 		.add(rectAreaLight.position, 'y')
 		.step(0.001)
 		.name('rectArea light y')
 		.min(-3)
 		.max(3);
-	awsomeTweaks
+	rectAreaTweaks
 		.add(rectAreaLight.position, 'z')
 		.step(0.001)
 		.name('rectArea light z')
 		.min(-3)
 		.max(3);
-	// EXPLAIN: roatation is interesting with gui
-	awsomeTweaks
+	rectAreaTweaks
 		.add(rectAreaLight.rotation, 'y')
 		.min(0)
 		.max(2 * Math.PI)
 		.name('rotate y');
 
-	// EXPLAIN: I wanted to set lookAt also in gui
 	debugObject.rectLookAtBox = () => {
 		rectAreaLight.lookAt(boxMesh.position);
 	};
@@ -348,10 +337,17 @@ async function init() {
 	debugObject.rectLookAtTorus = () => {
 		rectAreaLight.lookAt(torusMesh.position);
 	};
-	awsomeTweaks.add(debugObject, 'rectLookAtBox');
-	awsomeTweaks.add(debugObject, 'rectLookAtCenter');
-	awsomeTweaks.add(debugObject, 'rectLookAtSphere');
-	awsomeTweaks.add(debugObject, 'rectLookAtTorus');
+	rectAreaTweaks.add(debugObject, 'rectLookAtBox');
+	rectAreaTweaks.add(debugObject, 'rectLookAtCenter');
+	rectAreaTweaks.add(debugObject, 'rectLookAtSphere');
+	rectAreaTweaks.add(debugObject, 'rectLookAtTorus');
+
+	rectAreaTweaks
+		.add(rectAreaLight, 'visible')
+		.name('rect area light visible');
+
+	// EXPLAIN: adding spot light to the tweaks
+	spotTweaks.addColor(spotLight, 'color');
 
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
@@ -382,7 +378,7 @@ async function init() {
 	// orbitControls.update()
 
 	// ------------------------------------------------
-	// 10 - helpes
+	// 10 - helpers
 
 	const axesHelper = new THREE.AxesHelper(5);
 	axesHelper.setColors('red', 'green', 'blue');
@@ -396,13 +392,13 @@ async function init() {
 
 	directionalLightHelper.visible = false;
 
-	awsomeTweaks
-		.add({ a: '' }, 'a')
-		.name(
-			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-		);
+	// gui
+	// 	.add({ a: '' }, 'a')
+	// 	.name(
+	// 		'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+	// 	);
 
-	awsomeTweaks
+	directionalTweaks
 		.add(directionalLightHelper, 'visible')
 		.name('visualize directional light');
 
@@ -417,21 +413,20 @@ async function init() {
 
 	arrowHelper.visible = false;
 
-	awsomeTweaks
+	directionalTweaks
 		.add(arrowHelper, 'visible')
 		.name('what direction is light comming from');
 
 	scene.add(arrowHelper);
 
-	awsomeTweaks
-		.add({ a: '' }, 'a')
-		.name(
-			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-		)
-		.disable();
-	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
+	// ambientTweaks
+	// 	.add({ a: '' }, 'a')
+	// 	.name(
+	// 		'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+	// 	)
+	// 	.disable();
 
-	awsomeTweaks.open();
+	gui.add(axesHelper, 'visible').name('show axes');
 
 	// ----------------------------------------------------
 	// 0.2 - Renderer (second part)
@@ -495,9 +490,6 @@ async function init() {
 		// camera.lookAt(boxMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
 
-		// EXPLAIN: if you want to keep rectLight to look at
-		// during anmiation, to test this, uncomment it and
-		// change position of the rect light with gui we already set up
 		// rectAreaLight.lookAt(sphereMesh.position);
 
 		boxMesh.rotation.y = elapsedTime * 0.1;
