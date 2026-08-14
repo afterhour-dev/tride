@@ -1,5 +1,8 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// EXPLAIN: needed for rect area light to work
+import { RectAreaLightTexturesLib } from 'three/addons/lights/RectAreaLightTexturesLib.js';
+
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
 
@@ -46,6 +49,9 @@ async function init() {
 	// 1.1 - Renderer (first part)
 	const renderer = new THREE.WebGPURenderer({ canvas });
 	await renderer.init();
+
+	// EXPLAIN: for react area light to work
+	THREE.RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
 
 	// ------------------------------------------------------
 	// 2 - Environment map
@@ -267,6 +273,16 @@ async function init() {
 		.name(
 			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
 		);
+
+	awsomeTweaks
+		.add(rectAreaLight, 'intensity')
+		.name('rectAl light intensity')
+		.min(0)
+		.max(10)
+		.step(0.001);
+	awsomeTweaks
+		.addColor(rectAreaLight, 'color')
+		.name('rectAl light color');
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
