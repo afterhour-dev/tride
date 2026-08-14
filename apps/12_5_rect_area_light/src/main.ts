@@ -25,7 +25,10 @@ const gui = new GUI({
 const awsomeTweaks = gui.addFolder('Awsome tweaking');
 
 const debugObject = {
-	rectLookAtSphere: false,
+	rectLookAtBox: () => {},
+	rectLookAtCenter: () => {},
+	rectLookAtSphere: () => {},
+	rectLookAtTorus: () => {},
 };
 // awsomeTweaks.close();
 
@@ -112,7 +115,7 @@ async function init() {
 	rectAreaLight.height = 1;
 
 	// EXPALIN: we can position it
-	rectAreaLight.position.set(1.5, 0, 1.5);
+	rectAreaLight.position.set(-1.5, 0, 1.5);
 
 	// EXPLAIN: you can also rotate it
 
@@ -333,15 +336,23 @@ async function init() {
 		.name('rotate y');
 
 	// EXPLAIN: I wanted to set lookAt also in gui
-	awsomeTweaks
-		.add(debugObject, 'rectLookAtSphere')
-		.onChange((val: boolean) => {
-			if (val === true) {
-				rectAreaLight.lookAt(sphereMesh.position);
-			} else {
-				rectAreaLight.lookAt(new THREE.Vector3());
-			}
-		});
+	debugObject.rectLookAtBox = () => {
+		rectAreaLight.lookAt(boxMesh.position);
+	};
+	debugObject.rectLookAtCenter = () => {
+		rectAreaLight.lookAt(new THREE.Vector3());
+	};
+	debugObject.rectLookAtSphere = () => {
+		rectAreaLight.lookAt(sphereMesh.position);
+	};
+	debugObject.rectLookAtTorus = () => {
+		rectAreaLight.lookAt(torusMesh.position);
+	};
+	awsomeTweaks.add(debugObject, 'rectLookAtBox');
+	awsomeTweaks.add(debugObject, 'rectLookAtCenter');
+	awsomeTweaks.add(debugObject, 'rectLookAtSphere');
+	awsomeTweaks.add(debugObject, 'rectLookAtTorus');
+
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
@@ -483,6 +494,11 @@ async function init() {
 
 		// camera.lookAt(boxMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
+
+		// EXPLAIN: if you want to keep rectLight to look at
+		// during anmiation, to test this, uncomment it and
+		// change position of the rect light with gui we already set up
+		// rectAreaLight.lookAt(sphereMesh.position);
 
 		boxMesh.rotation.y = elapsedTime * 0.1;
 		sphereMesh.rotation.y = elapsedTime * 0.1;

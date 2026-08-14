@@ -40,3 +40,6 @@ Want to know important and useful things about RectAreaLight
       it worked after this solution: you explain why? And also is this solution up to date
 
 - It works only with `MeshStandardMaterial` and `MeshPhysicalMaterial`
+
+- you can use `lookAt` but you can't access `target`:
+  - RectAreaLight doesn't store a lookAt target as a property — unlike DirectionalLight/SpotLight, it has no .target object. Calling .lookAt() just rotates it once; after that, the "look direction" only exists implicitly in its rotation/quaternion.
