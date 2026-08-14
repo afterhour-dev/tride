@@ -1,6 +1,6 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// needed for rect area light to work in case of WebGPU
+// EXPLAIN: needed for rect area light to work
 import { RectAreaLightTexturesLib } from 'three/addons/lights/RectAreaLightTexturesLib.js';
 
 import GUI from 'lil-gui';
@@ -22,19 +22,7 @@ const gui = new GUI({
 	closeFolders: true,
 });
 
-// EXPLAIN: dividing all lights twaeaks into folders becase I
-// have too much setting in my gui
-const ambientTweaks = gui.addFolder('Ambient Light tweaks');
-ambientTweaks.close();
-const directionalTweaks = gui.addFolder('Directional Light tweaks');
-directionalTweaks.close();
-const hemisphereTweaks = gui.addFolder('Hemisphere Light tweaks');
-hemisphereTweaks.close();
-const pointTweaks = gui.addFolder('Point Light tweaks');
-pointTweaks.close();
-const rectAreaTweaks = gui.addFolder('Rect Area Light tweaks');
-
-rectAreaTweaks.open();
+const awsomeTweaks = gui.addFolder('Awsome tweaking');
 
 const debugObject = {
 	rectLookAtBox: () => {},
@@ -42,6 +30,7 @@ const debugObject = {
 	rectLookAtSphere: () => {},
 	rectLookAtTorus: () => {},
 };
+// awsomeTweaks.close();
 
 window.addEventListener('keydown', (ev) => {
 	if (ev.key === 'h') {
@@ -64,7 +53,7 @@ async function init() {
 	const renderer = new THREE.WebGPURenderer({ canvas });
 	await renderer.init();
 
-	// needed for react area light to work in case of WebGPU
+	// EXPLAIN: for react area light to work
 	THREE.RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
 
 	// ------------------------------------------------------
@@ -166,162 +155,181 @@ async function init() {
 
 	// ------------- Tweaks ----------------------------------
 	// 7 - gui tweaks
-	// ambientTweaks.add(material, 'wireframe');
+	// awsomeTweaks.add(material, 'wireframe');
 
-	ambientTweaks
+	awsomeTweaks
 		.add(ambientLight, 'intensity')
 		.min(0)
 		.max(1)
 		.step(0.001)
 		.name('ambient light intensity');
 
-	ambientTweaks
+	awsomeTweaks
 		.addColor(ambientLight, 'color')
 		.name('ambient light color');
 
-	ambientTweaks
+	awsomeTweaks
 		.add(ambientLight, 'visible')
 		.name('show ambient light');
 
-	// // // // // // // // // // // // // // // // // // //
+	awsomeTweaks
+		.add({ a: '' }, 'a')
+		.name(
+			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+		)
+		.disable();
 
-	directionalTweaks
+	awsomeTweaks
 		.add(directionalLight, 'intensity')
 		.min(0)
 		.max(1)
 		.step(0.001)
 		.name('directional light intensity');
 
-	directionalTweaks
+	awsomeTweaks
 		.addColor(directionalLight, 'color')
 		.name('directional light color');
 
-	directionalTweaks
+	awsomeTweaks
 		.add(directionalLight.position, 'x')
 		.step(0.5)
 		.name('directional light x')
 		.min(-100)
 		.max(100);
-	directionalTweaks
+	awsomeTweaks
 		.add(directionalLight.position, 'y')
 		.step(0.5)
 		.name('directional light y')
 		.min(-100)
 		.max(100);
-	directionalTweaks
+	awsomeTweaks
 		.add(directionalLight.position, 'z')
 		.step(0.5)
 		.name('directional light z')
 		.min(-100)
 		.max(100);
 
-	directionalTweaks
+	awsomeTweaks
 		.add(directionalLight, 'visible')
 		.name('show directional light');
 
-	// // // // // // // // // // // // // // // // // // //
+	awsomeTweaks
+		.add({ a: '' }, 'a')
+		.name(
+			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+		);
 
-	hemisphereTweaks
+	awsomeTweaks
 		.add(hemisphereLight, 'intensity')
 		.name('hemispere light intesnity')
 		.min(0)
 		.max(1)
 		.step(0.001);
-	hemisphereTweaks
+	awsomeTweaks
 		.addColor(hemisphereLight, 'color')
 		.name('hem sky color');
-	hemisphereTweaks
+	awsomeTweaks
 		.addColor(hemisphereLight, 'groundColor')
 		.name('hem ground color');
-	hemisphereTweaks
+	awsomeTweaks
 		.add(hemisphereLight, 'visible')
 		.name('show hemisphere light');
 
-	// // // // // // // // // // // // // // // // // // //
+	awsomeTweaks
+		.add({ a: '' }, 'a')
+		.name(
+			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+		);
 
-	pointTweaks
+	awsomeTweaks
 		.add(pointLight, 'intensity')
 		.name('point light intensity')
 		.min(0)
 		.max(1)
 		.step(0.001);
-	pointTweaks.addColor(pointLight, 'color').name('point light color');
-	pointTweaks
+	awsomeTweaks
+		.addColor(pointLight, 'color')
+		.name('point light color');
+	awsomeTweaks
 		.add(pointLight.position, 'x')
 		.step(0.001)
 		.name('point light x')
 		.min(-3)
 		.max(3);
-	pointTweaks
+	awsomeTweaks
 		.add(pointLight.position, 'y')
 		.step(0.001)
 		.name('point light y')
 		.min(-3)
 		.max(3);
-	pointTweaks
+	awsomeTweaks
 		.add(pointLight.position, 'z')
 		.step(0.001)
 		.name('point light z')
 		.min(-3)
 		.max(3);
-	ambientTweaks
+	awsomeTweaks
 		.add(pointLight, 'distance')
 		.min(0)
 		.max(20)
 		.step(0.01)
 		.name('point light distance');
-	pointTweaks
+	awsomeTweaks
 		.add(pointLight, 'decay')
 		.min(-1)
 		.max(20)
 		.step(0.01)
 		.name('point light decey');
-	pointTweaks.add(pointLight, 'visible').name('point light visible');
+	awsomeTweaks.add(pointLight, 'visible').name('point light visible');
 
-	// // // // // // // // // // // // // // // // // // //
+	awsomeTweaks
+		.add({ a: '' }, 'a')
+		.name(
+			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+		);
 
 	// EXPLAIN: tweaking rectAreaLight with gui
-	rectAreaTweaks
+	awsomeTweaks
 		.add(rectAreaLight, 'intensity')
 		.name('rectArea light intensity')
 		.min(0)
 		.max(10)
 		.step(0.001);
-	rectAreaTweaks
+	awsomeTweaks
 		.addColor(rectAreaLight, 'color')
 		.name('rectArea light color');
 
-	rectAreaTweaks
+	awsomeTweaks
 		.add(rectAreaLight, 'width')
 		.min(0)
 		.max(10)
 		.name('rectArea light width');
-	rectAreaTweaks
+	awsomeTweaks
 		.add(rectAreaLight, 'height')
 		.min(0)
 		.max(10)
 		.name('rectArea light height');
 
-	rectAreaTweaks
+	awsomeTweaks
 		.add(rectAreaLight.position, 'x')
 		.step(0.001)
 		.name('rectArea light x')
 		.min(-3)
 		.max(3);
-	rectAreaTweaks
+	awsomeTweaks
 		.add(rectAreaLight.position, 'y')
 		.step(0.001)
 		.name('rectArea light y')
 		.min(-3)
 		.max(3);
-	rectAreaTweaks
+	awsomeTweaks
 		.add(rectAreaLight.position, 'z')
 		.step(0.001)
 		.name('rectArea light z')
 		.min(-3)
 		.max(3);
 	// EXPLAIN: roatation is interesting with gui
-	rectAreaTweaks
+	awsomeTweaks
 		.add(rectAreaLight.rotation, 'y')
 		.min(0)
 		.max(2 * Math.PI)
@@ -340,14 +348,10 @@ async function init() {
 	debugObject.rectLookAtTorus = () => {
 		rectAreaLight.lookAt(torusMesh.position);
 	};
-	rectAreaTweaks.add(debugObject, 'rectLookAtBox');
-	rectAreaTweaks.add(debugObject, 'rectLookAtCenter');
-	rectAreaTweaks.add(debugObject, 'rectLookAtSphere');
-	rectAreaTweaks.add(debugObject, 'rectLookAtTorus');
-
-	rectAreaTweaks
-		.add(rectAreaLight, 'visible')
-		.name('rect area light visible');
+	awsomeTweaks.add(debugObject, 'rectLookAtBox');
+	awsomeTweaks.add(debugObject, 'rectLookAtCenter');
+	awsomeTweaks.add(debugObject, 'rectLookAtSphere');
+	awsomeTweaks.add(debugObject, 'rectLookAtTorus');
 
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
@@ -392,13 +396,13 @@ async function init() {
 
 	directionalLightHelper.visible = false;
 
-	ambientTweaks
+	awsomeTweaks
 		.add({ a: '' }, 'a')
 		.name(
 			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
 		);
 
-	directionalTweaks
+	awsomeTweaks
 		.add(directionalLightHelper, 'visible')
 		.name('visualize directional light');
 
@@ -413,20 +417,21 @@ async function init() {
 
 	arrowHelper.visible = false;
 
-	directionalTweaks
+	awsomeTweaks
 		.add(arrowHelper, 'visible')
 		.name('what direction is light comming from');
 
 	scene.add(arrowHelper);
 
-	// ambientTweaks
-	// 	.add({ a: '' }, 'a')
-	// 	.name(
-	// 		'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-	// 	)
-	// 	.disable();
+	awsomeTweaks
+		.add({ a: '' }, 'a')
+		.name(
+			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
+		)
+		.disable();
+	awsomeTweaks.add(axesHelper, 'visible').name('show axes');
 
-	gui.add(axesHelper, 'visible').name('show axes');
+	awsomeTweaks.open();
 
 	// ----------------------------------------------------
 	// 0.2 - Renderer (second part)
