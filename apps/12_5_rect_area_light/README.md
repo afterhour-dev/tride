@@ -38,3 +38,5 @@ Want to know important and useful things about RectAreaLight
       RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
       ```
       it worked after this solution: you explain why? And also is this solution up to date
+
+- It works only with `MeshStandardMaterial` and `MeshPhysicalMaterial`

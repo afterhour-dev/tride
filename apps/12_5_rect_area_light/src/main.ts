@@ -25,7 +25,7 @@ const gui = new GUI({
 const awsomeTweaks = gui.addFolder('Awsome tweaking');
 
 const debugObject = {
-	//
+	rectLookAtSphere: false,
 };
 // awsomeTweaks.close();
 
@@ -111,6 +111,14 @@ async function init() {
 	rectAreaLight.width = 1;
 	rectAreaLight.height = 1;
 
+	// EXPALIN: we can position it
+	rectAreaLight.position.set(1.5, 0, 1.5);
+
+	// EXPLAIN: you can also rotate it
+
+	// EXPLAIN: we can use `lookAt`
+	// rectAreaLight.lookAt(new THREE.Vector3());
+
 	scene.add(rectAreaLight);
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
@@ -138,6 +146,9 @@ async function init() {
 	floorMesh.position.y = -0.65;
 
 	scene.add(boxMesh, torusMesh, sphereMesh, floorMesh);
+
+	// // EXPLAIN: we can use `lookAt`
+	// rectAreaLight.lookAt(sphereMesh.position);
 
 	// ------------- Tweaks ----------------------------------
 	// 7 - gui tweaks
@@ -274,15 +285,63 @@ async function init() {
 			'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
 		);
 
+	// EXPLAIN: tweaking rectAreaLight with gui
 	awsomeTweaks
 		.add(rectAreaLight, 'intensity')
-		.name('rectAl light intensity')
+		.name('rectArea light intensity')
 		.min(0)
 		.max(10)
 		.step(0.001);
 	awsomeTweaks
 		.addColor(rectAreaLight, 'color')
-		.name('rectAl light color');
+		.name('rectArea light color');
+
+	awsomeTweaks
+		.add(rectAreaLight, 'width')
+		.min(0)
+		.max(10)
+		.name('rectArea light width');
+	awsomeTweaks
+		.add(rectAreaLight, 'height')
+		.min(0)
+		.max(10)
+		.name('rectArea light height');
+
+	awsomeTweaks
+		.add(rectAreaLight.position, 'x')
+		.step(0.001)
+		.name('rectArea light x')
+		.min(-3)
+		.max(3);
+	awsomeTweaks
+		.add(rectAreaLight.position, 'y')
+		.step(0.001)
+		.name('rectArea light y')
+		.min(-3)
+		.max(3);
+	awsomeTweaks
+		.add(rectAreaLight.position, 'z')
+		.step(0.001)
+		.name('rectArea light z')
+		.min(-3)
+		.max(3);
+	// EXPLAIN: roatation is interesting with gui
+	awsomeTweaks
+		.add(rectAreaLight.rotation, 'y')
+		.min(0)
+		.max(2 * Math.PI)
+		.name('rotate y');
+
+	// EXPLAIN: I wanted to set lookAt also in gui
+	awsomeTweaks
+		.add(debugObject, 'rectLookAtSphere')
+		.onChange((val: boolean) => {
+			if (val === true) {
+				rectAreaLight.lookAt(sphereMesh.position);
+			} else {
+				rectAreaLight.lookAt(new THREE.Vector3());
+			}
+		});
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
