@@ -39,10 +39,14 @@ const spotTweaks = gui.addFolder('Spot Light tweaks');
 spotTweaks.open();
 
 const debugObject = {
-	rectLookAtBox: () => {},
-	rectLookAtCenter: () => {},
-	rectLookAtSphere: () => {},
-	rectLookAtTorus: () => {},
+	// rectLookAtBox: () => {},
+	// rectLookAtCenter: () => {},
+	// rectLookAtSphere: () => {},
+	// rectLookAtTorus: () => {},
+	//
+	makeSphereTarget: () => {},
+	makeRandomTarget: () => {},
+	removeTarget: () => {},
 };
 
 window.addEventListener('keydown', (ev) => {
@@ -67,7 +71,7 @@ async function init() {
 	await renderer.init();
 
 	// needed for react area light to work in case of WebGPU
-	THREE.RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
+	// THREE.RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
 
 	// ------------------------------------------------------
 	// 2 - Environment map
@@ -120,7 +124,7 @@ async function init() {
 
 	scene.add(pointLight);
 
-	const rectAreaLight = new THREE.RectAreaLight();
+	/* const rectAreaLight = new THREE.RectAreaLight();
 	rectAreaLight.color = new THREE.Color(0x4e00ff);
 	rectAreaLight.intensity = 2;
 	rectAreaLight.width = 1;
@@ -130,10 +134,37 @@ async function init() {
 	// rectAreaLight.lookAt(new THREE.Vector3());
 	rectAreaLight.visible = false;
 
-	scene.add(rectAreaLight);
+	scene.add(rectAreaLight); */
 
 	// EXPLAIN: Spot Light and its arguments and properties
 	const spotLight = new THREE.SpotLight();
+
+	spotLight.color = new THREE.Color(0x78ff00);
+	// EXPLAIN: all ranges for these next properties
+	spotLight.intensity = 0.5;
+	spotLight.distance = 10;
+	spotLight.angle = Math.PI * 0.1;
+	spotLight.penumbra = 0.25;
+	spotLight.decay = 1;
+
+	// EXPLAIN: we can move it and rotate it
+	spotLight.position.set(0, 2, 3);
+
+	// EXPLAIN: spotlight target and adding it to the scene
+	// I assume it is empty object3D that
+	// we jut add to the scene and we can move it after that
+	// I'll try to add this to the gui
+	// console.log(spotLight.target);
+	// so instead just this I'll do it like this
+	// whichw we could do but don't want to because we want
+	// to give more power to gui in this case
+	// scene.add(spotLight.target);
+	let initialSpotLightTarget: THREE.Object3D = spotLight.target;
+	// and then add it
+
+	//EXPLAIN: instead of this we will d oit inside gui
+	// functions/buttons
+	// spotLight.target.position.x = 0.4;
 
 	scene.add(spotLight);
 
@@ -153,6 +184,9 @@ async function init() {
 	const torusMesh = new THREE.Mesh(torusGeometry, material);
 	const sphereMesh = new THREE.Mesh(sphereGreometry, material);
 	const floorMesh = new THREE.Mesh(floorGeometry, material);
+
+	// EXPLAIN: next line
+	// spotLight.target = sphereMesh;
 
 	// boxMesh.position.x = 1.5;
 	// boxMesh.position.z = 3;
@@ -280,7 +314,7 @@ async function init() {
 
 	// // // // // // // // // // // // // // // // // // //
 
-	rectAreaTweaks
+	/* rectAreaTweaks
 		.add(rectAreaLight, 'intensity')
 		.name('rectArea light intensity')
 		.min(0)
@@ -306,23 +340,28 @@ async function init() {
 		.step(0.001)
 		.name('rectArea light x')
 		.min(-3)
-		.max(3);
+		.max(3)
+		.step(0.001);
 	rectAreaTweaks
 		.add(rectAreaLight.position, 'y')
 		.step(0.001)
 		.name('rectArea light y')
 		.min(-3)
-		.max(3);
+		.max(3)
+		.step(0.001);
 	rectAreaTweaks
 		.add(rectAreaLight.position, 'z')
 		.step(0.001)
 		.name('rectArea light z')
 		.min(-3)
-		.max(3);
+		.max(3)
+		.step(0.001);
+
 	rectAreaTweaks
 		.add(rectAreaLight.rotation, 'y')
 		.min(0)
 		.max(2 * Math.PI)
+		.step(0.001)
 		.name('rotate y');
 
 	debugObject.rectLookAtBox = () => {
@@ -344,10 +383,101 @@ async function init() {
 
 	rectAreaTweaks
 		.add(rectAreaLight, 'visible')
-		.name('rect area light visible');
+		.name('rect area light visible'); */
 
-	// EXPLAIN: adding spot light to the tweaks
+	// // // // // // // // // // // // // // // // // // //
+
+	// EXPLAIN: adding spot light to the gui tweaks
 	spotTweaks.addColor(spotLight, 'color');
+	spotTweaks.add(spotLight, 'intensity').min(0).max(1).step(0.001);
+	spotTweaks.add(spotLight, 'distance').min(0).max(20).step(0.001);
+	spotTweaks
+		.add(spotLight, 'angle')
+		.min(0)
+		.max(2 * Math.PI)
+		.step(0.001);
+	spotTweaks.add(spotLight, 'penumbra').min(0).max(1).step(0.001);
+	spotTweaks.add(spotLight, 'decay').min(0).max(1).step(0.001);
+
+	spotTweaks
+		.add(spotLight.position, 'x')
+		.step(0.001)
+		.name('position.x')
+		.min(-3)
+		.max(3)
+		.step(0.001);
+	spotTweaks
+		.add(spotLight.position, 'y')
+		.step(0.001)
+		.name('position.y')
+		.min(-3)
+		.max(3)
+		.step(0.001);
+	spotTweaks
+		.add(spotLight.position, 'z')
+		.step(0.001)
+		.name('position.z')
+		.min(-3)
+		.max(3)
+		.step(0.001);
+
+	spotTweaks
+		.add(spotLight.rotation, 'x')
+		.min(0)
+		.max(2 * Math.PI)
+		.step(0.001)
+		.name('rotation.x (no effect)');
+
+	// EXPLAIN: moving target with gui
+	// EXPLAIN: this won't work only if we would add target
+	// because at this moment it is not added to the scene, because we
+	// commented out adding target to the scene target as you can see above in the code
+	/* spotTweaks
+		.add(spotLight.target.position, 'x')
+		.min(-10)
+		.max(10)
+		.step(0.001)
+		.name('random'); */
+	// EXPLAIN: but moving sphere or initialSpotLightTarget
+	// will work after we make them target with a
+	// button in gui
+
+	spotTweaks
+		.add(sphereMesh.position, 'x')
+		.min(-3)
+		.max(3)
+		.name('move only sphere by x after you made it target');
+
+	spotTweaks
+		.add(initialSpotLightTarget.position, 'x')
+		.min(-3)
+		.max(3)
+		.name('move only Object3D by x after you made it target');
+
+	debugObject.makeSphereTarget = () => {
+		// EXPLAIN: next line
+		spotLight.target = sphereMesh;
+	};
+	debugObject.makeRandomTarget = () => {
+		spotLight.target = initialSpotLightTarget;
+		// EXPLAIN: don't forget to add it to the scene
+		scene.add(spotLight.target);
+	};
+	debugObject.removeTarget = () => {
+		if (spotLight.target === sphereMesh) {
+			spotLight.target = initialSpotLightTarget;
+			scene.remove(initialSpotLightTarget);
+		}
+		if (spotLight.target === initialSpotLightTarget) {
+			scene.remove(initialSpotLightTarget);
+		}
+	};
+
+	spotTweaks.add(debugObject, 'makeSphereTarget');
+	spotTweaks.add(debugObject, 'makeRandomTarget');
+	spotTweaks.add(debugObject, 'removeTarget');
+
+	spotTweaks.add(spotLight, 'visible');
 
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
@@ -491,6 +621,8 @@ async function init() {
 		// camera.lookAt(new THREE.Vector3()); // default
 
 		// rectAreaLight.lookAt(sphereMesh.position);
+
+		// spotLight.lookAt(sphereMesh.position);
 
 		boxMesh.rotation.y = elapsedTime * 0.1;
 		sphereMesh.rotation.y = elapsedTime * 0.1;
