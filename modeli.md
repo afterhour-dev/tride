@@ -59,4 +59,10 @@ curl -s https://openrouter.ai/api/v1/models | jq '.data[] | select(.id=="deepsee
 "CLAUDE_CODE_SUBAGENT_MODEL": "deepseek/deepseek-v4-flash-0731",
 "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1048576"
 
-### 
+### aug 14
+
+"ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek/deepseek-v4-flash",
+"ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek/deepseek-v4-flash-0731",
+"ANTHROPIC_DEFAULT_HAIKU_MODEL": "xiaomi/mimo-v2.5",
+"CLAUDE_CODE_SUBAGENT_MODEL": "deepseek/deepseek-v4-flash-0731",
+"CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1048576"
