@@ -433,20 +433,23 @@ async function init() {
 		.add({ a: '' }, 'a')
 		.disable()
 		.name(
-			'move only  (initialSpotLightTarget.position) by x \nafter you made it target with button.\n what we are movig is spotLight.target',
+			'Only move sphereMesh by x/y/z after you made it target with\n`makeSphereTarget` button which does this:\n`spotLight.target = sphereMesh`.\n And when target is added to the scene (which already is added\nto the scene because we did it, and you can see it is present\n in the scene)',
 		);
-
+	debugObject.makeSphereTarget = () => {
+		spotLight.target = sphereMesh;
+	};
+	spotTweaks.add(debugObject, 'makeSphereTarget');
 	spotTweaks
 		.add(sphereMesh.position, 'x')
 		.min(-3)
 		.max(3)
-		.name('move only sphere by x after you made it target');
+		.name('sphereMesh.position.x');
 
 	spotTweaks
 		.add({ a: '' }, 'a')
 		.disable()
 		.name(
-			'Only move empty Object3D instance (initialSpotLightTarget)\n by x after you made it target with `makeRandomTarget` button\n which does this: `spotLight.target = initialSpotLightTarget`. And when\ntarget is added to the scene which also happenss with pressing same\n`makeRandomTarget` button: scene.add(spotLight.target)',
+			'Only move empty Object3D instance (initialSpotLightTarget)\n by x/y/z after you made it target with `makeRandomTarget` button\n which does this: `spotLight.target = initialSpotLightTarget`. And when\ntarget is added to the scene which also happenss with pressing same\n`makeRandomTarget` button: scene.add(spotLight.target)',
 		);
 	debugObject.makeRandomTarget = () => {
 		spotLight.target = initialSpotLightTarget;
@@ -460,9 +463,13 @@ async function init() {
 		.max(3)
 		.name('initialSpotLightTarget.position.x');
 
-	debugObject.makeSphereTarget = () => {
-		spotLight.target = sphereMesh;
-	};
+	spotTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'------------------------------------------------------------------------------------------------------------------------------',
+		);
+
 	debugObject.removeTarget = () => {
 		if (spotLight.target === sphereMesh) {
 			spotLight.target = initialSpotLightTarget;
@@ -473,7 +480,6 @@ async function init() {
 		}
 	};
 
-	spotTweaks.add(debugObject, 'makeSphereTarget');
 	spotTweaks.add(debugObject, 'removeTarget');
 
 	spotTweaks.add(spotLight, 'visible');
