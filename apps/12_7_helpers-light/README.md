@@ -35,3 +35,8 @@ Want to know important and useful things about helpers and performance, but also
   - `PointLightHelper`
   - `RectAreaLightHelper`
   - `SpotLightHelper`
+
+- in terms of spot light helper, do we need to update helper on every frame in animation and why?
+- in terms of rect area light helper, do we need to update helper on every frame in animation and why? (I think we don't need, it is not possible, since helper moves with a light?)
+
+- Am I right about this? In order to rect area light to follow some Object3D or a sphere, we need to do `rectAreaLight.lookAt` call with that object as argument in animation loop?

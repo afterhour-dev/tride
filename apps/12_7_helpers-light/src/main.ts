@@ -3,6 +3,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // EXPLAIN: just breafly mentions that this is
 // needed for rect area light to work in case of WebGPU
 import { RectAreaLightTexturesLib } from 'three/addons/lights/RectAreaLightTexturesLib.js';
+// EXPLAIN: unlike other light helpers, rect area light helper
+// needs to be imported from here
+import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
@@ -34,9 +37,9 @@ hemisphereTweaks.close();
 const pointTweaks = gui.addFolder('Point Lights');
 pointTweaks.close();
 const rectAreaTweaks = gui.addFolder('Rect Area Light');
-rectAreaTweaks.close();
+rectAreaTweaks.open();
 const spotTweaks = gui.addFolder('Spot Light');
-spotTweaks.open();
+spotTweaks.close();
 
 const debugObject = {
 	directLookAtCenter: () => {},
@@ -145,7 +148,7 @@ async function init() {
 
 	rectAreaLight.position.set(-1.5, 0, 1.5);
 	// rectAreaLight.lookAt(new THREE.Vector3());
-	rectAreaLight.visible = false;
+	// rectAreaLight.visible = false;
 
 	scene.add(rectAreaLight);
 
@@ -170,7 +173,7 @@ async function init() {
 	// We can't use lookAt
 	// spotLight.target.position.x = 0.4;
 
-	// spotLight.visible = false;
+	spotLight.visible = false;
 
 	scene.add(spotLight);
 
@@ -249,13 +252,13 @@ async function init() {
 		.max(10);
 	directionalTweaks
 		.add(directionalLight.rotation, 'x')
-		.min(0)
+		.min(-2 * Math.PI)
 		.max(2 * Math.PI)
 		.name('rotation.x')
 		.step(0.001);
 	directionalTweaks
 		.add(directionalLight.rotation, 'z')
-		.min(0)
+		.min(-2 * Math.PI)
 		.max(2 * Math.PI)
 		.name('rotation.z')
 		.step(0.001);
@@ -280,6 +283,12 @@ async function init() {
 		.addColor(hemisphereLight, 'color')
 		.name('color (skyColor arg)');
 	hemisphereTweaks.addColor(hemisphereLight, 'groundColor');
+	hemisphereTweaks
+		.add(hemisphereLight.position, 'y')
+		.name('position.y')
+		.min(-5)
+		.max(5)
+		.step(0.001);
 	hemisphereTweaks
 		.add(hemisphereLight, 'visible')
 		.name('show hemisphere light');
@@ -354,11 +363,24 @@ async function init() {
 		.step(0.001);
 
 	rectAreaTweaks
-		.add(rectAreaLight.rotation, 'y')
-		.min(0)
+		.add(rectAreaLight.rotation, 'x')
+		.min(-2 * Math.PI)
 		.max(2 * Math.PI)
 		.step(0.001)
-		.name('rotate y');
+		.name('rotation.x');
+	rectAreaTweaks
+		.add(rectAreaLight.rotation, 'y')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.step(0.001)
+		.name('rotation.y');
+	rectAreaTweaks
+		.add(rectAreaLight.rotation, 'z')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.step(0.001)
+		.name('rotation.z');
+
 	rectAreaTweaks
 		.add(sphereMesh.position, 'x')
 		.min(-3)
@@ -374,6 +396,12 @@ async function init() {
 		.min(-3)
 		.max(3)
 		.name('sphereMesh.position.z');
+	rectAreaTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'As you move Object3D after he was argument of lookAt, light\nwill not follow the object because you need\nto call lookAt in animation loop',
+		);
 
 	debugObject.rectLookAtBox = () => {
 		rectAreaLight.lookAt(boxMesh.position);
@@ -403,7 +431,7 @@ async function init() {
 	spotTweaks.add(spotLight, 'distance').min(0).max(20).step(0.001);
 	spotTweaks
 		.add(spotLight, 'angle')
-		.min(0)
+		.min(-2 * Math.PI)
 		.max(2 * Math.PI)
 		.step(0.001);
 	spotTweaks.add(spotLight, 'penumbra').min(0).max(1).step(0.001);
@@ -433,7 +461,7 @@ async function init() {
 
 	spotTweaks
 		.add(spotLight.rotation, 'x')
-		.min(0)
+		.min(-2 * Math.PI)
 		.max(2 * Math.PI)
 		.step(0.001)
 		.name('rotation.x (no effect which is ok)');
@@ -492,13 +520,6 @@ async function init() {
 		.max(3)
 		.name('initialSpotLightTarget.position.z');
 
-	spotTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			'------------------------------------------------------------------------------------------------------------------------------',
-		);
-
 	debugObject.removeTarget = () => {
 		if (spotLight.target === sphereMesh) {
 			spotLight.target = initialSpotLightTarget;
@@ -510,21 +531,7 @@ async function init() {
 	};
 	spotTweaks.add(debugObject, 'removeTarget');
 
-	spotTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			'------------------------------------------------------------------------------------------------------------------------------',
-		);
-
 	spotTweaks.add(spotLight, 'visible').name('spotLight visible');
-
-	spotTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			'------------------------------------------------------------------------------------------------------------------------------\n ------------------------------------------------------------------------------------------------------------------------------',
-		);
 
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
@@ -562,18 +569,28 @@ async function init() {
 	scene.add(axesHelper);
 	axesHelper.visible = false;
 
+	// EXPLAIN: all light helpers we are using here
+	const hemisphereLightHelper = new THREE.HemisphereLightHelper(
+		hemisphereLight,
+		0.2,
+	);
+
+	hemisphereLightHelper.visible = false;
+
+	hemisphereTweaks
+		.add(hemisphereLightHelper, 'visible')
+		.name('visualize hemisphere light');
+
+	scene.add(hemisphereLightHelper);
+
+	// // // // // // // // //
+
 	const directionalLightHelper = new THREE.DirectionalLightHelper(
 		directionalLight,
-		5,
+		0.2,
 	);
 
 	directionalLightHelper.visible = false;
-
-	// gui
-	// 	.add({ a: '' }, 'a')
-	// 	.name(
-	// 		'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-	// 	);
 
 	directionalTweaks
 		.add(directionalLightHelper, 'visible')
@@ -596,12 +613,52 @@ async function init() {
 
 	scene.add(arrowHelper);
 
-	// ambientTweaks
-	// 	.add({ a: '' }, 'a')
-	// 	.name(
-	// 		'----------------------------------------------------------------------------------------------\n----------------------------------------------------------------------------------------------',
-	// 	)
-	// 	.disable();
+	// // // // // // // // //
+
+	const pointLightHelper = new THREE.PointLightHelper(
+		pointLight,
+		0.2,
+	);
+
+	pointLightHelper.visible = false;
+
+	pointTweaks
+		.add(pointLightHelper, 'visible')
+		.name('visualize point light');
+
+	scene.add(pointLightHelper);
+
+	// // // // // // // // //
+
+	const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+
+	spotLightHelper.visible = false;
+
+	spotTweaks
+		.add(spotLightHelper, 'visible')
+		.name('visualize spot light');
+
+	scene.add(spotLightHelper);
+
+	// EXPLAIN: don't forget to update
+	// spotLightHelper on every frame
+
+	// // // // // // // // //
+
+	const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight);
+
+	// rectAreaLightHelper.visible = false;
+
+	rectAreaTweaks
+		.add(rectAreaLightHelper, 'visible')
+		.name('visualize react area light');
+
+	scene.add(rectAreaLightHelper);
+
+	// EXPLAIN: don't forget to update
+	// rectAreaLightHelper on every frame
+
+	// // // // // // // // //
 
 	gui.add(axesHelper, 'visible').name('show axes');
 
@@ -663,6 +720,14 @@ async function init() {
 		const elapsedTime = timer.getElapsed();
 
 		orbitControls.update();
+
+		// EXPLAIN: updating spot light helper on
+		// every frame
+		spotLightHelper.update();
+
+		// EXPLAIN: updating rect area light helper on
+		// every frame isn't needed and it is not possible. Why?
+		// rectAreaLightHelper.update();
 
 		// camera.lookAt(boxMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
