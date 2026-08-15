@@ -608,6 +608,13 @@ async function init() {
 	arrowHelper.visible = false;
 
 	directionalTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			"The arrow direction is computed **once** at creation and never\nupdated. If you move the directional light, the arrow stays where it\nwas. For a dynamic arrow, you'd need to recreate or manually update\nit each frame.",
+		);
+
+	directionalTweaks
 		.add(arrowHelper, 'visible')
 		.name('what direction is light comming from');
 
