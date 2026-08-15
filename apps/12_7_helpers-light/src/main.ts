@@ -1,5 +1,6 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// EXPLAIN: just breafly mentions that this is
 // needed for rect area light to work in case of WebGPU
 import { RectAreaLightTexturesLib } from 'three/addons/lights/RectAreaLightTexturesLib.js';
 
@@ -22,7 +23,7 @@ const gui = new GUI({
 	closeFolders: true,
 });
 
-// EXPLAIN: dividing all lights twaeaks into folders becase I
+// dividing all lights twaeaks into folders becase I
 // have too much setting in my gui
 const ambientTweaks = gui.addFolder('Ambient Light tweaks');
 ambientTweaks.close();
@@ -39,10 +40,10 @@ const spotTweaks = gui.addFolder('Spot Light tweaks');
 spotTweaks.open();
 
 const debugObject = {
-	// rectLookAtBox: () => {},
-	// rectLookAtCenter: () => {},
-	// rectLookAtSphere: () => {},
-	// rectLookAtTorus: () => {},
+	rectLookAtBox: () => {},
+	rectLookAtCenter: () => {},
+	rectLookAtSphere: () => {},
+	rectLookAtTorus: () => {},
 	//
 	makeSphereTarget: () => {},
 	makeRandomTarget: () => {},
@@ -70,8 +71,9 @@ async function init() {
 	const renderer = new THREE.WebGPURenderer({ canvas });
 	await renderer.init();
 
-	// needed for react area light to work in case of WebGPU
-	// THREE.RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
+	// EXPLAIN: just breafly mentions that this is
+	// needed for rect area light to work in case of WebGPU
+	THREE.RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
 
 	// ------------------------------------------------------
 	// 2 - Environment map
@@ -89,12 +91,15 @@ async function init() {
 	// const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
 	// const ambientLight = new THREE.AmbientLight('#a51c81', 8);
 	const ambientLight = new THREE.AmbientLight();
+
 	ambientLight.color = new THREE.Color(0xffffff);
 	ambientLight.intensity = 0.5;
 
 	ambientLight.visible = false;
 
 	scene.add(ambientLight);
+
+	// // // // // // // //
 
 	const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.3);
 
@@ -104,7 +109,10 @@ async function init() {
 
 	scene.add(directionalLight);
 
+	// // // // // // // //
+
 	const hemisphereLight = new THREE.HemisphereLight();
+
 	hemisphereLight.color = new THREE.Color(0xff0000);
 	hemisphereLight.groundColor = new THREE.Color(0x0000ff);
 	hemisphereLight.intensity = 0.3;
@@ -112,6 +120,8 @@ async function init() {
 	hemisphereLight.visible = false;
 
 	scene.add(hemisphereLight);
+
+	// // // // // // // //
 
 	const pointLight = new THREE.PointLight(0xff9000, 0.5);
 
@@ -124,7 +134,9 @@ async function init() {
 
 	scene.add(pointLight);
 
-	/* const rectAreaLight = new THREE.RectAreaLight();
+	// // // // // // // //
+
+	const rectAreaLight = new THREE.RectAreaLight();
 	rectAreaLight.color = new THREE.Color(0x4e00ff);
 	rectAreaLight.intensity = 2;
 	rectAreaLight.width = 1;
@@ -134,36 +146,27 @@ async function init() {
 	// rectAreaLight.lookAt(new THREE.Vector3());
 	rectAreaLight.visible = false;
 
-	scene.add(rectAreaLight); */
+	scene.add(rectAreaLight);
 
-	// EXPLAIN: Spot Light and its arguments and properties
+	// // // // // // // //
+
 	const spotLight = new THREE.SpotLight();
 
 	spotLight.color = new THREE.Color(0x78ff00);
-	// EXPLAIN: all ranges for these next properties
 	spotLight.intensity = 0.5;
 	spotLight.distance = 10;
 	spotLight.angle = Math.PI * 0.1;
 	spotLight.penumbra = 0.25;
 	spotLight.decay = 1;
 
-	// EXPLAIN: we can move it and rotate it
 	spotLight.position.set(0, 2, 3);
 
-	// EXPLAIN: spotlight target and adding it to the scene
-	// I assume it is empty object3D that
-	// we jut add to the scene and we can move it after that
-	// I'll try to add this to the gui
-	// console.log(spotLight.target);
-	// so instead just this I'll do it like this
-	// whichw we could do but don't want to because we want
-	// to give more power to gui in this case
 	// scene.add(spotLight.target);
 	let initialSpotLightTarget: THREE.Object3D = spotLight.target;
-	// and then add it
 
-	//EXPLAIN: instead of this we will d oit inside gui
+	//instead of this we will do it inside gui
 	// functions/buttons
+	// We can't use lookAt
 	// spotLight.target.position.x = 0.4;
 
 	scene.add(spotLight);
@@ -185,7 +188,6 @@ async function init() {
 	const sphereMesh = new THREE.Mesh(sphereGreometry, material);
 	const floorMesh = new THREE.Mesh(floorGeometry, material);
 
-	// EXPLAIN: next line
 	// spotLight.target = sphereMesh;
 
 	// boxMesh.position.x = 1.5;
@@ -314,7 +316,7 @@ async function init() {
 
 	// // // // // // // // // // // // // // // // // // //
 
-	/* rectAreaTweaks
+	rectAreaTweaks
 		.add(rectAreaLight, 'intensity')
 		.name('rectArea light intensity')
 		.min(0)
@@ -383,11 +385,10 @@ async function init() {
 
 	rectAreaTweaks
 		.add(rectAreaLight, 'visible')
-		.name('rect area light visible'); */
+		.name('rect area light visible');
 
 	// // // // // // // // // // // // // // // // // // //
 
-	// EXPLAIN: adding spot light to the gui tweaks
 	spotTweaks.addColor(spotLight, 'color');
 	spotTweaks.add(spotLight, 'intensity').min(0).max(1).step(0.001);
 	spotTweaks.add(spotLight, 'distance').min(0).max(20).step(0.001);
@@ -428,20 +429,6 @@ async function init() {
 		.step(0.001)
 		.name('rotation.x (no effect)');
 
-	// EXPLAIN: moving target with gui
-	// EXPLAIN: this won't work only if we would add target
-	// because at this moment it is not added to the scene, because we
-	// commented out adding target to the scene target as you can see above in the code
-	/* spotTweaks
-		.add(spotLight.target.position, 'x')
-		.min(-10)
-		.max(10)
-		.step(0.001)
-		.name('random'); */
-	// EXPLAIN: but moving sphere or initialSpotLightTarget
-	// will work after we make them target with a
-	// button in gui
-
 	spotTweaks
 		.add(sphereMesh.position, 'x')
 		.min(-3)
@@ -455,12 +442,10 @@ async function init() {
 		.name('move only Object3D by x after you made it target');
 
 	debugObject.makeSphereTarget = () => {
-		// EXPLAIN: next line
 		spotLight.target = sphereMesh;
 	};
 	debugObject.makeRandomTarget = () => {
 		spotLight.target = initialSpotLightTarget;
-		// EXPLAIN: don't forget to add it to the scene
 		scene.add(spotLight.target);
 	};
 	debugObject.removeTarget = () => {
