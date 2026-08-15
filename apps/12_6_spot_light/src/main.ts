@@ -298,7 +298,7 @@ async function init() {
 		.name('point light z')
 		.min(-3)
 		.max(3);
-	ambientTweaks
+	pointTweaks
 		.add(pointLight, 'distance')
 		.min(0)
 		.max(20)

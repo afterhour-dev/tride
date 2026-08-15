@@ -148,22 +148,22 @@ async function init() {
 	// what is the defaoult
 	awsomeTweaks
 		.add(directionalLight.position, 'x')
-		.step(0.5)
+		.step(0.001)
 		.name('directional light x')
-		.min(-100)
-		.max(100);
+		.min(-10)
+		.max(10);
 	awsomeTweaks
 		.add(directionalLight.position, 'y')
-		.step(0.5)
+		.step(0.001)
 		.name('directional light y')
-		.min(-100)
-		.max(100);
+		.min(-10)
+		.max(10);
 	awsomeTweaks
 		.add(directionalLight.position, 'z')
-		.step(0.5)
+		.step(0.001)
 		.name('directional light z')
-		.min(-100)
-		.max(100);
+		.min(-10)
+		.max(10);
 
 	awsomeTweaks
 		.add(directionalLight, 'visible')

@@ -19,27 +19,28 @@ const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
 
 const gui = new GUI({
 	width: 350,
-	title: 'Debugging',
+	title: 'Tweaks',
 	closeFolders: true,
 });
 
 // dividing all lights twaeaks into folders becase I
 // have too much setting in my gui
-const ambientTweaks = gui.addFolder('Ambient Light tweaks');
+const ambientTweaks = gui.addFolder('Ambient Light');
 ambientTweaks.close();
-const directionalTweaks = gui.addFolder('Directional Light tweaks');
+const directionalTweaks = gui.addFolder('Directional Light');
 directionalTweaks.close();
-const hemisphereTweaks = gui.addFolder('Hemisphere Light tweaks');
+const hemisphereTweaks = gui.addFolder('Hemisphere Light');
 hemisphereTweaks.close();
-const pointTweaks = gui.addFolder('Point Light tweaks');
+const pointTweaks = gui.addFolder('Point Lights');
 pointTweaks.close();
-const rectAreaTweaks = gui.addFolder('Rect Area Light tweaks');
+const rectAreaTweaks = gui.addFolder('Rect Area Light');
 rectAreaTweaks.close();
-
-const spotTweaks = gui.addFolder('Spot Light tweaks');
+const spotTweaks = gui.addFolder('Spot Light');
 spotTweaks.open();
 
 const debugObject = {
+	directLookAtCenter: () => {},
+	//
 	rectLookAtBox: () => {},
 	rectLookAtCenter: () => {},
 	rectLookAtSphere: () => {},
@@ -169,6 +170,8 @@ async function init() {
 	// We can't use lookAt
 	// spotLight.target.position.x = 0.4;
 
+	// spotLight.visible = false;
+
 	scene.add(spotLight);
 
 	// -----------------------------------------------------
@@ -208,12 +211,9 @@ async function init() {
 		.add(ambientLight, 'intensity')
 		.min(0)
 		.max(1)
-		.step(0.001)
-		.name('ambient light intensity');
+		.step(0.001);
 
-	ambientTweaks
-		.addColor(ambientLight, 'color')
-		.name('ambient light color');
+	ambientTweaks.addColor(ambientLight, 'color');
 
 	ambientTweaks
 		.add(ambientLight, 'visible')
@@ -225,31 +225,45 @@ async function init() {
 		.add(directionalLight, 'intensity')
 		.min(0)
 		.max(1)
-		.step(0.001)
-		.name('directional light intensity');
+		.step(0.001);
 
-	directionalTweaks
-		.addColor(directionalLight, 'color')
-		.name('directional light color');
+	directionalTweaks.addColor(directionalLight, 'color');
 
 	directionalTweaks
 		.add(directionalLight.position, 'x')
-		.step(0.5)
-		.name('directional light x')
-		.min(-100)
-		.max(100);
+		.step(0.001)
+		.name('position.x')
+		.min(-10)
+		.max(10);
 	directionalTweaks
 		.add(directionalLight.position, 'y')
-		.step(0.5)
-		.name('directional light y')
-		.min(-100)
-		.max(100);
+		.step(0.001)
+		.name('position.y')
+		.min(-10)
+		.max(10);
 	directionalTweaks
 		.add(directionalLight.position, 'z')
-		.step(0.5)
-		.name('directional light z')
-		.min(-100)
-		.max(100);
+		.step(0.001)
+		.name('position.z')
+		.min(-10)
+		.max(10);
+	directionalTweaks
+		.add(directionalLight.rotation, 'x')
+		.min(0)
+		.max(2 * Math.PI)
+		.name('rotation.x')
+		.step(0.001);
+	directionalTweaks
+		.add(directionalLight.rotation, 'z')
+		.min(0)
+		.max(2 * Math.PI)
+		.name('rotation.z')
+		.step(0.001);
+
+	debugObject.directLookAtCenter = () => {
+		directionalLight.lookAt(new THREE.Vector3());
+	};
+	directionalTweaks.add(debugObject, 'directLookAtCenter');
 
 	directionalTweaks
 		.add(directionalLight, 'visible')
@@ -259,104 +273,84 @@ async function init() {
 
 	hemisphereTweaks
 		.add(hemisphereLight, 'intensity')
-		.name('hemispere light intesnity')
 		.min(0)
 		.max(1)
 		.step(0.001);
 	hemisphereTweaks
 		.addColor(hemisphereLight, 'color')
-		.name('hem sky color');
-	hemisphereTweaks
-		.addColor(hemisphereLight, 'groundColor')
-		.name('hem ground color');
+		.name('color (skyColor arg)');
+	hemisphereTweaks.addColor(hemisphereLight, 'groundColor');
 	hemisphereTweaks
 		.add(hemisphereLight, 'visible')
 		.name('show hemisphere light');
 
 	// // // // // // // // // // // // // // // // // // //
 
-	pointTweaks
-		.add(pointLight, 'intensity')
-		.name('point light intensity')
-		.min(0)
-		.max(1)
-		.step(0.001);
-	pointTweaks.addColor(pointLight, 'color').name('point light color');
+	pointTweaks.add(pointLight, 'intensity').min(0).max(1).step(0.001);
+	pointTweaks.addColor(pointLight, 'color');
+	pointTweaks.add(pointLight, 'distance').min(0).max(20).step(0.01);
+	pointTweaks.add(pointLight, 'decay').min(-1).max(20).step(0.01);
 	pointTweaks
 		.add(pointLight.position, 'x')
 		.step(0.001)
-		.name('point light x')
-		.min(-3)
-		.max(3);
+		.name('position.x')
+		.min(-10)
+		.max(10);
 	pointTweaks
 		.add(pointLight.position, 'y')
 		.step(0.001)
-		.name('point light y')
-		.min(-3)
-		.max(3);
+		.name('position.y')
+		.min(-10)
+		.max(10);
 	pointTweaks
 		.add(pointLight.position, 'z')
 		.step(0.001)
-		.name('point light z')
-		.min(-3)
-		.max(3);
-	ambientTweaks
-		.add(pointLight, 'distance')
-		.min(0)
-		.max(20)
-		.step(0.01)
-		.name('point light distance');
-	pointTweaks
-		.add(pointLight, 'decay')
-		.min(-1)
-		.max(20)
-		.step(0.01)
-		.name('point light decey');
+		.name('position.z')
+		.min(-10)
+		.max(10);
 	pointTweaks.add(pointLight, 'visible').name('point light visible');
 
 	// // // // // // // // // // // // // // // // // // //
 
 	rectAreaTweaks
 		.add(rectAreaLight, 'intensity')
-		.name('rectArea light intensity')
+		.name('intensity')
 		.min(0)
 		.max(10)
 		.step(0.001);
-	rectAreaTweaks
-		.addColor(rectAreaLight, 'color')
-		.name('rectArea light color');
+	rectAreaTweaks.addColor(rectAreaLight, 'color').name('color');
 
 	rectAreaTweaks
 		.add(rectAreaLight, 'width')
 		.min(0)
 		.max(10)
-		.name('rectArea light width');
+		.name('width');
 	rectAreaTweaks
 		.add(rectAreaLight, 'height')
 		.min(0)
 		.max(10)
-		.name('rectArea light height');
+		.name('height');
 
 	rectAreaTweaks
 		.add(rectAreaLight.position, 'x')
 		.step(0.001)
-		.name('rectArea light x')
-		.min(-3)
-		.max(3)
+		.name('position.x')
+		.min(-10)
+		.max(10)
 		.step(0.001);
 	rectAreaTweaks
 		.add(rectAreaLight.position, 'y')
 		.step(0.001)
-		.name('rectArea light y')
-		.min(-3)
-		.max(3)
+		.name('position.y')
+		.min(-10)
+		.max(10)
 		.step(0.001);
 	rectAreaTweaks
 		.add(rectAreaLight.position, 'z')
 		.step(0.001)
-		.name('rectArea light z')
-		.min(-3)
-		.max(3)
+		.name('position.z')
+		.min(-10)
+		.max(10)
 		.step(0.001);
 
 	rectAreaTweaks
@@ -365,6 +359,21 @@ async function init() {
 		.max(2 * Math.PI)
 		.step(0.001)
 		.name('rotate y');
+	rectAreaTweaks
+		.add(sphereMesh.position, 'x')
+		.min(-3)
+		.max(3)
+		.name('sphereMesh.position.x');
+	rectAreaTweaks
+		.add(sphereMesh.position, 'y')
+		.min(-3)
+		.max(3)
+		.name('sphereMesh.position.y');
+	rectAreaTweaks
+		.add(sphereMesh.position, 'z')
+		.min(-3)
+		.max(3)
+		.name('sphereMesh.position.z');
 
 	debugObject.rectLookAtBox = () => {
 		rectAreaLight.lookAt(boxMesh.position);
@@ -404,22 +413,22 @@ async function init() {
 		.add(spotLight.position, 'x')
 		.step(0.001)
 		.name('position.x')
-		.min(-3)
-		.max(3)
+		.min(-10)
+		.max(10)
 		.step(0.001);
 	spotTweaks
 		.add(spotLight.position, 'y')
 		.step(0.001)
 		.name('position.y')
-		.min(-3)
-		.max(3)
+		.min(-10)
+		.max(10)
 		.step(0.001);
 	spotTweaks
 		.add(spotLight.position, 'z')
 		.step(0.001)
 		.name('position.z')
-		.min(-3)
-		.max(3)
+		.min(-10)
+		.max(10)
 		.step(0.001);
 
 	spotTweaks
