@@ -427,7 +427,7 @@ async function init() {
 		.min(0)
 		.max(2 * Math.PI)
 		.step(0.001)
-		.name('rotation.x (no effect)');
+		.name('rotation.x (no effect which is ok)');
 
 	spotTweaks
 		.add({ a: '' }, 'a')
@@ -444,6 +444,16 @@ async function init() {
 		.min(-3)
 		.max(3)
 		.name('sphereMesh.position.x');
+	spotTweaks
+		.add(sphereMesh.position, 'y')
+		.min(-3)
+		.max(3)
+		.name('sphereMesh.position.y');
+	spotTweaks
+		.add(sphereMesh.position, 'z')
+		.min(-3)
+		.max(3)
+		.name('sphereMesh.position.z');
 
 	spotTweaks
 		.add({ a: '' }, 'a')
@@ -462,6 +472,16 @@ async function init() {
 		.min(-3)
 		.max(3)
 		.name('initialSpotLightTarget.position.x');
+	spotTweaks
+		.add(initialSpotLightTarget.position, 'y')
+		.min(-3)
+		.max(3)
+		.name('initialSpotLightTarget.position.y');
+	spotTweaks
+		.add(initialSpotLightTarget.position, 'z')
+		.min(-3)
+		.max(3)
+		.name('initialSpotLightTarget.position.z');
 
 	spotTweaks
 		.add({ a: '' }, 'a')
@@ -479,10 +499,23 @@ async function init() {
 			scene.remove(initialSpotLightTarget);
 		}
 	};
-
 	spotTweaks.add(debugObject, 'removeTarget');
 
-	spotTweaks.add(spotLight, 'visible');
+	spotTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'------------------------------------------------------------------------------------------------------------------------------',
+		);
+
+	spotTweaks.add(spotLight, 'visible').name('spotLight visible');
+
+	spotTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'------------------------------------------------------------------------------------------------------------------------------\n ------------------------------------------------------------------------------------------------------------------------------',
+		);
 
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
