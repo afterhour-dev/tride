@@ -163,7 +163,7 @@ async function init() {
 	spotLight.position.set(0, 2, 3);
 
 	// scene.add(spotLight.target);
-	let initialSpotLightTarget: THREE.Object3D = spotLight.target;
+	const initialSpotLightTarget: THREE.Object3D = spotLight.target;
 
 	//instead of this we will do it inside gui
 	// functions/buttons

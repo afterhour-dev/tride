@@ -159,7 +159,7 @@ async function init() {
 	// whichw we could do but don't want to because we want
 	// to give more power to gui in this case
 	// scene.add(spotLight.target);
-	let initialSpotLightTarget: THREE.Object3D = spotLight.target;
+	const initialSpotLightTarget: THREE.Object3D = spotLight.target;
 	// and then add it
 
 	//EXPLAIN: instead of this we will d oit inside gui
