@@ -121,6 +121,11 @@ async function init() {
 		.min(0)
 		.max(1)
 		.step(0.001);
+	standardMaterialTweaks
+		.add(material, 'metalness')
+		.min(0)
+		.max(1)
+		.step(0.001);
 	standardMaterialTweaks.add(material, 'wireframe').onChange(() => {
 		// EXPLAIN: error happens if I don't do this
 		// error is frame related I think
