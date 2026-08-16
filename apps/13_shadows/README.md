@@ -8,11 +8,11 @@ Imortant things of our setup in this app are:
 - a directional light
 - an ambient light
 
-This app is intro to the shadows app. 
+This app is intro to the shadows app.
 
 ## Namera / Intent
 
-Goal is to learn important things related to shadows in this intro app.
+Goal is to learn introdactionary important things related to shadows in this intro app.
 
 ## Šta treba objasniti u detalje
 
