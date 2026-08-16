@@ -72,3 +72,4 @@
 - [[12.6_spot-light]] — 2026-08-15
 - [[12.7_light-helpers-performance-baking]] — 2026-08-15
 - [[13.0_shadows-intro]] — 2026-08-16
+- [[13.1_shadow-map-optimization-part-one]] — 2026-08-16
