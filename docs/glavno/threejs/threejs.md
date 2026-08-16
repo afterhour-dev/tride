@@ -71,3 +71,4 @@
 - [[12.5_rect-area-light]] — 2026-08-14
 - [[12.6_spot-light]] — 2026-08-15
 - [[12.7_light-helpers-performance-baking]] — 2026-08-15
+- [[13.0_shadows-intro]] — 2026-08-16
