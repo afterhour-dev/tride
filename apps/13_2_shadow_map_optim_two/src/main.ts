@@ -28,7 +28,9 @@ const standardMaterialTweaks = gui.addFolder('MeshStandardMaterial');
 standardMaterialTweaks.close();
 const sphereTweaks = gui.addFolder('sphere Mesh');
 sphereTweaks.close();
-const shadowTweaks = gui.addFolder('Directional light Shadow tweaks');
+const shadowTweaks = gui.addFolder(
+	'Shadow tweaks (mostly on directional ligt and one on rednerer)',
+);
 shadowTweaks.open();
 
 const debugObject = {
@@ -63,6 +65,9 @@ async function init() {
 	// 0.2 - Shadows stuff globaly related
 
 	renderer.shadowMap.enabled = true;
+
+	// EXPLAIN: shadow map algorithm
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // other ones we used in gui
 
 	// ------------------------------------------------------
 	// 3 -  texture stuff
@@ -110,6 +115,9 @@ async function init() {
 	directionalLight.shadow.camera.right = 2;
 	directionalLight.shadow.camera.bottom = -2;
 	directionalLight.shadow.camera.left = -2;
+
+	// EXPLAIN: blur with radius
+	directionalLight.shadow.radius = 10;
 
 	// -----------------------------------------------------------
 
@@ -258,6 +266,31 @@ async function init() {
 		.min(-5)
 		.max(5);
 	// // // // // // // // // // // // // // // // // // //
+	// shadow things tweaks
+
+	shadowTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name("radius (blur) doesn't work with `THREE.PCFSoftShadowMap`");
+
+	// EXPLAIN: next twaek - blur
+	shadowTweaks
+		.add(directionalLight.shadow, 'radius')
+		.min(-30)
+		.max(30)
+		.step(0.001)
+		.name('directionalLight.shadow.radius (blur)');
+	// EXPLAIN: tweaking shadow map algo type
+	const shadowMapAlgoType = {
+		BasicShadowMap: THREE.BasicShadowMap,
+		PCFShadowMap: THREE.PCFShadowMap,
+		PCFSoftShadowMap: THREE.PCFSoftShadowMap,
+		VSMShadowMap: THREE.VSMShadowMap,
+	};
+	shadowTweaks
+		.add(renderer.shadowMap, 'type', shadowMapAlgoType)
+		.name('renderer.shadowMap.type');
+
 	const shadowMapSizes = {
 		128: 128,
 		256: 256,
