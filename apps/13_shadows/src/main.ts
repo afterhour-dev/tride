@@ -21,11 +21,12 @@ const gui = new GUI({
 });
 
 const ambientTweaks = gui.addFolder('Ambient Light');
-ambientTweaks.open();
+ambientTweaks.close();
 const directionalTweaks = gui.addFolder('Directional Light');
 directionalTweaks.open();
 const standardMaterialTweaks = gui.addFolder('MeshStandardMaterial');
 standardMaterialTweaks.open();
+const sphereTweaks = gui.addFolder('sphere Mesh');
 
 const debugObject = {
 	directLookAtCenter: () => {},
@@ -44,16 +45,21 @@ const sizes = {
 };
 
 async function init() {
-	// 0 - Scene
+	// Scene
 	const scene = new THREE.Scene();
 
 	// ------------------------------------------------------
-	// 1.1 - Renderer (first part)
+	// 0.1 - Renderer (first part)
 	const renderer = new THREE.WebGPURenderer({ canvas });
 	await renderer.init();
 
+	// -----------------------------------------------------
+	// 1 - Environment
+
 	// ------------------------------------------------------
-	// 2 - Environment map
+	// 0.2 - Shadows related
+	// EXPLAIN: next line
+	renderer.shadowMap.enabled = true;
 
 	// ------------------------------------------------------
 	// 3 -  texture stuff
@@ -84,6 +90,9 @@ async function init() {
 
 	directionalLight.position.set(2, 2, -1);
 
+	// EXPLAIN: next line about casting shadows from the light
+	directionalLight.castShadow = true;
+
 	// directionalLight.visible = false;
 
 	scene.add(directionalLight);
@@ -105,6 +114,12 @@ async function init() {
 
 	const sphereMesh = new THREE.Mesh(sphereGreometry, material);
 	const floorMesh = new THREE.Mesh(floorGeometry, material);
+
+	// EXPLAIN: next lines about casting and receiving shadows
+	floorMesh.receiveShadow = true;
+
+	// sphereMesh.receiveShadow = true;
+	sphereMesh.castShadow = true;
 
 	// spotLight.target = sphereMesh;
 
@@ -205,6 +220,26 @@ async function init() {
 		.add(directionalLight, 'visible')
 		.name('show directional light');
 
+	// // // // // // // // // // // // // // // // // // //
+
+	sphereTweaks
+		.add(sphereMesh.position, 'x')
+		.step(0.001)
+		.name('position.x')
+		.min(-5)
+		.max(5);
+	sphereTweaks
+		.add(sphereMesh.position, 'y')
+		.step(0.001)
+		.name('position.y')
+		.min(0)
+		.max(5);
+	sphereTweaks
+		.add(sphereMesh.position, 'z')
+		.step(0.001)
+		.name('position.z')
+		.min(-5)
+		.max(5);
 	// // // // // // // // // // // // // // // // // // //
 
 	// --------------------------------------------------------
