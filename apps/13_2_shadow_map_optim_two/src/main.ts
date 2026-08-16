@@ -119,6 +119,10 @@ async function init() {
 	// EXPLAIN: blur with radius
 	directionalLight.shadow.radius = 10;
 
+	// EXPLAIN: bias and intensity
+	directionalLight.shadow.intensity = 1; // default
+	directionalLight.shadow.bias = 0.002;
+
 	// -----------------------------------------------------------
 
 	scene.add(directionalLight);
@@ -291,6 +295,25 @@ async function init() {
 		.add(renderer.shadowMap, 'type', shadowMapAlgoType)
 		.name('renderer.shadowMap.type');
 
+	shadowTweaks
+		.add(directionalLight.shadow, 'intensity')
+		.min(0)
+		.max(1)
+		.step(0.001)
+		.name('directionalLight.shadow.intensity');
+	shadowTweaks
+		.add(directionalLight.shadow, 'bias')
+		.min(-0.001)
+		.max(0.002)
+		.step(0.00001)
+		.name('directionalLight.shadow.bias');
+
+	shadowTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'keep width and height for mapSize the same --------------------------------',
+		);
 	const shadowMapSizes = {
 		128: 128,
 		256: 256,
@@ -298,12 +321,6 @@ async function init() {
 		1024: 1024,
 		2048: 2048,
 	};
-	shadowTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			'keep width and height for mapSize the same --------------------------------',
-		);
 	shadowTweaks
 		.add(directionalLight.shadow.mapSize, 'width', shadowMapSizes)
 		.name('directionalLight.shadow.mapSize.width');
