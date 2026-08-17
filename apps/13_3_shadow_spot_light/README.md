@@ -8,3 +8,6 @@ Cilje je razumeti sta sve mozemo da uradimo u smislu shadow-a, kada imamo spot l
 
 ## Šta treba objasniti u detalje
 
+- mixing shadows doesn't look really good
+
+- we can improve the shadow quality using the same technics that we used for the directional light

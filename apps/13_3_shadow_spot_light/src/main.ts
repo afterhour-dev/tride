@@ -89,8 +89,8 @@ async function init() {
 	const ambientLight = new THREE.AmbientLight();
 
 	ambientLight.color = new THREE.Color(0xffffff);
-	// ambientLight.intensity = 0.5;
-	ambientLight.intensity = 1;
+	ambientLight.intensity = 0.4;
+	// ambientLight.intensity = 1;
 
 	// ambientLight.visible = false;
 
@@ -100,6 +100,7 @@ async function init() {
 
 	// const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.3);
 	const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+	directionalLight.intensity = 0.4;
 
 	directionalLight.position.set(2, 2, -1);
 
@@ -585,6 +586,30 @@ async function init() {
 			directionalLight.shadow.camera.updateProjectionMatrix();
 			directionalLightShadowCameraHelper.update();
 		});
+
+	// EXPLAIN: helper for spot light
+
+	const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+
+	spotLightHelper.visible = false;
+
+	spotTweaks
+		.add(spotLightHelper, 'visible')
+		.name('visualize spot light');
+
+	scene.add(spotLightHelper);
+
+	// EXPLAIN: spotlight shadow camera helper
+	const spotlightShadowCameraHelper = new THREE.CameraHelper(
+		spotLight.shadow.camera,
+	);
+
+	scene.add(spotlightShadowCameraHelper);
+
+	spotLightShadowTweaks
+		.add(spotlightShadowCameraHelper, 'visible')
+		.name('show spotlight shadow camera helper');
+
 	// // // // // // // // //
 
 	// // // // // // // // //
@@ -649,6 +674,10 @@ async function init() {
 		// const elapsedTime = timer.getElapsed();
 
 		orbitControls.update();
+
+		// EXPLAIN: updating spot light helper on
+		// every frame
+		spotLightHelper.update();
 
 		// camera.lookAt(sphereMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
