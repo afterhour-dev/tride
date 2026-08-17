@@ -88,7 +88,7 @@ async function init() {
 	scene.add(hemisphereLight);
 
 	// EXPLAIN: PointLight, its parameters and major props
-	const pointLight = new THREE.PointLight(0xff9000, 0.5);
+	const pointLight = new THREE.PointLight(0xff9000, 0.5 * Math.PI);
 	// EXPLAIN: with distance and decay as arguments
 	// const pointLight = new THREE.PointLight(0xff9000, 0.5, 10, 2);
 
@@ -219,7 +219,7 @@ async function init() {
 		.add(pointLight, 'intensity')
 		.name('point light intensity')
 		.min(0)
-		.max(1)
+		.max(20)
 		.step(0.001);
 	awsomeTweaks
 		.addColor(pointLight, 'color')

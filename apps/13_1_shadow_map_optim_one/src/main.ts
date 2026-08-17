@@ -22,12 +22,12 @@ const gui = new GUI({
 
 const ambientTweaks = gui.addFolder('Ambient Light');
 ambientTweaks.close();
-const directionalTweaks = gui.addFolder('Directional Light');
-directionalTweaks.close();
 const standardMaterialTweaks = gui.addFolder('MeshStandardMaterial');
 standardMaterialTweaks.close();
 const sphereTweaks = gui.addFolder('sphere Mesh');
 sphereTweaks.close();
+const directionalTweaks = gui.addFolder('Directional Light');
+directionalTweaks.close();
 // EXPLAIN: for tweaking shadow stuff related to directional light
 const shadowTweaks = gui.addFolder('Directional light Shadow tweaks');
 shadowTweaks.open();
@@ -88,7 +88,10 @@ async function init() {
 	// // // // // // // // -------------------------------
 
 	// const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.3);
-	const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+	const directionalLight = new THREE.DirectionalLight(
+		0xffffff,
+		0.4 * Math.PI,
+	);
 
 	directionalLight.position.set(1, 0.25, 0);
 
@@ -191,7 +194,7 @@ async function init() {
 	directionalTweaks
 		.add(directionalLight, 'intensity')
 		.min(0)
-		.max(1)
+		.max(10)
 		.step(0.001);
 	directionalTweaks
 		.add(directionalLight.position, 'x')

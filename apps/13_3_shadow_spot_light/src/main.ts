@@ -99,8 +99,8 @@ async function init() {
 	// // // // // // // // -------------------------------
 
 	// const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.3);
-	const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-	directionalLight.intensity = 0.4;
+	const directionalLight = new THREE.DirectionalLight(0xffffff);
+	directionalLight.intensity = 0.4 * Math.PI;
 
 	directionalLight.position.set(2, 2, -1);
 
