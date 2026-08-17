@@ -173,13 +173,12 @@ async function init() {
 	// what you have to say about it
 	// spotLight.shadow.camera.far = 6;
 
-	// ----------------------------------------------------------
-	scene.add(spotLight);
-
 	// EXPLAIN: don't forget to add spotlight target to the scene, which
 	// we talked about already in some lesson
 	// target is Object3D and we will be able to mobe that target
 	scene.add(spotLight.target);
+	// ----------------------------------------------------------
+	scene.add(spotLight);
 
 	// // // // // // // // --------------------------------
 
@@ -768,6 +767,10 @@ async function init() {
 		// EXPLAIN: updating spot light helper on
 		// every frame
 		spotLightHelper.update();
+
+		// EXPLAIN: doesn't work
+		// shadow is still on the same place not moving as we move target
+		// spotLight.target.updateMatrixWorld(true);
 
 		// camera.lookAt(sphereMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default

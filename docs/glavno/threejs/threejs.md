@@ -74,3 +74,4 @@
 - [[13.0_shadows-intro]] — 2026-08-16
 - [[13.1_shadow-map-optimization-part-one]] — 2026-08-16
 - [[13.2_shadow-map-optimization-part-two]] — 2026-08-16
+- [[13.3_shadow-spot-light]] — 2026-08-17
