@@ -22,16 +22,16 @@ const gui = new GUI({
 
 const ambientTweaks = gui.addFolder('Ambient Light');
 ambientTweaks.close();
-const directionalTweaks = gui.addFolder('Directional Light');
-directionalTweaks.close();
 const standardMaterialTweaks = gui.addFolder('MeshStandardMaterial');
 standardMaterialTweaks.close();
 const sphereTweaks = gui.addFolder('sphere Mesh');
 sphereTweaks.close();
-const shadowTweaks = gui.addFolder(
-	'Shadow tweaks (mostly on directional ligt and one on rednerer)',
+const directionalTweaks = gui.addFolder('Directional Light');
+directionalTweaks.close();
+const directionalShadowTweaks = gui.addFolder(
+	'Directional Light Shadow tweaks',
 );
-shadowTweaks.close();
+directionalShadowTweaks.close();
 // EXPLAIN: adding tweaks for spot light and other
 // for shadow related spot light things
 const spotTweaks = gui.addFolder('Spot Light');
@@ -156,6 +156,17 @@ async function init() {
 
 	//  5.2 - Shadow stuff related to spot light
 
+	// EXPLAIN: mapSize.height/width for spotLight shadow
+	spotLight.shadow.mapSize.width = 1024;
+	spotLight.shadow.mapSize.height = 1024;
+
+	// EXPLAIN: fov and its ranges
+	spotLight.shadow.camera.fov = 30;
+
+	// EXPLAIN: near and far and their ranges
+	spotLight.shadow.camera.near = 1;
+	spotLight.shadow.camera.far = 6;
+
 	// ----------------------------------------------------------
 	scene.add(spotLight);
 
@@ -196,6 +207,17 @@ async function init() {
 
 	// ------------- Tweaks ----------------------------------
 	// 7 - gui tweaks
+
+	const shadowMapAlgoType = {
+		BasicShadowMap: THREE.BasicShadowMap,
+		PCFShadowMap: THREE.PCFShadowMap,
+		PCFSoftShadowMap: THREE.PCFSoftShadowMap,
+		VSMShadowMap: THREE.VSMShadowMap,
+	};
+	gui
+		.add(renderer.shadowMap, 'type', shadowMapAlgoType)
+		.name('renderer.shadowMap.type');
+	// // // // // // // // // // // // // //
 
 	standardMaterialTweaks
 		.add(material, 'roughness')
@@ -309,41 +331,32 @@ async function init() {
 	// // // // // // // // // // // // // // // // // // //
 	// shadow things tweaks
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add({ a: '' }, 'a')
 		.disable()
 		.name("radius (blur) doesn't work with `THREE.PCFSoftShadowMap`");
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow, 'radius')
 		.min(-30)
 		.max(30)
 		.step(0.001)
 		.name('directionalLight.shadow.radius (blur)');
-	const shadowMapAlgoType = {
-		BasicShadowMap: THREE.BasicShadowMap,
-		PCFShadowMap: THREE.PCFShadowMap,
-		PCFSoftShadowMap: THREE.PCFSoftShadowMap,
-		VSMShadowMap: THREE.VSMShadowMap,
-	};
-	shadowTweaks
-		.add(renderer.shadowMap, 'type', shadowMapAlgoType)
-		.name('renderer.shadowMap.type');
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow, 'intensity')
 		.min(0)
 		.max(1)
 		.step(0.001)
 		.name('directionalLight.shadow.intensity');
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow, 'bias')
 		.min(-0.0002)
 		.max(0.0002)
 		.step(0.00001)
 		.name('directionalLight.shadow.bias');
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add({ a: '' }, 'a')
 		.disable()
 		.name(
@@ -356,15 +369,15 @@ async function init() {
 		1024: 1024,
 		2048: 2048,
 	};
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow.mapSize, 'width', shadowMapSizes)
 		.name('directionalLight.shadow.mapSize.width');
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow.mapSize, 'height', shadowMapSizes)
 		.name('directionalLight.shadow.mapSize.height');
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add({ a: '' }, 'a')
 		.disable()
 		.name(
@@ -514,11 +527,11 @@ async function init() {
 
 	scene.add(directionalLightShadowCameraHelper);
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLightShadowCameraHelper, 'visible')
 		.name('Directional Light Shadow Camera Helper');
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'far')
 		.name('directionalLight.shadow.camera.far')
 		.max(100)
@@ -528,7 +541,7 @@ async function init() {
 			directionalLight.shadow.camera.updateProjectionMatrix();
 			directionalLightShadowCameraHelper.update();
 		});
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'near')
 		.name('directionalLight.shadow.camera.near')
 		.max(100)
@@ -539,14 +552,14 @@ async function init() {
 			directionalLightShadowCameraHelper.update();
 		});
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add({ a: '' }, 'a')
 		.disable()
 		.name(
 			'--------------------------------------------------------------------------------------------',
 		);
 
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'top')
 		.min(-5)
 		.max(5)
@@ -556,7 +569,7 @@ async function init() {
 			directionalLight.shadow.camera.updateProjectionMatrix();
 			directionalLightShadowCameraHelper.update();
 		});
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'right')
 		.min(-5)
 		.max(5)
@@ -566,7 +579,7 @@ async function init() {
 			directionalLight.shadow.camera.updateProjectionMatrix();
 			directionalLightShadowCameraHelper.update();
 		});
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'bottom')
 		.min(-5)
 		.max(5)
@@ -576,7 +589,7 @@ async function init() {
 			directionalLight.shadow.camera.updateProjectionMatrix();
 			directionalLightShadowCameraHelper.update();
 		});
-	shadowTweaks
+	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'left')
 		.min(-5)
 		.max(5)
@@ -588,7 +601,6 @@ async function init() {
 		});
 
 	// EXPLAIN: helper for spot light
-
 	const spotLightHelper = new THREE.SpotLightHelper(spotLight);
 
 	spotLightHelper.visible = false;
@@ -606,11 +618,66 @@ async function init() {
 
 	scene.add(spotlightShadowCameraHelper);
 
+	// EXPLAIN: all tweaks related to spotLight shadow and
+	// spotLight shadow camera
+	spotLightShadowTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'keep width and height for mapSize the same --------------------------------',
+		);
+	spotLightShadowTweaks
+		.add(spotLight.shadow.mapSize, 'width', shadowMapSizes)
+		.name('spotLight.shadow.mapSize.width');
+
+	spotLightShadowTweaks
+		.add(spotLight.shadow.mapSize, 'height', shadowMapSizes)
+		.name('spotLight.shadow.mapSize.height');
+
+	spotLightShadowTweaks
+		.add(spotLight.shadow.camera, 'fov')
+		.min(0)
+		.max(100)
+		.step(0.001)
+		.onChange(() => {
+			spotLight.shadow.camera.updateProjectionMatrix();
+			spotlightShadowCameraHelper.update();
+		})
+		.name('spotLight.shadow.camera.fov');
+
+	spotLightShadowTweaks
+		.add(spotLight.shadow.camera, 'near')
+		.min(0)
+		.max(10)
+		.step(0.001)
+		.onChange(() => {
+			spotLight.shadow.camera.updateProjectionMatrix();
+			spotlightShadowCameraHelper.update();
+		})
+		.name('spotLight.shadow.camera.near');
+	spotLightShadowTweaks
+		.add(spotLight.shadow.camera, 'far')
+		.min(0)
+		.max(50)
+		.step(0.001)
+		.onChange(() => {
+			spotLight.shadow.camera.updateProjectionMatrix();
+			spotlightShadowCameraHelper.update();
+		})
+		.name('spotLight.shadow.camera.far');
+
+	//
 	spotLightShadowTweaks
 		.add(spotlightShadowCameraHelper, 'visible')
 		.name('show spotlight shadow camera helper');
 
 	// // // // // // // // //
+	spotLightShadowTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'--------------------------------------------------------------------------------------------\n--------------------------------------------------------------------------------------------',
+		);
 
 	// // // // // // // // //
 
@@ -677,7 +744,7 @@ async function init() {
 
 		// EXPLAIN: updating spot light helper on
 		// every frame
-		spotLightHelper.update();
+		// spotLightHelper.update();
 
 		// camera.lookAt(sphereMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
