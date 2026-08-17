@@ -160,12 +160,18 @@ async function init() {
 	spotLight.shadow.mapSize.width = 1024;
 	spotLight.shadow.mapSize.height = 1024;
 
-	// EXPLAIN: fov and its ranges
-	spotLight.shadow.camera.fov = 30;
+	// EXPLAIN: ( fov ) and its ranges
+	// but sice this caused problems I explained in readme I am
+	// I'm going to comment this out for now, until after I learn
+	// what you have to say about it
+	// spotLight.shadow.camera.fov = 30;
 
 	// EXPLAIN: near and far and their ranges
 	spotLight.shadow.camera.near = 1;
-	spotLight.shadow.camera.far = 6;
+	// EXPLAIN: ( far ) because of the problem I explained in readme
+	// I'm going to comment this out for now, until after I learn
+	// what you have to say about it
+	// spotLight.shadow.camera.far = 6;
 
 	// ----------------------------------------------------------
 	scene.add(spotLight);
@@ -744,7 +750,7 @@ async function init() {
 
 		// EXPLAIN: updating spot light helper on
 		// every frame
-		// spotLightHelper.update();
+		spotLightHelper.update();
 
 		// camera.lookAt(sphereMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
