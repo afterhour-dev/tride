@@ -192,8 +192,11 @@ async function init() {
 
 	// ----------------------------------------------------------
 	// 5.3 - Shadow stuff related to point light
+	pointLight.shadow.mapSize.width = 1024;
+	pointLight.shadow.mapSize.height = 1024;
 
-	// EXPLAIN: don't forget to add target to the scene
+	pointLight.shadow.camera.near = 0.1;
+	pointLight.shadow.camera.far = 5;
 
 	// ----------------------------------------------------------
 
@@ -506,6 +509,28 @@ async function init() {
 		.step(0.01)
 		.name('point light decey');
 
+	pointLightShadowTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'keep width and height for mapSize the same --------------------------------',
+		);
+	// EXPLAIN: point light shadow twaeks
+	const pointShadowMapSizes = {
+		128: 128,
+		256: 256,
+		512: 512,
+		1024: 1024,
+		2048: 2048,
+	};
+	pointLightShadowTweaks
+		.add(pointLight.shadow.mapSize, 'width', pointShadowMapSizes)
+		.name('pointLight.shadow.mapSize.width');
+
+	pointLightShadowTweaks
+		.add(pointLight.shadow.mapSize, 'height', pointShadowMapSizes)
+		.name('pointLight.shadow.mapSize.height');
+
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
@@ -697,7 +722,6 @@ async function init() {
 			spotLight.shadow.camera.updateProjectionMatrix();
 			spotlightShadowCameraHelper.update();
 		})
-
 		.disable()
 		.name('spotLight.shadow.camera.fov');
 
@@ -767,6 +791,27 @@ async function init() {
 	);
 
 	scene.add(pointLightShadowCameraHelper);
+
+	pointLightShadowTweaks
+		.add(pointLight.shadow.camera, 'near')
+		.min(0)
+		.max(10)
+		.step(0.001)
+		.onChange(() => {
+			pointLight.shadow.camera.updateProjectionMatrix();
+			pointLightShadowCameraHelper.update();
+		})
+		.name('pointLight.shadow.camera.near');
+	pointLightShadowTweaks
+		.add(pointLight.shadow.camera, 'far')
+		.min(-10)
+		.max(50)
+		.step(0.001)
+		.onChange(() => {
+			pointLight.shadow.camera.updateProjectionMatrix();
+			pointLightShadowCameraHelper.update();
+		})
+		.name('pointLight.shadow.camera.far');
 
 	pointLightShadowTweaks
 		.add(pointLightShadowCameraHelper, 'visible')
