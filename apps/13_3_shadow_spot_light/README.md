@@ -17,8 +17,6 @@ Cilje je razumeti sta sve mozemo da uradimo u smislu shadow-a, kada imamo spot l
 - near and far
   
 - **I have problems here while using gui to change near far fov. Only effect It gave me as I was increaing near shadow got croper or disapeard, which is expected, but lowering far even to 0 did nothig. As I change near or far fov changes, jumps and increses. Changing fov also had no effect**
- 
-
   - after some digging I found out about why is that problem happening, and this is what is suggested
 
     This confirms exactly what's happening — this is a known three.js behavior, not a bug in your code.

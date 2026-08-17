@@ -649,6 +649,9 @@ async function init() {
 			spotLight.shadow.camera.updateProjectionMatrix();
 			spotlightShadowCameraHelper.update();
 		})
+		// EXPLAIN: disabed this because of the problem I already
+		// explined in readme
+		.disable()
 		.name('spotLight.shadow.camera.fov');
 
 	spotLightShadowTweaks
@@ -670,7 +673,21 @@ async function init() {
 			spotLight.shadow.camera.updateProjectionMatrix();
 			spotlightShadowCameraHelper.update();
 		})
+		// EXPLAIN: disabed this because of the problem I already
+		// explined in readme
+		.disable()
 		.name('spotLight.shadow.camera.far');
+
+	// EXPLAIN: focus
+	spotLightShadowTweaks
+		.add(spotLight.shadow, 'focus')
+		.min(0)
+		.max(2)
+		.step(0.001)
+		.onChange(() => {
+			spotlightShadowCameraHelper.update();
+		})
+		.name('spotLight.shadow.focus');
 
 	//
 	spotLightShadowTweaks
