@@ -196,7 +196,7 @@ async function init() {
 	pointLight.shadow.mapSize.height = 1024;
 
 	pointLight.shadow.camera.near = 0.1;
-	pointLight.shadow.camera.far = 5;
+	// pointLight.shadow.camera.far = 5;
 
 	// ----------------------------------------------------------
 
@@ -811,6 +811,7 @@ async function init() {
 			pointLight.shadow.camera.updateProjectionMatrix();
 			pointLightShadowCameraHelper.update();
 		})
+		.disable()
 		.name('pointLight.shadow.camera.far');
 
 	pointLightShadowTweaks
