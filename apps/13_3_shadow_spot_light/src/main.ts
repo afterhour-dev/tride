@@ -31,7 +31,15 @@ sphereTweaks.close();
 const shadowTweaks = gui.addFolder(
 	'Shadow tweaks (mostly on directional ligt and one on rednerer)',
 );
-shadowTweaks.open();
+shadowTweaks.close();
+// EXPLAIN: adding tweaks for spot light and other
+// for shadow related spot light things
+const spotTweaks = gui.addFolder('Spot Light');
+const spotLightShadowTweaks = gui.addFolder(
+	'Spot Light shadow tweaks',
+);
+spotTweaks.open();
+spotLightShadowTweaks.open();
 
 const debugObject = {
 	directLookAtCenter: () => {},
@@ -66,7 +74,6 @@ async function init() {
 
 	renderer.shadowMap.enabled = true;
 
-	// EXPLAIN: shadow map algorithm
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // other ones we used in gui
 
 	// ------------------------------------------------------
@@ -94,13 +101,12 @@ async function init() {
 	// const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.3);
 	const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
 
-	directionalLight.position.set(1, 0.25, 0);
-
 	directionalLight.position.set(2, 2, -1);
 
 	directionalLight.castShadow = true;
 
 	// directionalLight.visible = false;
+
 	// ----------------------------------------------------------
 	//  5.1 - Shadow stuff related to directional light
 
@@ -116,16 +122,46 @@ async function init() {
 	directionalLight.shadow.camera.bottom = -2;
 	directionalLight.shadow.camera.left = -2;
 
-	// EXPLAIN: blur with radius
 	directionalLight.shadow.radius = 10;
 
-	// EXPLAIN: bias and intensity
 	directionalLight.shadow.intensity = 1; // default
-	// directionalLight.shadow.bias = 0.001;
+	// directionalLight.shadow.bias = 0.0002;
 
 	// -----------------------------------------------------------
-
 	scene.add(directionalLight);
+
+	// // // // // // // // -------------------------------
+	// EXPLAIN: adding spot light
+	const spotLight = new THREE.SpotLight();
+
+	spotLight.color = new THREE.Color(0xffffff);
+	// EXPLAIN: these are candelas, are not units from 0 to 1
+	// to mimic legacy of 0.4 I multiply by Math.PI (is this ok)
+	spotLight.intensity = 0.4 * Math.PI;
+	spotLight.distance = 10;
+	// EXPLAIN: by default decay is 2
+	// I need 0 to mimic old behaviour
+	spotLight.decay = 0;
+	spotLight.angle = Math.PI * 0.3;
+
+	// EXPLAIN: don't forget to cast a shadow
+	spotLight.castShadow = true;
+
+	spotLight.position.set(0, 2, 2);
+
+	// spotLight.visible = false;
+
+	// ----------------------------------------------------------
+
+	//  5.2 - Shadow stuff related to spot light
+
+	// ----------------------------------------------------------
+	scene.add(spotLight);
+
+	// EXPLAIN: don't forget to add spotlight target to the scene, which
+	// we talked about already in some lesson
+	// target is Object3D and we will be able to mobe that target
+	scene.add(spotLight.target);
 
 	// // // // // // // // --------------------------------
 
@@ -277,14 +313,12 @@ async function init() {
 		.disable()
 		.name("radius (blur) doesn't work with `THREE.PCFSoftShadowMap`");
 
-	// EXPLAIN: next twaek - blur
 	shadowTweaks
 		.add(directionalLight.shadow, 'radius')
 		.min(-30)
 		.max(30)
 		.step(0.001)
 		.name('directionalLight.shadow.radius (blur)');
-	// EXPLAIN: tweaking shadow map algo type
 	const shadowMapAlgoType = {
 		BasicShadowMap: THREE.BasicShadowMap,
 		PCFShadowMap: THREE.PCFShadowMap,
@@ -337,6 +371,64 @@ async function init() {
 		);
 
 	// // // // // // // // // // // // // // // // // // //
+	// EXPLAIN: added spotLight tweaks
+	spotTweaks.addColor(spotLight, 'color');
+	spotTweaks.add(spotLight, 'intensity').min(0).max(200).step(0.001);
+	spotTweaks.add(spotLight, 'distance').min(0).max(20).step(0.001);
+	spotTweaks
+		.add(spotLight, 'angle')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.step(0.001);
+	// spotTweaks.add(spotLight, 'penumbra').min(0).max(1).step(0.001);
+	spotTweaks.add(spotLight, 'decay').min(0).max(2).step(0.001);
+
+	spotTweaks
+		.add(spotLight.position, 'x')
+		.step(0.001)
+		.name('position.x')
+		.min(-10)
+		.max(10)
+		.step(0.001);
+	spotTweaks
+		.add(spotLight.position, 'y')
+		.step(0.001)
+		.name('position.y')
+		.min(-10)
+		.max(10)
+		.step(0.001);
+	spotTweaks
+		.add(spotLight.position, 'z')
+		.step(0.001)
+		.name('position.z')
+		.min(-10)
+		.max(10)
+		.step(0.001);
+
+	spotTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			"Target moving wouldn't work if we didn't add target Object3D to\n the scene",
+		);
+
+	spotTweaks
+		.add(spotLight.target.position, 'x')
+		.min(-3)
+		.max(3)
+		.name('spotLight.target.position.x');
+	spotTweaks
+		.add(spotLight.target.position, 'y')
+		.min(-3)
+		.max(3)
+		.name('spotLight.target.position.y');
+	spotTweaks
+		.add(spotLight.target.position, 'z')
+		.min(-3)
+		.max(3)
+		.name('spotLight.target.position.z');
+
+	spotTweaks.add(spotLight, 'visible').name('spotLight visible');
 
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera

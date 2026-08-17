@@ -119,7 +119,7 @@ async function init() {
 
 	hemisphereLight.color = new THREE.Color(0xff0000);
 	hemisphereLight.groundColor = new THREE.Color(0x0000ff);
-	hemisphereLight.intensity = 0.3;
+	hemisphereLight.intensity = 0.3 * Math.PI;
 
 	hemisphereLight.visible = false;
 
@@ -298,7 +298,7 @@ async function init() {
 	pointTweaks.add(pointLight, 'intensity').min(0).max(1).step(0.001);
 	pointTweaks.addColor(pointLight, 'color');
 	pointTweaks.add(pointLight, 'distance').min(0).max(20).step(0.01);
-	pointTweaks.add(pointLight, 'decay').min(-1).max(20).step(0.01);
+	pointTweaks.add(pointLight, 'decay').min(1).max(2).step(0.01);
 	pointTweaks
 		.add(pointLight.position, 'x')
 		.step(0.001)
@@ -435,7 +435,7 @@ async function init() {
 		.max(2 * Math.PI)
 		.step(0.001);
 	spotTweaks.add(spotLight, 'penumbra').min(0).max(1).step(0.001);
-	spotTweaks.add(spotLight, 'decay').min(0).max(1).step(0.001);
+	spotTweaks.add(spotLight, 'decay').min(0).max(2).step(0.001);
 
 	spotTweaks
 		.add(spotLight.position, 'x')

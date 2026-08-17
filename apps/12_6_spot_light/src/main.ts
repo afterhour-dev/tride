@@ -389,7 +389,7 @@ async function init() {
 
 	// EXPLAIN: adding spot light to the gui tweaks
 	spotTweaks.addColor(spotLight, 'color');
-	spotTweaks.add(spotLight, 'intensity').min(0).max(1).step(0.001);
+	spotTweaks.add(spotLight, 'intensity').min(0).max(200).step(0.001);
 	spotTweaks.add(spotLight, 'distance').min(0).max(20).step(0.001);
 	spotTweaks
 		.add(spotLight, 'angle')
@@ -397,7 +397,7 @@ async function init() {
 		.max(2 * Math.PI)
 		.step(0.001);
 	spotTweaks.add(spotLight, 'penumbra').min(0).max(1).step(0.001);
-	spotTweaks.add(spotLight, 'decay').min(0).max(1).step(0.001);
+	spotTweaks.add(spotLight, 'decay').min(0).max(2).step(0.001);
 
 	spotTweaks
 		.add(spotLight.position, 'x')
