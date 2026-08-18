@@ -124,8 +124,8 @@ async function init() {
 
 	const floorGeometry = new THREE.PlaneGeometry(20, 20);
 	const floorMaterial = new THREE.MeshStandardMaterial();
-	floorMaterial.color = new THREE.Color(0xffffff);
-	// floorMaterial.color = new THREE.Color(0x59b4af);
+	// floorMaterial.color = new THREE.Color(0xffffff);
+	floorMaterial.color = new THREE.Color(0x59b4af);
 	// material.wireframe = true;
 	// floorMaterial.roughness = 0.7;
 	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
