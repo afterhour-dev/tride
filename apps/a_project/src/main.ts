@@ -247,7 +247,15 @@ async function init() {
 	// // // // // // // // // // ---------------------------------
 	// gui - Folders ----------------
 	// // // // // // // // // // ---------------------------------
-
+	directionalShadowTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'helper will not work without `renderer.shadowMap.enabled` === `true`',
+		);
+	directionalShadowTweaks
+		.add(directionalLightShadowCameraHelper, 'visible')
+		.name('Directional Light Shadow Camera Helper');
 	directionalShadowTweaks
 		.add({ a: '' }, 'a')
 		.disable()
@@ -298,9 +306,7 @@ async function init() {
 		.name(
 			'--------------------------------------------------------------------------------------------',
 		);
-	directionalShadowTweaks
-		.add(directionalLightShadowCameraHelper, 'visible')
-		.name('Directional Light Shadow Camera Helper');
+
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'far')
 		.name('directionalLight.shadow.camera.far')
@@ -412,17 +418,19 @@ async function init() {
 		.name('rotation.z')
 		.step(0.001);
 
+	// should be removed
 	directionalTweaks
 		.add({ a: '' }, 'a')
 		.disable()
 		.name(
 			"this `directLookAtCenter` isn't doing what I thought it would. Which\n would be pointing to the center of the scene.\nBut it doesen't do an rotations",
-		);
-
+		)
+		.hide();
 	debugObject.directLookAtCenter = () => {
 		directionalLight.lookAt(new THREE.Vector3());
 	};
-	directionalTweaks.add(debugObject, 'directLookAtCenter');
+	directionalTweaks.add(debugObject, 'directLookAtCenter').hide();
+	//
 
 	directionalTweaks
 		.add(directionalLight, 'visible')
@@ -437,7 +445,8 @@ async function init() {
 
 	directionalTweaks
 		.add(arrowHelper, 'visible')
-		.name('what direction is light comming from');
+		.name('what direction is light comming from')
+		.hide();
 
 	// // // // // // // // // // // // // // // // // // //
 
