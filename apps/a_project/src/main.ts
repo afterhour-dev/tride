@@ -74,11 +74,8 @@ async function init() {
 	// 5 - Lights
 
 	const ambientLight = new THREE.AmbientLight();
-
 	ambientLight.color = new THREE.Color(0xffffff);
 	ambientLight.intensity = 0.3;
-	// ambientLight.intensity = 1;
-
 	// ambientLight.visible = false;
 
 	scene.add(ambientLight);
@@ -87,18 +84,16 @@ async function init() {
 
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
 	directionalLight.intensity = 0.2 * Math.PI;
-
 	directionalLight.position.set(2, 2, -1);
-
 	// directionalLight.visible = false;
 
 	// ----------------------------------------------------------
 	//  5.1 - Shadow stuff related to directional light
-	directionalLight.castShadow = true;
 
 	// console.log(directionalLight.shadow);
 	// console.log(directionalLight.shadow.camera);
 
+	directionalLight.castShadow = true;
 	directionalLight.shadow.mapSize.width = 1024;
 	directionalLight.shadow.mapSize.height = 1024;
 	directionalLight.shadow.camera.near = 1;
@@ -107,11 +102,9 @@ async function init() {
 	directionalLight.shadow.camera.right = 2;
 	directionalLight.shadow.camera.bottom = -2;
 	directionalLight.shadow.camera.left = -2;
-
 	directionalLight.shadow.radius = 10;
-
 	directionalLight.shadow.intensity = 1; // default
-	// directionalLight.shadow.bias = 0.0002;
+	// directionalLight.shadow.bias = 0.0002; // default
 
 	// -----------------------------------------------------------
 	scene.add(directionalLight);
@@ -164,7 +157,7 @@ async function init() {
 	scene.add(camera);
 
 	// -----------------------------------------------------
-	// 9 - Orbit Controls
+	// 8 - Orbit Controls
 	const orbitControls = new OrbitControls(camera, canvas);
 
 	orbitControls.enableDamping = true;
@@ -172,7 +165,7 @@ async function init() {
 	// orbitControls.update()
 
 	// ------------------------------------------------
-	// 10 - helpers
+	// 9 - helpers
 
 	// // // // // // // // //
 	// Light Helpers
@@ -219,7 +212,7 @@ async function init() {
 	scene.add(axesHelper);
 	axesHelper.visible = false;
 
-	// GUI ---------------------------------------------------------
+	// 9 - GUI ---------------------------------------------------------
 
 	// // // // // // // // // //
 	// gui - Global -----------------
@@ -418,7 +411,7 @@ async function init() {
 		.name('rotation.z')
 		.step(0.001);
 
-	// should be removed
+	// should be removed -
 	directionalTweaks
 		.add({ a: '' }, 'a')
 		.disable()
@@ -430,7 +423,7 @@ async function init() {
 		directionalLight.lookAt(new THREE.Vector3());
 	};
 	directionalTweaks.add(debugObject, 'directLookAtCenter').hide();
-	//
+	// -
 
 	directionalTweaks
 		.add(directionalLight, 'visible')
@@ -510,7 +503,7 @@ async function init() {
 	function tick(timestamp: number) {
 		timer.update(timestamp);
 
-		const elapsedTime = timer.getElapsed();
+		// const elapsedTime = timer.getElapsed();
 
 		orbitControls.update();
 
