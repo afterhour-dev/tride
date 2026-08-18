@@ -371,7 +371,7 @@ async function init() {
 	directionalTweaks
 		.add(directionalLight, 'intensity')
 		.min(0)
-		.max(1)
+		.max(6)
 		.step(0.001);
 	directionalTweaks
 		.add(directionalLight.position, 'x')

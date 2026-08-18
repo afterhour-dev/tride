@@ -25,12 +25,16 @@ const debugObject = {
 
 const sphereTweaks = gui.addFolder('sphere Mesh');
 sphereTweaks.close();
+const floorTweaks = gui.addFolder('floor Mesh');
+floorTweaks.open();
 const ambientTweaks = gui.addFolder('Ambient Light');
 ambientTweaks.close();
-const directionalTweaks = gui.addFolder('Directional Light');
+const directionalTweaks = gui.addFolder(
+	'Directional Light - Moon Light',
+);
 directionalTweaks.close();
 const directionalShadowTweaks = gui.addFolder(
-	'Directional Light Shadow tweaks',
+	'Directional Light Shadow tweaks - Moon Light shadow tweaks',
 );
 directionalShadowTweaks.close();
 
@@ -57,11 +61,11 @@ async function init() {
 	// 0.2 - Shadows stuff globaly related
 
 	// shadows disabled for now gloabaly
-	renderer.shadowMap.enabled = false;
+	renderer.shadowMap.enabled = true;
 
-	// renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
 	// using default for a start (doesn't have anty effect but leaving it here for start)
-	renderer.shadowMap.type = THREE.PCFShadowMap;
+	// renderer.shadowMap.type = THREE.PCFShadowMap;
 
 	// ------------------------------------------------------
 	// 3 -  texture stuff
@@ -75,7 +79,7 @@ async function init() {
 
 	const ambientLight = new THREE.AmbientLight();
 	ambientLight.color = new THREE.Color(0xffffff);
-	ambientLight.intensity = 0.3;
+	ambientLight.intensity = 0.5;
 	// ambientLight.visible = false;
 
 	scene.add(ambientLight);
@@ -83,8 +87,9 @@ async function init() {
 	// // // // // // // // -------------------------------
 
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
-	directionalLight.intensity = 0.2 * Math.PI;
-	directionalLight.position.set(2, 2, -1);
+	// directionalLight.intensity = 1.5 * Math.PI;
+	directionalLight.intensity = 0.9 * Math.PI;
+	directionalLight.position.set(4, 5, -2);
 	// directionalLight.visible = false;
 
 	// ----------------------------------------------------------
@@ -97,7 +102,8 @@ async function init() {
 	directionalLight.shadow.mapSize.width = 1024;
 	directionalLight.shadow.mapSize.height = 1024;
 	directionalLight.shadow.camera.near = 1;
-	directionalLight.shadow.camera.far = 6;
+	directionalLight.shadow.camera.far = 10;
+	// directionalLight.shadow.camera.far = 6;
 	directionalLight.shadow.camera.top = 2;
 	directionalLight.shadow.camera.right = 2;
 	directionalLight.shadow.camera.bottom = -2;
@@ -106,33 +112,32 @@ async function init() {
 	directionalLight.shadow.intensity = 1; // default
 	// directionalLight.shadow.bias = 0.0002; // default
 
-	// -----------------------------------------------------------
+	//   //     //     //      //      //        //
 	scene.add(directionalLight);
 
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const sphereGreometry = new THREE.SphereGeometry(0.5, 32, 32);
-	const floorGeometry = new THREE.PlaneGeometry(5, 5);
+	const sphereGreometry = new THREE.SphereGeometry(1, 32, 32);
+	const sphereMaterial = new THREE.MeshStandardMaterial();
+	sphereMaterial.roughness = 0.7;
 
-	const material = new THREE.MeshStandardMaterial();
-
+	const floorGeometry = new THREE.PlaneGeometry(20, 20);
+	const floorMaterial = new THREE.MeshStandardMaterial();
+	floorMaterial.color = new THREE.Color(0xffffff);
+	// floorMaterial.color = new THREE.Color(0x59b4af);
 	// material.wireframe = true;
-
-	material.roughness = 0.7;
-
-	const sphereMesh = new THREE.Mesh(sphereGreometry, material);
-
-	const floorMesh = new THREE.Mesh(floorGeometry, material);
-
+	// floorMaterial.roughness = 0.7;
+	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 	floorMesh.rotation.x = -Math.PI / 2;
-	floorMesh.position.y = -0.5;
-
-	//  ------------------------
-
+	floorMesh.position.y = 0;
 	floorMesh.receiveShadow = true;
 
+	const sphereMesh = new THREE.Mesh(sphereGreometry, sphereMaterial);
+	sphereMesh.position.y = 1;
 	sphereMesh.castShadow = true;
+
+	//  ------------------------
 
 	scene.add(sphereMesh, floorMesh);
 
@@ -145,12 +150,9 @@ async function init() {
 		100,
 	);
 
-	// camera.position.z = 3;
-	// camera.position.y = 1.5;
-	// camera.position.x = 1;
-	camera.position.z = 1;
-	camera.position.y = 1;
-	camera.position.x = 2;
+	camera.position.z = 4;
+	camera.position.y = 2;
+	camera.position.x = 5;
 
 	// camera.lookAt(boxMesh.position);
 
@@ -175,7 +177,7 @@ async function init() {
 		0.2,
 	);
 
-	directionalLightHelper.visible = false;
+	// directionalLightHelper.visible = false;
 
 	directionalTweaks
 		.add(directionalLightHelper, 'visible')
@@ -199,7 +201,7 @@ async function init() {
 		directionalLight.shadow.camera,
 	);
 
-	directionalLightShadowCameraHelper.visible = false;
+	// directionalLightShadowCameraHelper.visible = false;
 
 	scene.add(directionalLightShadowCameraHelper);
 
@@ -210,7 +212,7 @@ async function init() {
 	const axesHelper = new THREE.AxesHelper(5);
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
-	axesHelper.visible = false;
+	// axesHelper.visible = false;
 
 	// 9 - GUI ---------------------------------------------------------
 
@@ -240,6 +242,84 @@ async function init() {
 	// // // // // // // // // // ---------------------------------
 	// gui - Folders ----------------
 	// // // // // // // // // // ---------------------------------
+
+	directionalTweaks.add(directionalLight, 'castShadow');
+
+	directionalTweaks
+		.add(directionalLight, 'intensity')
+		.min(0)
+		.max(6)
+		.step(0.001);
+	directionalTweaks
+		.add(directionalLight.position, 'x')
+		.step(0.001)
+		.name('position.x')
+		.min(-5)
+		.max(5);
+	directionalTweaks
+		.add(directionalLight.position, 'y')
+		.step(0.001)
+		.name('position.y')
+		.min(-5)
+		.max(5);
+	directionalTweaks
+		.add(directionalLight.position, 'z')
+		.step(0.001)
+		.name('position.z')
+		.min(-5)
+		.max(5);
+	directionalTweaks.addColor(directionalLight, 'color');
+	directionalTweaks
+		.add(directionalLight.rotation, 'x')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.name('rotation.x')
+		.step(0.001);
+	directionalTweaks
+		.add(directionalLight.rotation, 'y')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.name('rotation.y')
+		.step(0.001);
+	directionalTweaks
+		.add(directionalLight.rotation, 'z')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.name('rotation.z')
+		.step(0.001);
+
+	// should be removed -
+	directionalTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			"this `directLookAtCenter` isn't doing what I thought it would. Which\n would be pointing to the center of the scene.\nBut it doesen't do an rotations",
+		)
+		.hide();
+	debugObject.directLookAtCenter = () => {
+		directionalLight.lookAt(new THREE.Vector3());
+	};
+	directionalTweaks.add(debugObject, 'directLookAtCenter').hide();
+	// -
+
+	directionalTweaks
+		.add(directionalLight, 'visible')
+		.name('show directional light');
+
+	directionalTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			"The arrow direction is computed **once** at creation and never\nupdated. If you move the directional light, the arrow stays where it\nwas. For a dynamic arrow, you'd need to recreate or manually update\nit each frame.",
+		);
+
+	directionalTweaks
+		.add(arrowHelper, 'visible')
+		.name('what direction is light comming from')
+		.hide();
+
+	// // // // // // // // // // // // // // // // // // // // //
+
 	directionalShadowTweaks
 		.add({ a: '' }, 'a')
 		.disable()
@@ -367,82 +447,12 @@ async function init() {
 			directionalLightShadowCameraHelper.update();
 		});
 
-	// // // // // // // // // // // // // // // // // // // // //
-	directionalTweaks
-		.add(directionalLight, 'intensity')
-		.min(0)
-		.max(1)
-		.step(0.001);
-	directionalTweaks
-		.add(directionalLight.position, 'x')
-		.step(0.001)
-		.name('position.x')
-		.min(-5)
-		.max(5);
-	directionalTweaks
-		.add(directionalLight.position, 'y')
-		.step(0.001)
-		.name('position.y')
-		.min(-5)
-		.max(5);
-	directionalTweaks
-		.add(directionalLight.position, 'z')
-		.step(0.001)
-		.name('position.z')
-		.min(-5)
-		.max(5);
-	directionalTweaks.addColor(directionalLight, 'color');
-	directionalTweaks
-		.add(directionalLight.rotation, 'x')
-		.min(-2 * Math.PI)
-		.max(2 * Math.PI)
-		.name('rotation.x')
-		.step(0.001);
-	directionalTweaks
-		.add(directionalLight.rotation, 'y')
-		.min(-2 * Math.PI)
-		.max(2 * Math.PI)
-		.name('rotation.y')
-		.step(0.001);
-	directionalTweaks
-		.add(directionalLight.rotation, 'z')
-		.min(-2 * Math.PI)
-		.max(2 * Math.PI)
-		.name('rotation.z')
-		.step(0.001);
-
-	// should be removed -
-	directionalTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			"this `directLookAtCenter` isn't doing what I thought it would. Which\n would be pointing to the center of the scene.\nBut it doesen't do an rotations",
-		)
-		.hide();
-	debugObject.directLookAtCenter = () => {
-		directionalLight.lookAt(new THREE.Vector3());
-	};
-	directionalTweaks.add(debugObject, 'directLookAtCenter').hide();
-	// -
-
-	directionalTweaks
-		.add(directionalLight, 'visible')
-		.name('show directional light');
-
-	directionalTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			"The arrow direction is computed **once** at creation and never\nupdated. If you move the directional light, the arrow stays where it\nwas. For a dynamic arrow, you'd need to recreate or manually update\nit each frame.",
-		);
-
-	directionalTweaks
-		.add(arrowHelper, 'visible')
-		.name('what direction is light comming from')
-		.hide();
-
 	// // // // // // // // // // // // // // // // // // //
 
+	floorTweaks.add(floorMesh, 'receiveShadow');
+	// // // // // // // // // // // // // // // // // // //
+
+	sphereTweaks.add(sphereMesh, 'castShadow');
 	sphereTweaks
 		.add(sphereMesh.position, 'x')
 		.step(0.001)
