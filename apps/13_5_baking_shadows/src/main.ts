@@ -51,7 +51,7 @@ spotLightShadowTweaks.close();
 
 const pointTweaks = gui.addFolder('Point Light');
 const pointLightShadowTweaks = gui.addFolder(
-	'Spot Light shadow tweaks',
+	'Point Light shadow tweaks',
 );
 pointTweaks.close();
 pointLightShadowTweaks.close();
