@@ -6,8 +6,18 @@ import GUI from 'lil-gui';
 
 import { getRequiredElement } from './util';
 
-// const loadingManager = new THREE.LoadingManager();
-// const textureLoader = new THREE.TextureLoader(loadingManager);
+const loadingManager = new THREE.LoadingManager();
+const textureLoader = new THREE.TextureLoader(loadingManager);
+
+// EXPLAIN: loading baked shadow texture
+const bakedShadowTexture = textureLoader.load(
+	'/textures/bakedShadow.jpg',
+);
+
+// EXPLAIN: loading simpler baked shadow texture
+const simplerBakedShadowTexture = textureLoader.load(
+	'/textures/simpleShadow.jpg',
+);
 
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
@@ -38,14 +48,13 @@ const spotLightShadowTweaks = gui.addFolder(
 );
 spotTweaks.close();
 spotLightShadowTweaks.close();
-// EXPLAIN: adding tweaks for point light and other
-// for shadow related point light things
+
 const pointTweaks = gui.addFolder('Point Light');
 const pointLightShadowTweaks = gui.addFolder(
 	'Spot Light shadow tweaks',
 );
-pointTweaks.open();
-pointLightShadowTweaks.open();
+pointTweaks.close();
+pointLightShadowTweaks.close();
 
 const debugObject = {
 	directLookAtCenter: () => {},
@@ -78,7 +87,9 @@ async function init() {
 	// ------------------------------------------------------
 	// 0.2 - Shadows stuff globaly related
 
-	renderer.shadowMap.enabled = true;
+	// EXPLAIN: we need to deactivate all shadows we have
+	// renderer.shadowMap.enabled = true;
+	renderer.shadowMap.enabled = false;
 
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // other ones we used in gui
 
@@ -171,18 +182,16 @@ async function init() {
 	scene.add(spotLight);
 
 	// // // // // // // // --------------------------------
-	// EXPLAIN: adding point light
+
 	const pointLight = new THREE.PointLight();
 	pointLight.color = new THREE.Color(0xffffff);
 
-	// EXPLAIN: this one is mesured in candela too?
 	pointLight.intensity = 0.4 * Math.PI;
 
 	pointLight.distance = 10;
 
 	pointLight.decay = 0.5;
 
-	// EXPLAIN: don't forget to cast shadow
 	pointLight.castShadow = true;
 
 	pointLight.position.set(-1, 1, 0);
@@ -209,13 +218,51 @@ async function init() {
 
 	const material = new THREE.MeshStandardMaterial();
 
+	// EXPLAIN: we created floor material where we are going
+	// to stick our shadow texture
+	const floorMaterial = new THREE.MeshBasicMaterial();
+	floorMaterial.map = bakedShadowTexture;
+
 	// material.wireframe = true;
 
 	// material.roughness = 0.4;
 	material.roughness = 0.7;
 
 	const sphereMesh = new THREE.Mesh(sphereGreometry, material);
-	const floorMesh = new THREE.Mesh(floorGeometry, material);
+	// EXPLAIN: and here instead of material we will use floorMaterial
+	// const floorMesh = new THREE.Mesh(floorGeometry, material);
+	const floorMesh = new THREE.Mesh(
+		floorGeometry,
+		// EXPLAIN: for the alternative approach we are going back
+		// to our standard material because we don't want that static
+		// baked shadow on the floor
+		// floorMaterial
+		material,
+	);
+
+	// EXPLAIN: creating the mesh that will play a role of shadow
+	const sphereShadowMesh = new THREE.Mesh(
+		new THREE.PlaneGeometry(1.5, 1.5),
+		new THREE.MeshBasicMaterial({
+			color: 0x000000,
+			transparent: true,
+			// EXPLAIN: we use simple shadow texture as alpha map
+			// because as we talked in the textures lesson , only
+			// way to apply this texture we need transparent to be allowed
+			// and we can apply texture that hase transparent part (black) and the
+			// opaque part (white)
+			alphaMap: simplerBakedShadowTexture,
+		}),
+	);
+
+	floorMesh.rotation.x = -Math.PI / 2;
+	floorMesh.position.y = -0.5;
+
+	// EXPLAIN: to prevent z-fighting, we place new plane slightly
+	// above the floor, not exacly on the floor
+	sphereShadowMesh.position.y = floorMesh.position.y + 0.01;
+	sphereShadowMesh.rotation.x = -Math.PI / 2;
+	//  ------------------------
 
 	floorMesh.receiveShadow = true;
 
@@ -224,10 +271,7 @@ async function init() {
 
 	// spotLight.target = sphereMesh;
 
-	floorMesh.rotation.x = -Math.PI / 2;
-	floorMesh.position.y = -0.5;
-
-	scene.add(sphereMesh, floorMesh);
+	scene.add(sphereMesh, floorMesh, sphereShadowMesh);
 
 	// ------------- Tweaks ----------------------------------
 	// 7 - gui tweaks
@@ -467,7 +511,7 @@ async function init() {
 
 	spotTweaks.add(spotLight, 'visible').name('spotLight visible');
 
-	// EXPLAIN: point light tweaks ----------------
+	// point light tweaks ----------------
 	pointTweaks
 		.add(pointLight, 'intensity')
 		.name('point light intensity')
@@ -512,7 +556,6 @@ async function init() {
 		.name(
 			'keep width and height for mapSize the same --------------------------------',
 		);
-	// EXPLAIN: point light shadow twaeks
 	const pointShadowMapSizes = {
 		128: 128,
 		256: 256,
@@ -770,7 +813,6 @@ async function init() {
 
 	// // // // // // // // //
 
-	// EXPLAIN: added point light helper
 	const pointLightHelper = new THREE.PointLightHelper(pointLight);
 
 	pointLightHelper.visible = false;
@@ -786,6 +828,8 @@ async function init() {
 	const pointLightShadowCameraHelper = new THREE.CameraHelper(
 		pointLight.shadow.camera,
 	);
+
+	pointLightShadowCameraHelper.visible = false;
 
 	scene.add(pointLightShadowCameraHelper);
 
@@ -886,11 +930,30 @@ async function init() {
 	function tick(timestamp: number) {
 		timer.update(timestamp);
 
-		// const elapsedTime = timer.getElapsed();
+		const elapsedTime = timer.getElapsed();
 
 		orbitControls.update();
 
 		spotLightHelper.update();
+
+		// EXPLAIN: moving sphereMesh
+		sphereMesh.position.x = Math.sin(elapsedTime) * 1.5; // 1.5 to have bigger radius
+		sphereMesh.position.z = Math.cos(elapsedTime) * 1.5;
+		// EXPLAIN: absolute because we want only positive values
+		// we don't want our ball going through the floor
+		sphereMesh.position.y = Math.abs(Math.sin(elapsedTime * 3)); // 3 is acceleration
+
+		// EXPLAIN: making shadow plane mesh to move bt z and x same as sphereMesh
+		sphereShadowMesh.position.x = sphereMesh.position.x;
+		sphereShadowMesh.position.z = sphereMesh.position.z;
+		// EXPLAIN: alpha should change according to y
+		sphereShadowMesh.material.opacity =
+			// EXPLAIN: we have other way around initialy when using just
+			// sphereMesh.position.y, opaque is up which is wrong
+			// opaque should be when sphere is lower, so we need to
+			// suntract from 1
+			// and since shadow is a bit to strong we multiply by 0.9
+			(1 - sphereMesh.position.y) * 0.9;
 
 		// camera.lookAt(sphereMesh.position);
 		// camera.lookAt(new THREE.Vector3()); // default
