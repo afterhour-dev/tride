@@ -19,4 +19,4 @@ Practicing three.js by using "primitives" as geometries and by using textures an
 
 - tips for the mesurements instea using random measures
   - 1 unit should be 1 meter
-- 
+- math used in this project
