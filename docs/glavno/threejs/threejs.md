@@ -77,3 +77,4 @@
 - [[13.3_shadow-spot-light]] — 2026-08-17
 - [[13.4_shadow-point-light]] — 2026-08-18
 - [[13.5_baking-shadows]] — 2026-08-18
+- [[a_project-1]] — 2026-08-19
