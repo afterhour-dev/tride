@@ -120,6 +120,17 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
+	const mesure = {
+		wallHeight: 2.5,
+		wallWidt: 4,
+		wallDepth: 4,
+		roofHeight: 1,
+		roofRadiusBottom: 3.4,
+		roofRadiusTop: 1,
+		doorHeight: 2,
+		doorWidth: 2,
+	};
+
 	const floorGeometry = new THREE.PlaneGeometry(20, 20);
 	const floorMaterial = new THREE.MeshStandardMaterial();
 	floorMaterial.color = new THREE.Color(0x59b4af);
@@ -130,15 +141,81 @@ async function init() {
 	// floorMesh.receiveShadow = true;
 	scene.add(floorMesh);
 
-	const wallsGeometry = createWallBoxGeometry(THREE, 4, 6, 2.5);
+	const wallsGeometry = createWallBoxGeometry(
+		THREE,
+		mesure.wallWidt,
+		mesure.wallDepth,
+		mesure.wallHeight,
+	);
 	const wallsMaterial = new THREE.MeshStandardMaterial({
 		color: '#353042',
 	});
 	const wallsMesh = new THREE.Mesh(wallsGeometry, wallsMaterial);
 	//
+	const roofGeometry = new THREE.CylinderGeometry(
+		mesure.roofRadiusTop,
+		mesure.roofRadiusBottom,
+		mesure.roofHeight,
+		4,
+		8,
+		// true,
+	);
+	const roofMaterial = new THREE.MeshStandardMaterial({
+		color: '#7ea0e9',
+	});
+	const roofMesh = new THREE.Mesh(roofGeometry, roofMaterial);
+	roofMesh.position.y = mesure.wallHeight + mesure.roofHeight / 2;
+	roofMesh.rotation.y = Math.PI / 4;
+
+	const doorGeometry = new THREE.PlaneGeometry(
+		mesure.doorWidth,
+		mesure.doorHeight,
+	);
+	const doorMaterial = new THREE.MeshStandardMaterial({
+		color: '#5d4534',
+	});
+	const doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
+	doorMesh.position.z = mesure.wallDepth / 2 + 0.02;
+	doorMesh.position.y = mesure.doorHeight / 2;
+
+	const bushGeometry = new THREE.TetrahedronGeometry(0.3, 2);
+	const bushMaterial = new THREE.MeshStandardMaterial({
+		color: '#a6ddd9',
+	});
+
+	const bushOneMesh = new THREE.Mesh(bushGeometry, bushMaterial);
+	const bushTwoMesh = new THREE.Mesh(bushGeometry, bushMaterial);
+	const bushThreeMesh = new THREE.Mesh(bushGeometry, bushMaterial);
+	const bushFourMesh = new THREE.Mesh(bushGeometry, bushMaterial);
+
+	bushOneMesh.position.z = mesure.wallDepth / 2 + 0.3;
+	bushOneMesh.position.x = mesure.doorWidth / 2;
+	bushOneMesh.position.y = 0.5;
+	bushOneMesh.scale.y = 2.6;
+	bushTwoMesh.position.z = mesure.wallDepth / 2 + 0.3;
+	bushTwoMesh.position.x = -mesure.doorWidth / 2;
+	bushTwoMesh.position.y = 0.5;
+	bushTwoMesh.scale.y = 2.6;
+	bushThreeMesh.position.z = mesure.wallDepth / 2 + 0.5;
+	bushThreeMesh.position.x = mesure.doorWidth / 2 + 0.4;
+	bushThreeMesh.position.y = 0.3;
+	bushThreeMesh.scale.y = 1.9;
+	bushFourMesh.position.z = mesure.wallDepth / 2 + 0.5;
+	bushFourMesh.position.x = -mesure.doorWidth / 2 - 0.2;
+	bushFourMesh.position.y = 0.1;
+	bushFourMesh.scale.y = 1.1;
+
 	const house = new THREE.Group();
 
-	house.add(wallsMesh);
+	house.add(
+		wallsMesh,
+		roofMesh,
+		doorMesh,
+		bushOneMesh,
+		bushTwoMesh,
+		bushThreeMesh,
+		bushFourMesh,
+	);
 
 	scene.add(house);
 
