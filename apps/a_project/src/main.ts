@@ -217,7 +217,33 @@ async function init() {
 		bushFourMesh,
 	);
 
-	scene.add(house);
+	const toombstoneGeometry = new THREE.BoxGeometry(0.6, 0.9, 0.2);
+	const toobstoneMaterial = new THREE.MeshStandardMaterial({
+		color: '#fde6e3',
+	});
+	const toombstones = new THREE.Group();
+
+	for (let i = 0; i < 50; i++) {
+		const angle = Math.random() * Math.PI * 2; // full circle * random val
+		const radius = Math.random() * 6 + 3.5; // 3.5 is offset
+
+		const x = Math.cos(angle) * radius;
+		const z = Math.sin(angle) * radius;
+
+		const toomb = new THREE.Mesh(
+			toombstoneGeometry,
+			toobstoneMaterial,
+		);
+
+		toomb.position.set(x, 0.2, z);
+		//
+		toomb.rotation.y = (Math.random() - 0.5) * 0.2;
+		toomb.rotation.z = (Math.random() - 0.5) * 0.4;
+
+		toombstones.add(toomb);
+	}
+
+	scene.add(house, toombstones);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
