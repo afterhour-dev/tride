@@ -6,6 +6,10 @@ import GUI from 'lil-gui';
 
 import { getRequiredElement } from './util';
 
+import { createWallBoxGeometry } from './geo-util';
+
+export type Three = typeof THREE;
+
 // loading textures -----------------------------------------
 const loadingManager = new THREE.LoadingManager();
 const textureLoader = new THREE.TextureLoader(loadingManager);
@@ -23,10 +27,8 @@ const debugObject = {
 	directLookAtCenter: () => {},
 };
 
-const sphereTweaks = gui.addFolder('sphere Mesh');
-sphereTweaks.close();
 const floorTweaks = gui.addFolder('floor Mesh');
-floorTweaks.open();
+floorTweaks.close();
 const ambientTweaks = gui.addFolder('Ambient Light');
 ambientTweaks.close();
 const directionalTweaks = gui.addFolder(
@@ -61,11 +63,11 @@ async function init() {
 	// 0.2 - Shadows stuff globaly related
 
 	// shadows disabled for now gloabaly
-	renderer.shadowMap.enabled = true;
+	// renderer.shadowMap.enabled = true;
 
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
-	// using default for a start (doesn't have anty effect but leaving it here for start)
-	// renderer.shadowMap.type = THREE.PCFShadowMap;
+	// renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
+	// using default for a start (don't need to set default but I will be explicit)
+	renderer.shadowMap.type = THREE.PCFShadowMap;
 
 	// ------------------------------------------------------
 	// 3 -  texture stuff
@@ -98,7 +100,7 @@ async function init() {
 	// console.log(directionalLight.shadow);
 	// console.log(directionalLight.shadow.camera);
 
-	directionalLight.castShadow = true;
+	/* directionalLight.castShadow = true;
 	directionalLight.shadow.mapSize.width = 1024;
 	directionalLight.shadow.mapSize.height = 1024;
 	directionalLight.shadow.camera.near = 1;
@@ -109,7 +111,7 @@ async function init() {
 	directionalLight.shadow.camera.bottom = -2;
 	directionalLight.shadow.camera.left = -2;
 	directionalLight.shadow.radius = 10;
-	directionalLight.shadow.intensity = 1; // default
+	directionalLight.shadow.intensity = 1; */ // default
 	// directionalLight.shadow.bias = 0.0002; // default
 
 	//   //     //     //      //      //        //
@@ -118,28 +120,27 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const sphereGreometry = new THREE.SphereGeometry(1, 32, 32);
-	const sphereMaterial = new THREE.MeshStandardMaterial();
-	sphereMaterial.roughness = 0.7;
-
 	const floorGeometry = new THREE.PlaneGeometry(20, 20);
 	const floorMaterial = new THREE.MeshStandardMaterial();
-	// floorMaterial.color = new THREE.Color(0xffffff);
 	floorMaterial.color = new THREE.Color(0x59b4af);
-	// material.wireframe = true;
 	// floorMaterial.roughness = 0.7;
 	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 	floorMesh.rotation.x = -Math.PI / 2;
 	floorMesh.position.y = 0;
-	floorMesh.receiveShadow = true;
+	// floorMesh.receiveShadow = true;
+	scene.add(floorMesh);
 
-	const sphereMesh = new THREE.Mesh(sphereGreometry, sphereMaterial);
-	sphereMesh.position.y = 1;
-	sphereMesh.castShadow = true;
+	const wallsGeometry = createWallBoxGeometry(THREE, 4, 6, 2.5);
+	const wallsMaterial = new THREE.MeshStandardMaterial({
+		color: '#353042',
+	});
+	const wallsMesh = new THREE.Mesh(wallsGeometry, wallsMaterial);
+	//
+	const house = new THREE.Group();
 
-	//  ------------------------
+	house.add(wallsMesh);
 
-	scene.add(sphereMesh, floorMesh);
+	scene.add(house);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -177,7 +178,7 @@ async function init() {
 		0.2,
 	);
 
-	// directionalLightHelper.visible = false;
+	directionalLightHelper.visible = false;
 
 	directionalTweaks
 		.add(directionalLightHelper, 'visible')
@@ -201,7 +202,7 @@ async function init() {
 		directionalLight.shadow.camera,
 	);
 
-	// directionalLightShadowCameraHelper.visible = false;
+	directionalLightShadowCameraHelper.visible = false;
 
 	scene.add(directionalLightShadowCameraHelper);
 
@@ -212,7 +213,7 @@ async function init() {
 	const axesHelper = new THREE.AxesHelper(5);
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
-	// axesHelper.visible = false;
+	axesHelper.visible = false;
 
 	// 9 - GUI ---------------------------------------------------------
 
@@ -452,25 +453,6 @@ async function init() {
 	floorTweaks.add(floorMesh, 'receiveShadow');
 	// // // // // // // // // // // // // // // // // // //
 
-	sphereTweaks.add(sphereMesh, 'castShadow');
-	sphereTweaks
-		.add(sphereMesh.position, 'x')
-		.step(0.001)
-		.name('position.x')
-		.min(-5)
-		.max(5);
-	sphereTweaks
-		.add(sphereMesh.position, 'y')
-		.step(0.001)
-		.name('position.y')
-		.min(0)
-		.max(5);
-	sphereTweaks
-		.add(sphereMesh.position, 'z')
-		.step(0.001)
-		.name('position.z')
-		.min(-5)
-		.max(5);
 	// // // // // // // // // // // // // // // // // // //
 
 	ambientTweaks

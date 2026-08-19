@@ -64,8 +64,7 @@ async function init() {
 	renderer.shadowMap.enabled = true;
 
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
-	// using default for a start (doesn't have anty effect but leaving it here for start)
-	// renderer.shadowMap.type = THREE.PCFShadowMap;
+	// renderer.shadowMap.type = THREE.PCFShadowMap; //default
 
 	// ------------------------------------------------------
 	// 3 -  texture stuff
