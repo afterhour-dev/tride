@@ -1,6 +1,7 @@
 import type { Three } from './main';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
+// EXPLAIN: this function
 export function createWallBoxGeometry(
 	THREE: Three,
 	width: number,
