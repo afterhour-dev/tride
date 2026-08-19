@@ -1,4 +1,4 @@
-# Project A
+# Project A - part one
 
 First project built to practice some of the learned things.
 
