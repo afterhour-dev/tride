@@ -40,3 +40,10 @@ Major thing in this current project is that we are deling with textures, and ena
         (anonymous)	@	main.ts:863
        ```
        so I decidet to comment out mentioned if statement
+- For roof texture I defined this:
+  ```ts
+  albedoRoofTexture.wrapS = THREE.RepeatWrapping;
+	albedoRoofTexture.wrapT = THREE.RepeatWrapping;
+	albedoRoofTexture.repeat.set(8, 1); // Adjust numbers to fit your scale
+  ```
+  Can you explain this, and would this also fix that displacmentScale and displacmentBias problem I explained in comments for the brick wall. I assume not because using displacment on roof also caused same problems

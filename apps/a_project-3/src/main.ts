@@ -107,6 +107,25 @@ const normalPlanksTexture = textureLoader.load(
 const roughnessPlanksTexture = textureLoader.load(
 	'/textures/planks/Stylized_Wood_Planks_001_roughness.jpg',
 );
+// EXPLAIN: loading all roof textures, but decided not to use it
+const albedoRoofTexture = textureLoader.load(
+	'/textures/roof/Stylized_Metal_Shingles_001_basecolor.png',
+);
+const aoRoofTexture = textureLoader.load(
+	'/textures/roof/Stylized_Metal_Shingles_001_ambientOcclusion.png',
+);
+const heightRoofTexture = textureLoader.load(
+	'/textures/roof/Stylized_Metal_Shingles_001_height.png',
+);
+const normalRoofTexture = textureLoader.load(
+	'/textures/roof/Stylized_Metal_Shingles_001_normal.png',
+);
+const roughnessRoofTexture = textureLoader.load(
+	'/textures/roof/Stylized_Metal_Shingles_001_roughness.png',
+);
+const metalnessRoofTexture = textureLoader.load(
+	'/textures/roof/Stylized_Metal_Shingles_001_metallic.png',
+);
 
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
@@ -115,9 +134,12 @@ const mesuresAndColors = {
 	wallHeight: 2.5,
 	wallWidt: 4,
 	wallDepth: 4,
-	roofHeight: 1,
+	roofHeight: 1.6,
 	roofRadiusBottom: 3.4,
-	roofRadiusTop: 1,
+	// EXPLAIN: roofRadius top iz zero because I also want to
+	// open cylinder because diplacment is casing me problems
+	// on bottom side of cylinder
+	roofRadiusTop: 0,
 	// increased a size a little bit
 	// doorHeight: 2,
 	// doorWidth: 2,
@@ -200,6 +222,18 @@ async function init() {
 	// there are more textures we can set that up?
 
 	albedoBricksTexture.colorSpace = THREE.SRGBColorSpace;
+
+	albedoRoofTexture.colorSpace = THREE.SRGBColorSpace;
+	// EXPLAIN: I did this for roof texture, I look bad without it
+	// over cylinder geometry, you explain why
+	albedoRoofTexture.wrapS = THREE.RepeatWrapping;
+	albedoRoofTexture.wrapT = THREE.RepeatWrapping;
+	albedoRoofTexture.repeat.set(8, 1); // Adjust numbers to fit your scale
+
+	albedoPlanksTexture.colorSpace = THREE.SRGBColorSpace;
+	// albedoPlanksTexture.wrapS = THREE.RepeatWrapping;
+	// albedoPlanksTexture.wrapT = THREE.RepeatWrapping;
+	// albedoPlanksTexture.repeat.set(64, 2); // Adjust numbers to fit your scale
 
 	// ------------------------------------------------------
 	// 4 - Text - font loading, TextGeometry, material, mesh
@@ -314,32 +348,57 @@ async function init() {
 		mesuresAndColors.roofRadiusBottom,
 		mesuresAndColors.roofHeight,
 		4,
-		8,
-		// true,
+		128,
+		// EXPLAIN: open cylinder
+		true,
 	);
+
 	const roofMaterial = new THREE.MeshStandardMaterial({
-		// color: '#7ea0e9',
+		// color: '#d4def4',
+		map: albedoRoofTexture,
+		aoMap: aoRoofTexture,
+		displacementMap: heightRoofTexture,
+		displacementScale: 0.34,
+		// displacementBias: -0.01,
+		normalMap: normalRoofTexture,
+		roughnessMap: roughnessRoofTexture,
+		metalnessMap: metalnessRoofTexture,
+		// roughness: 0.3,
+		// metalness: 0.5,
 	});
 	const roofMesh = new THREE.Mesh(roofGeometry, roofMaterial);
 	roofMesh.position.y =
-		mesuresAndColors.wallHeight + mesuresAndColors.roofHeight / 2;
+		mesuresAndColors.wallHeight +
+		mesuresAndColors.roofHeight / 2 -
+		0.029;
 	roofMesh.rotation.y = Math.PI / 4;
 
 	// EXPLAIN: adding another plane I'll use to add
 	// planks textures bellow the roof
 	const planksRoofPlane = new THREE.PlaneGeometry(
-		mesuresAndColors.roofRadiusBottom + 1.5,
-		mesuresAndColors.roofRadiusBottom + 1.5,
+		mesuresAndColors.roofRadiusBottom + 1.33,
+		mesuresAndColors.roofRadiusBottom + 1.33,
+		128,
+		128,
 	);
+
 	const planksRoofMaterial = new THREE.MeshStandardMaterial({
-		color: '#a54841',
+		// color: '#a54841',
+		// EXPLAIN: adding planks textures
+		map: albedoPlanksTexture,
+		aoMap: aoPlanksTexture,
+		displacementMap: heightPlanksTexture,
+		displacementScale: 0.05,
+		normalMap: normalPlanksTexture,
+		roughnessMap: roughnessPlanksTexture,
 	});
 	const planksRoofMesh = new THREE.Mesh(
 		planksRoofPlane,
 		planksRoofMaterial,
 	);
 	planksRoofMesh.rotation.x = Math.PI / 2;
-	planksRoofMesh.position.y = mesuresAndColors.wallHeight - 0.02;
+	planksRoofMesh.position.y = mesuresAndColors.wallHeight + 0.04;
+	// planksRoofMesh.scale.set(0.99, 1, 0.99);
 
 	const doorGeometry = new THREE.PlaneGeometry(
 		mesuresAndColors.doorWidth,
@@ -414,9 +473,16 @@ async function init() {
 	// doorMesh.position.y = mesuresAndColors.doorHeight / 2;
 	doorMesh.position.y = mesuresAndColors.doorHeight / 2 - 0.1;
 
-	const bushGeometry = new THREE.TetrahedronGeometry(0.3, 2);
+	const bushGeometry = new THREE.TetrahedronGeometry(0.3, 16);
+
 	const bushMaterial = new THREE.MeshStandardMaterial({
-		color: '#a6ddd9',
+		// color: '#a6ddd9',
+		map: albedoLeavesTexture,
+		aoMap: aoLeavesTexture,
+		displacementMap: heightLeavesTexture,
+		displacementScale: 0.4,
+		normalMap: normalLeavesTexture,
+		roughnessMap: roughnessLeavesTexture,
 	});
 
 	const bushOneMesh = new THREE.Mesh(bushGeometry, bushMaterial);
