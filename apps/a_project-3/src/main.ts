@@ -350,13 +350,17 @@ async function init() {
 		roughness: 1,
 		metalness: 1,
 	});
-	if (doorMaterial.aoMap) {
+	// EXPLAIN: normalScale, I did n'yt use it but you explain it
+	// since I would like to have it documented
+	// doorMaterial.normalScale.set(0.9, 0.9);
+
+	/* if (doorMaterial.aoMap) {
 		// EXPLAIN: For this project I needed to set uv2
 		// but following some advice I did it like this
 		// Is this right? Do I even need this
 		doorMaterial.aoMap.channel = 1;
 	}
-
+ */
 	// EXPLAIN: so we didn't do this, because this is old
 	// approach, we did upper approach instead
 	/* doorGeometry.setAttribute(
@@ -365,8 +369,8 @@ async function init() {
 			doorGeometry.attributes.uv.array,
 			2,
 		),
-	); */
-
+	);
+ */
 	const doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
 
 	// doorMesh.geometry.setAttribute(

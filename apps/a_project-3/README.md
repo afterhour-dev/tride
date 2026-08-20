@@ -29,9 +29,9 @@ Major thing in this current project is that we are deling with textures, and ena
    	}
     ```
      Do I even need mentioned?
-     As I look to rendered texture I didn't see any changes at all. Maybe they are there but I don;t see it. As I crank up diaplacementScale, I can see black parts on the corners which I guess confirms that we have occlusion? Or what is your opinion?
+     As I look to rendered texture I didn't see any changes at all. Maybe they are there but I don;t see it. As I crank up diaplacementScale, I cant see that any change is applied in corners which should ao bring? Or what is your opinion?
      Also I got this warning in console:
-     
+
        ```
        installHook.js:1 THREE.AttributeNode: Vertex attribute "uv1" not found on geometry.
         overrideMethod	@	installHook.js:1
@@ -39,3 +39,4 @@ Major thing in this current project is that we are deling with textures, and ena
         await in init		
         (anonymous)	@	main.ts:863
        ```
+       so I decidet to comment out mentioned if statement
