@@ -259,6 +259,22 @@ async function init() {
 		mesuresAndColors.wallHeight + mesuresAndColors.roofHeight / 2;
 	roofMesh.rotation.y = Math.PI / 4;
 
+	// EXPLAIN: adding another plane I'll use to add
+	// planks textures
+	const planksRoofPlane = new THREE.PlaneGeometry(
+		mesuresAndColors.roofRadiusBottom + 1.5,
+		mesuresAndColors.roofRadiusBottom + 1.5,
+	);
+	const planksRoofMaterial = new THREE.MeshStandardMaterial({
+		color: '#a54841',
+	});
+	const planksRoofMesh = new THREE.Mesh(
+		planksRoofPlane,
+		planksRoofMaterial,
+	);
+	planksRoofMesh.rotation.x = Math.PI / 2;
+	planksRoofMesh.position.y = mesuresAndColors.wallHeight - 0.02;
+
 	const doorGeometry = new THREE.PlaneGeometry(
 		mesuresAndColors.doorWidth,
 		mesuresAndColors.doorHeight,
@@ -309,6 +325,8 @@ async function init() {
 		bushFourMesh,
 		//
 		doorPointLight,
+		// EXPLAIN: adding planks roof mesh
+		planksRoofMesh,
 	);
 
 	const toombstoneGeometry = new THREE.BoxGeometry(0.6, 0.9, 0.2);
