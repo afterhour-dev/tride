@@ -75,6 +75,38 @@ const normalGrassTexture = textureLoader.load(
 const roughnessGrassTexture = textureLoader.load(
 	'/textures/grass/Stylized_Grass_002_roughness.jpg',
 );
+// EXPLAIN: loading all leaves textures
+const albedoLeavesTexture = textureLoader.load(
+	'/textures/leaves/Stylized_Leaves_002_basecolor.jpg',
+);
+const aoLeavesTexture = textureLoader.load(
+	'/textures/leaves/Stylized_Leaves_002_ambientOcclusion.jpg',
+);
+const heightLeavesTexture = textureLoader.load(
+	'/textures/leaves/Stylized_Leaves_002_height.png',
+);
+const normalLeavesTexture = textureLoader.load(
+	'/textures/leaves/Stylized_Leaves_002_normal.jpg',
+);
+const roughnessLeavesTexture = textureLoader.load(
+	'/textures/leaves/Stylized_Leaves_002_roughness.jpg',
+);
+// EXPLAIN: loading all planks textures
+const albedoPlanksTexture = textureLoader.load(
+	'/textures/planks/Stylized_Wood_Planks_001_basecolor.jpg',
+);
+const aoPlanksTexture = textureLoader.load(
+	'/textures/planks/Stylized_Wood_Planks_001_ambientOcclusion.jpg',
+);
+const heightPlanksTexture = textureLoader.load(
+	'/textures/planks/Stylized_Wood_Planks_001_height.png',
+);
+const normalPlanksTexture = textureLoader.load(
+	'/textures/planks/Stylized_Wood_Planks_001_normal.jpg',
+);
+const roughnessPlanksTexture = textureLoader.load(
+	'/textures/planks/Stylized_Wood_Planks_001_roughness.jpg',
+);
 
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
