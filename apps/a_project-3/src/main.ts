@@ -18,7 +18,7 @@ loadingManager.onError = (e) => {
 	console.error('Texture loading error: ', e);
 };
 loadingManager.onProgress = (path) => {
-	console.log('Texture loaded', path);
+	// console.log('Texture loaded', path);
 };
 
 // EXPLAIN: loading all wooden door textures
@@ -254,7 +254,10 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const floorGeometry = new THREE.PlaneGeometry(20, 20);
+	// EXPLAIN: we are going to add more subdivivisions
+	// in order for our height map to have a desired effect
+	// const floorGeometry = new THREE.PlaneGeometry(20, 20);
+	const floorGeometry = new THREE.PlaneGeometry(20, 20, 100, 100);
 	const floorMaterial = new THREE.MeshStandardMaterial();
 	floorMaterial.color = new THREE.Color(mesuresAndColors.grassColor);
 	// floorMaterial.roughness = 0.7;
