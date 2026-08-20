@@ -118,8 +118,11 @@ const mesuresAndColors = {
 	roofHeight: 1,
 	roofRadiusBottom: 3.4,
 	roofRadiusTop: 1,
-	doorHeight: 2,
-	doorWidth: 2,
+	// increased a size a little bit
+	// doorHeight: 2,
+	// doorWidth: 2,
+	doorHeight: 2.2,
+	doorWidth: 2.2,
 	grassColor: '#355250',
 
 	fogBackground: '#201b2f',
@@ -322,12 +325,15 @@ async function init() {
 		100,
 		100,
 	);
+
+	//
 	const doorMaterial = new THREE.MeshStandardMaterial({
 		// color: '#5d4534',
 		// EXPLAIN: adding all textures for the door and
 		// other settings
 		map: albedoDoorTexture,
 		aoMap: aoDoorTexture,
+		aoMapIntensity: 1,
 		// EXPLAIN: don't forget to set transparent t otrue
 		// in orther for alpha map to work
 		transparent: true,
@@ -340,10 +346,41 @@ async function init() {
 		normalMap: normalDoorTexture,
 		roughnessMap: roughnessDoorTexture,
 		metalnessMap: metalnessDoorTexture,
+		// EXPLAIN: why we cracked both of these up to 1
+		roughness: 1,
+		metalness: 1,
 	});
+	if (doorMaterial.aoMap) {
+		// EXPLAIN: For this project I needed to set uv2
+		// but following some advice I did it like this
+		// Is this right? Do I even need this
+		doorMaterial.aoMap.channel = 1;
+	}
+
+	// EXPLAIN: so we didn't do this, because this is old
+	// approach, we did upper approach instead
+	/* doorGeometry.setAttribute(
+		'uv2',
+		new THREE.Float32BufferAttribute(
+			doorGeometry.attributes.uv.array,
+			2,
+		),
+	); */
+
 	const doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
+
+	// doorMesh.geometry.setAttribute(
+	// 	'uv2',
+	// 	new THREE.Float32BufferAttribute(
+	// 		doorMesh.geometry.attributes.uv.array,
+	// 		2,
+	// 	),
+	// );
+
 	doorMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.02;
-	doorMesh.position.y = mesuresAndColors.doorHeight / 2;
+	// lower it down a little bit
+	// doorMesh.position.y = mesuresAndColors.doorHeight / 2;
+	doorMesh.position.y = mesuresAndColors.doorHeight / 2 - 0.1;
 
 	const bushGeometry = new THREE.TetrahedronGeometry(0.3, 2);
 	const bushMaterial = new THREE.MeshStandardMaterial({

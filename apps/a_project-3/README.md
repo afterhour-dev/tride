@@ -11,3 +11,31 @@ Practicing three.js by using "primitives" as geometries and by using textures an
 Major thing in this current project is that we are deling with textures, and enabling shadows
 
 ## Šta treba objasniti u detalje
+
+- in case of ambient occlusion map; do we still need to provide uv2 attribute to support oaMap or not? I didn't do it because somwehere I found info that that approach is outdated
+  -  and I did it like this:
+    ```ts
+    // instead of this
+    /* doorGeometry.setAttribute(
+   		'uv2',
+   		new THREE.Float32BufferAttribute(
+   			doorGeometry.attributes.uv.array,
+   			2,
+   		),
+   	); */
+    // I used this
+     if (doorMaterial.aoMap) {
+   		doorMaterial.aoMap.channel = 1;
+   	}
+    ```
+     Do I even need mentioned?
+     As I look to rendered texture I didn't see any changes at all. Maybe they are there but I don;t see it. As I crank up diaplacementScale, I can see black parts on the corners which I guess confirms that we have occlusion? Or what is your opinion?
+     Also I got this warning in console:
+     
+       ```
+       installHook.js:1 THREE.AttributeNode: Vertex attribute "uv1" not found on geometry.
+        overrideMethod	@	installHook.js:1
+        init	@	main.ts:787
+        await in init		
+        (anonymous)	@	main.ts:863
+       ```
