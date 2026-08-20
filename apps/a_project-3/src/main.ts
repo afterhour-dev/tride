@@ -189,6 +189,12 @@ async function init() {
 	// ------------------------------------------------------
 	// 3 -  texture stuff
 	// colorSpace and stuff
+	// EXPLAIN: On textures that store color we set up
+	// SRGColorSpace
+	albedoDoorTexture.colorSpace = THREE.SRGBColorSpace;
+	// EXPLAIN: I forgot to ask in previous lessons. Do we only
+	// set up different color space only for albedo texture or
+	// there are more textures we can set that up?
 
 	// ------------------------------------------------------
 	// 4 - Text - font loading, TextGeometry, material, mesh
@@ -254,10 +260,8 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	// EXPLAIN: we are going to add more subdivivisions
-	// in order for our height map to have a desired effect
-	// const floorGeometry = new THREE.PlaneGeometry(20, 20);
-	const floorGeometry = new THREE.PlaneGeometry(20, 20, 100, 100);
+	const floorGeometry = new THREE.PlaneGeometry(20, 20);
+	// const floorGeometry = new THREE.PlaneGeometry(20, 20, 100, 100);
 	const floorMaterial = new THREE.MeshStandardMaterial();
 	floorMaterial.color = new THREE.Color(mesuresAndColors.grassColor);
 	// floorMaterial.roughness = 0.7;
@@ -295,7 +299,7 @@ async function init() {
 	roofMesh.rotation.y = Math.PI / 4;
 
 	// EXPLAIN: adding another plane I'll use to add
-	// planks textures
+	// planks textures bellow the roof
 	const planksRoofPlane = new THREE.PlaneGeometry(
 		mesuresAndColors.roofRadiusBottom + 1.5,
 		mesuresAndColors.roofRadiusBottom + 1.5,
@@ -313,9 +317,29 @@ async function init() {
 	const doorGeometry = new THREE.PlaneGeometry(
 		mesuresAndColors.doorWidth,
 		mesuresAndColors.doorHeight,
+		// EXPLAIN: we are going to add more subdivivisions
+		// in order for our height (displacement) map to have a desired effect
+		100,
+		100,
 	);
 	const doorMaterial = new THREE.MeshStandardMaterial({
-		color: '#5d4534',
+		// color: '#5d4534',
+		// EXPLAIN: adding all textures for the door and
+		// other settings
+		map: albedoDoorTexture,
+		aoMap: aoDoorTexture,
+		// EXPLAIN: don't forget to set transparent t otrue
+		// in orther for alpha map to work
+		transparent: true,
+		alphaMap: alphaDoorTexture,
+		displacementMap: heightDoorTexture,
+		// EXPLAIN: lowering displacement scale because door
+		// look too much protruding because of displacementMap
+		displacementScale: 0.1,
+		//
+		normalMap: normalDoorTexture,
+		roughnessMap: roughnessDoorTexture,
+		metalnessMap: metalnessDoorTexture,
 	});
 	const doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
 	doorMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.02;
