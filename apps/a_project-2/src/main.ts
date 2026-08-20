@@ -17,7 +17,7 @@ const textureLoader = new THREE.TextureLoader(loadingManager);
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
 
-const mesure = {
+const mesuresAndColors = {
 	wallHeight: 2.5,
 	wallWidt: 4,
 	wallDepth: 4,
@@ -26,6 +26,10 @@ const mesure = {
 	roofRadiusTop: 1,
 	doorHeight: 2,
 	doorWidth: 2,
+	grassColor: '#355250',
+
+	// EXPLAIN: to o be used both as background and as fog
+	fogBackground: '#201b2f',
 };
 
 // Gui -----------------------------------------------------
@@ -34,9 +38,7 @@ const gui = new GUI({
 	title: 'Tweaks',
 	closeFolders: true,
 });
-const debugObject = {
-	directLookAtCenter: () => {},
-};
+const debugObject = {};
 
 const floorTweaks = gui.addFolder('floor Mesh');
 floorTweaks.close();
@@ -66,6 +68,19 @@ async function init() {
 	// 0.1 - Renderer (first part)
 	const renderer = new THREE.WebGPURenderer({ canvas });
 	await renderer.init();
+
+	//
+	// EXPLAIN: I will add Fog here
+	const fog = new THREE.Fog(mesuresAndColors.fogBackground);
+	fog.near = 1;
+	fog.far = 15;
+
+	// EXPLAIN: addding fog to the scene
+	scene.fog = fog;
+	//
+
+	//
+	scene.background = new THREE.Color(mesuresAndColors.fogBackground);
 
 	// -----------------------------------------------------
 	// 1 - Environment
@@ -145,8 +160,8 @@ async function init() {
 
 	doorPointLight.position.set(
 		0,
-		mesure.doorHeight + 0.1,
-		mesure.doorWidth + 0.6,
+		mesuresAndColors.doorHeight + 0.1,
+		mesuresAndColors.doorWidth + 0.6,
 	);
 
 	// EXPLAIN: bellow in code we added pointLight to the house group
@@ -156,7 +171,7 @@ async function init() {
 
 	const floorGeometry = new THREE.PlaneGeometry(20, 20);
 	const floorMaterial = new THREE.MeshStandardMaterial();
-	floorMaterial.color = new THREE.Color(0x59b4af);
+	floorMaterial.color = new THREE.Color(mesuresAndColors.grassColor);
 	// floorMaterial.roughness = 0.7;
 	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 	floorMesh.rotation.x = -Math.PI / 2;
@@ -166,9 +181,9 @@ async function init() {
 
 	const wallsGeometry = createWallBoxGeometry(
 		THREE,
-		mesure.wallWidt,
-		mesure.wallDepth,
-		mesure.wallHeight,
+		mesuresAndColors.wallWidt,
+		mesuresAndColors.wallDepth,
+		mesuresAndColors.wallHeight,
 	);
 	const wallsMaterial = new THREE.MeshStandardMaterial({
 		color: '#353042',
@@ -176,9 +191,9 @@ async function init() {
 	const wallsMesh = new THREE.Mesh(wallsGeometry, wallsMaterial);
 	//
 	const roofGeometry = new THREE.CylinderGeometry(
-		mesure.roofRadiusTop,
-		mesure.roofRadiusBottom,
-		mesure.roofHeight,
+		mesuresAndColors.roofRadiusTop,
+		mesuresAndColors.roofRadiusBottom,
+		mesuresAndColors.roofHeight,
 		4,
 		8,
 		// true,
@@ -187,19 +202,20 @@ async function init() {
 		color: '#7ea0e9',
 	});
 	const roofMesh = new THREE.Mesh(roofGeometry, roofMaterial);
-	roofMesh.position.y = mesure.wallHeight + mesure.roofHeight / 2;
+	roofMesh.position.y =
+		mesuresAndColors.wallHeight + mesuresAndColors.roofHeight / 2;
 	roofMesh.rotation.y = Math.PI / 4;
 
 	const doorGeometry = new THREE.PlaneGeometry(
-		mesure.doorWidth,
-		mesure.doorHeight,
+		mesuresAndColors.doorWidth,
+		mesuresAndColors.doorHeight,
 	);
 	const doorMaterial = new THREE.MeshStandardMaterial({
 		color: '#5d4534',
 	});
 	const doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
-	doorMesh.position.z = mesure.wallDepth / 2 + 0.02;
-	doorMesh.position.y = mesure.doorHeight / 2;
+	doorMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.02;
+	doorMesh.position.y = mesuresAndColors.doorHeight / 2;
 
 	const bushGeometry = new THREE.TetrahedronGeometry(0.3, 2);
 	const bushMaterial = new THREE.MeshStandardMaterial({
@@ -211,20 +227,20 @@ async function init() {
 	const bushThreeMesh = new THREE.Mesh(bushGeometry, bushMaterial);
 	const bushFourMesh = new THREE.Mesh(bushGeometry, bushMaterial);
 
-	bushOneMesh.position.z = mesure.wallDepth / 2 + 0.3;
-	bushOneMesh.position.x = mesure.doorWidth / 2;
+	bushOneMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.3;
+	bushOneMesh.position.x = mesuresAndColors.doorWidth / 2;
 	bushOneMesh.position.y = 0.5;
 	bushOneMesh.scale.y = 2.6;
-	bushTwoMesh.position.z = mesure.wallDepth / 2 + 0.3;
-	bushTwoMesh.position.x = -mesure.doorWidth / 2;
+	bushTwoMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.3;
+	bushTwoMesh.position.x = -mesuresAndColors.doorWidth / 2;
 	bushTwoMesh.position.y = 0.5;
 	bushTwoMesh.scale.y = 2.6;
-	bushThreeMesh.position.z = mesure.wallDepth / 2 + 0.5;
-	bushThreeMesh.position.x = mesure.doorWidth / 2 + 0.4;
+	bushThreeMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.5;
+	bushThreeMesh.position.x = mesuresAndColors.doorWidth / 2 + 0.4;
 	bushThreeMesh.position.y = 0.3;
 	bushThreeMesh.scale.y = 1.9;
-	bushFourMesh.position.z = mesure.wallDepth / 2 + 0.5;
-	bushFourMesh.position.x = -mesure.doorWidth / 2 - 0.2;
+	bushFourMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.5;
+	bushFourMesh.position.x = -mesuresAndColors.doorWidth / 2 - 0.2;
 	bushFourMesh.position.y = 0.1;
 	bushFourMesh.scale.y = 1.1;
 
@@ -248,63 +264,10 @@ async function init() {
 	});
 	const toombstones = new THREE.Group();
 
-	// EXPLAIN: cement this in your head: Math.sin and Math.cos
-	// both accepts radians; both have possible max of 1 and min of -1
-	// on 0 radians sinus produces 0, and cosinus produces 1;
-	// as radians grows sinus produces
-	// in the direction 0 -> 1 -> 0 -> -1
-	// and as radians grows cosinus produces
-	// in the direction 1 ->  0 -> -1 -> 0
-
 	for (let i = 0; i < 50; i++) {
-		// EXPLAIN: Math.PI * 2 is full circle in radians
-		// we multiply by number bellow zero (Math.random() produces it)
-		// which means we are choping the full circle or getting
-		// values in radians that are 2 * Math.PI if random number is 1
-		// and getting 2 * Math.PI divided by something, which means
-		// we are getting random values in radians bellow 2 * Math.PI
-		// which are values on the spectrum from 0 to 2 * Math.PI
-		// So we are dividing full circle to get radians betwen 0 and 2 * Math.PI
 		const angle = Math.random() * Math.PI * 2;
-		// EXPLAIN: hewre we have Math.random() * 6
-		// Again we are dividing here too since we are using Math.random()
-		// as a multiplier; and again we are getting numbers from 0 to 1
-		// and we must multiply by something to increase radius
-		// which means we are getting values from 0 to 5.5
-		// EXPLAIN: 3.5 is offset here, guaranteed lowest possible value
-		// we can get so if Math.random() * 5.5 is 0, radius will be
-		// 3.5 and biggest value is 3.5 + 5.5 == 9
+
 		const radius = 3.5 + Math.random() * 5.5;
-		// EXPLAIN: why whe choose 3.5 as minimum and 9 as maximum
-		// floorPlane is 20 * 20 meaning biggest circle you can place there
-		// is radius 10 and we can't go above 10 since we are 9
-		// and in case of minimal of 3.5, our house is maximum 4 (we can write circle radius 2
-		// around it); well radius 2 is lower than 3.5, meaning we are
-		// making sure objects don't overlap with our house;
-		// why 3.5 and not 2 ? because we want some free space betwen
-		// house and where objects are going to be layed
-
-		// EXPLAIN: we need to cement in our head that
-		// number we multiply sinus or cosinus by is the number
-		// that represents radius
-		// EXPLAIN: we need to cementin our head that
-		// Math.<cos/sin> accept radians
-		// EXPLAIN: we know that when we combine cos and sin
-		// in a way when we would have subsequent numbers as angle
-		// values, we would place dots in a perfect circle; or we can
-		// say that dots will draw perfect circle, and in same
-		// case unlike angle, radius shouldn't change, because
-		// if radius changes we don't have perfect circle anymore
-		// we would have randomnes
-
-		// EXPLAIN: Well here we have contolled randomnes for the radius
-		// we have maximum radius and minimum radius, and all values
-		// between that maximum and minimum
-
-		// EXPLAIN: and for angle we have also "controled"
-		// randomness where we get maximum 2 * PI and minimum of 0
-		// and possible values between them so in a way it is controlled
-		// randomnes
 
 		const x = Math.cos(angle) * radius;
 		const z = Math.sin(angle) * radius;
@@ -315,12 +278,7 @@ async function init() {
 		);
 
 		toomb.position.set(x, 0.35, z);
-		// EXPLAIN: subtracting 0.5 gives us also negative values
-		// but negative values are between -0.5 and 0.5
-		// so when we multiply those values by 0.2 or 0.4
-		// we always get small radian values between 0 and 0.25 and -0.25 to 0
-		// which are small angles, making toomb just a little bit angled
-		// by defined axis
+
 		toomb.rotation.y = (Math.random() - 0.5) * 0.2;
 		toomb.rotation.z = (Math.random() - 0.5) * 0.4;
 
@@ -484,10 +442,7 @@ async function init() {
 			"this `directLookAtCenter` isn't doing what I thought it would. Which\n would be pointing to the center of the scene.\nBut it doesen't do an rotations",
 		)
 		.hide();
-	debugObject.directLookAtCenter = () => {
-		directionalLight.lookAt(new THREE.Vector3());
-	};
-	directionalTweaks.add(debugObject, 'directLookAtCenter').hide();
+
 	// -
 
 	directionalTweaks
@@ -664,7 +619,10 @@ async function init() {
 	// 0.2 - Renderer (second part)
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 	renderer.setSize(sizes.width, sizes.height);
-	renderer.setClearColor(0x000000, 1);
+	// EXPLAIN: so what I did I commented out usage of
+	// setClearColor and used scene.background
+	// renderer.setClearColor(0x000000, 1);
+	// renderer.setClearColor(mesuresAndColors.fogBackground, 1);
 	renderer.render(scene, camera);
 
 	// --------------------------------------------------------------
