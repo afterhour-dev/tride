@@ -1,12 +1,14 @@
 # Project A - part two
 
-First project built to practice some of the learned things.
+First project built to practice some of the learned things from previous lessons.
+
+This project is continuation of a_project-1
 
 ## Namera / Intent
 
 Practicing three.js by using "primitives" as geometries and by using textures and using lights and shadow knowledge from previous lessons.
 
-We are continuing this project in next lesson.
+We are continuing this project in next lesson where we are going to load a lot of textures.
 
 ## Šta treba objasniti u detalje
 
