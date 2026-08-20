@@ -235,6 +235,7 @@ async function init() {
 	// albedoPlanksTexture.wrapT = THREE.RepeatWrapping;
 	// albedoPlanksTexture.repeat.set(64, 2); // Adjust numbers to fit your scale
 
+	albedoLeavesTexture.colorSpace = THREE.SRGBColorSpace;
 	// ------------------------------------------------------
 	// 4 - Text - font loading, TextGeometry, material, mesh
 
