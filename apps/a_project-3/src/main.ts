@@ -199,6 +199,8 @@ async function init() {
 	// set up different color space only for albedo texture or
 	// there are more textures we can set that up?
 
+	albedoBricksTexture.colorSpace = THREE.SRGBColorSpace;
+
 	// ------------------------------------------------------
 	// 4 - Text - font loading, TextGeometry, material, mesh
 
@@ -251,7 +253,10 @@ async function init() {
 	scene.add(directionalLight);
 
 	const doorPointLight = new THREE.PointLight('#c7a87e');
-	doorPointLight.intensity = 1.5 * Math.PI;
+	// EXPLAIN: increased a little bit intensity of
+	// point light
+	// doorPointLight.intensity = 1.5 * Math.PI;
+	doorPointLight.intensity = 1.7 * Math.PI;
 	doorPointLight.distance = 7;
 
 	doorPointLight.position.set(
@@ -279,9 +284,28 @@ async function init() {
 		mesuresAndColors.wallWidt,
 		mesuresAndColors.wallDepth,
 		mesuresAndColors.wallHeight,
+		128,
+		128,
 	);
+
 	const wallsMaterial = new THREE.MeshStandardMaterial({
-		color: '#353042',
+		// color: '#353042',
+		// EXPLAIN: adding tectures to wall material
+		map: albedoBricksTexture,
+		// EXPLAIN: we don't have alpha map so no need for transparency
+		// transparent: true,
+		aoMap: aoBricksTexture,
+		normalMap: normalBricksTexture,
+		displacementMap: heightBricksTexture,
+		// EXPLAIN: we must use very small displacment because
+		// in corners texture pulls away and we can see through house
+		// so I had to tune these two displacement values
+		// I don't know the better way currently; you can tell me
+		// what else could I've done
+		displacementScale: 0.05,
+		displacementBias: -0.038,
+		roughnessMap: roughnessBricksTexture,
+		roughness: 0.8,
 	});
 	const wallsMesh = new THREE.Mesh(wallsGeometry, wallsMaterial);
 	//
@@ -294,7 +318,7 @@ async function init() {
 		// true,
 	);
 	const roofMaterial = new THREE.MeshStandardMaterial({
-		color: '#7ea0e9',
+		// color: '#7ea0e9',
 	});
 	const roofMesh = new THREE.Mesh(roofGeometry, roofMaterial);
 	roofMesh.position.y =
@@ -381,7 +405,11 @@ async function init() {
 	// 	),
 	// );
 
-	doorMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.02;
+	// EXPLAIN: had to move door closer to the house because
+	// using negative displacmentBias on brick material made
+	// walls pull inward a little bit so I move door closer to the wall
+	// doorMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.02;
+	doorMesh.position.z = mesuresAndColors.wallDepth / 2;
 	// lower it down a little bit
 	// doorMesh.position.y = mesuresAndColors.doorHeight / 2;
 	doorMesh.position.y = mesuresAndColors.doorHeight / 2 - 0.1;
