@@ -9,7 +9,7 @@ app_path: apps/a_project-2-fog
 
 # a Project 2 — Fog, Background, and the Clear-Color Question
 
-Project A continues. Most of the scene is carried over from [[a_project-1]]: the stylized house built from primitives, the ring of 50 tombstones, the ambient + directional lighting, and the debug GUI. Part two's job is to sharpen two specific rendering ideas the first part left open:
+Project A continues. Most of the scene is carried over from [[a_project-1-geo]]: the stylized house built from primitives, the ring of 50 tombstones, the ambient + directional lighting, and the debug GUI. Part two's job is to sharpen two specific rendering ideas the first part left open:
 
 1. **Fog** — how the `Fog` class fades distant objects into a color, what `near`/`far` actually mean, and why you assign it via `scene.fog = fog` instead of `scene.add(fog)`.
 2. **Background vs. clear color** — the scene now runs on **WebGPU** (`three/webgpu` + `WebGPURenderer`), and the code deliberately replaces `renderer.setClearColor(...)` with a `scene.background` + matching fog color. The README asks outright: *did I make the right choices?* That's the heart of this lesson.
@@ -100,7 +100,7 @@ But the user chose instead to match fog to **background**, not to the grass. Now
 
 ### 4. The rest of the carried-over scene
 
-Everything else is [[a_project-1]] refined:
+Everything else is [[a_project-1-geo]] refined:
 
 - **Lights are the star again.** `AmbientLight` tinted periwinkle (`#987dd6`) at a low `0.12`, `DirectionalLight` same tint at `0.02 * Math.PI` (physically-based units), plus a new `PointLight` (`#c7a87e`) sitting just above the door to spotlight it. Intensities are low, and `PointLight.distance = 7` bounds its reach.
 - **Grouping** — the house group now also contains `doorPointLight`, so the warm pool of light at the door *moves with the house* when the group transforms. Worth noting: lights-as-children of a group is legal and keeps light attached to the object.
@@ -155,7 +155,7 @@ house.add(doorLight); // doorLight handles benefit from being a group child
 
 - **Fog is *not* added with `scene.add`** — it's `scene.fog = fog`. Add it to the scene object and it silently controls nothing. This is the single easiest misunderstanding in this lesson.
 - **Fog color, `scene.background`, and clear color must agree.** Use one constant for all of them; letting fog/background drift apart is how far-separated edges become visible again.
-- **`shadow.radius` (blur) doesn't work with `THREE.PCFSoftShadowMap`** — the GUI even warns about it. Blur behaves only with `PCFShadowMap`/`VSMShadowMap`. (Same gotcha as [[a_project-1]].)
+- **`shadow.radius` (blur) doesn't work with `THREE.PCFSoftShadowMap`** — the GUI even warns about it. Blur behaves only with `PCFShadowMap`/`VSMShadowMap`. (Same gotcha as [[a_project-1-geo]].)
 - **The shadow camera helper shows nothing unless `renderer.shadowMap.enabled` is `true`.** Since shadows are off in `@ts-src`, the `CameraHelper` / shadow-tweak GUI are inert until you flip it.
 - **`ArrowHelper` direction is computed once at creation.** Move the `directionalLight` and the arrow won't follow — it points the old way until recreated.
 - **`shadow.mapSize.width` and `height` must stay equal** — non-square maps waste memory and mis-render.
