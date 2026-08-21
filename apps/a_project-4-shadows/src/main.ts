@@ -321,12 +321,13 @@ async function init() {
 	);
 
 	// // // // // // // // -------------------------------
-	// EXPLAIN: adding 3 point lights that will move through the scene
+	// EXPLAIN: adding 4 point lights that will move through the scene
 	const energy1 = new THREE.PointLight('#8c499a', 4 * Math.PI, 3);
 	const energy2 = new THREE.PointLight('#6fbcc0', 4 * Math.PI, 3);
 	const energy3 = new THREE.PointLight('#c75339', 4 * Math.PI, 3);
+	const energy4 = new THREE.PointLight('#d1b727', 4 * Math.PI, 3);
 
-	scene.add(energy1, energy2, energy3);
+	scene.add(energy1, energy2, energy3, energy4);
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
@@ -905,24 +906,81 @@ async function init() {
 		timer.update(timestamp);
 
 		const elapsedTime = timer.getElapsed();
-		// EXPLAIN: moving lights in a circle around the house
-		// EXPLAIN: 0.5 will determine speed, speed will be decreased
-		// can you explain mre why
+		// EXPLAIN: we are defining
+		//  moving of lights in a circle around the house
+
+		// EXPLAIN: cement this in your head - multiplier
+		//  of any number you intended to be
+		// angle wil increase that angle or decrese it
+		// if multiplier is above 1 (example 5), angle will be bigger
+		// if multiplier is bellow 1 (example 0.5), angle will be smaller
+		// EXPLAIN: since we are using elapsed time as angle
+		// our angle is changing with time
+		// EXPLAIN: cement this in your head - we can conclude
+		// from previous statemnts
+		// that if we multiply angle by number bellow 0 (eg 0.5)
+		// you will have slower animation
+
+		// EXPLAIN: we know from previous lessons that sin/cos
+		// functions produces numbers in range from -1 to 1;
+		// and if we want bigger radius we multiply result of the sin/cos
+		// by a number; a number that is above 1 because 1 is default
+
+		// EXPLAIN: also cement in your head that number you are multiplying
+		// angle is called frequency, and number you are multiplying
+		// the result of sin/cos is called amplitude
+
 		const energyAngle1 = elapsedTime * 0.5;
 		energy1.position.x = Math.cos(energyAngle1) * 4;
-		energy1.position.z = Math.sin(energyAngle1) * 4;
+		// EXPLAIN: I decided to change radius because I don't
+		// want perfect circilar movement for energy1 light
+		energy1.position.z = Math.sin(energyAngle1) * 6;
+		// EXPLAIN: here we are using sinus function
+		// over y axis which means object is going in the ground
+		// then making curved path than above the ground curved path
+		// and by multiplying with bigger number like 3 this is going to be faster
+		// which means frequent up and down accrross the ground
 		energy1.position.y = Math.sin(elapsedTime * 3);
 
 		const energyAngle2 = elapsedTime * 0.34;
+		// EXPLAIN: here I wanted counter clockwise movement
+		// so I switched sin and coss so the x to have sin
+		// and y to have cos; we also are using same value for
+		// radius because we want light to go around in perfect circle
 		energy2.position.x = Math.sin(energyAngle2) * 5;
 		energy2.position.z = Math.cos(energyAngle2) * 5;
-		energy2.position.y = Math.sin(elapsedTime * 3);
+		// EXPLAIN: we don't want same frequencies of movement
+		// or to be precise even frequencies so we can make sum
+		// of two sinuses for example, with different frequency
+		// multiplier for an angle ofcourse
+		energy2.position.y =
+			Math.sin(elapsedTime * 2.5) + Math.sin(elapsedTime * 4);
 
-		/* const energyAngle3 = elapsedTime * 0.5;
-		energy3.position.x = Math.cos(energyAngle3) * 4;
-		energy3.position.z = Math.sin(energyAngle3) * 4;
-		energy3.position.y = Math.sin(elapsedTime * 3);
- */
+		// EXPLAIN: we can also define negative angle , which will
+		// also make it counter clockwise, without needing to switch
+		// sin and cos between x and z
+		const energyAngle3 = -elapsedTime * 0.14;
+		// EXPLAIN: so here we will have even more randomness
+		// we now have uneven frequanecy by x and z
+		// you can explain what shape we are making around if you can
+		energy3.position.x =
+			Math.cos(energyAngle3) * 3 + Math.sin(energyAngle3 * 0.32) * 7;
+		energy3.position.z =
+			Math.cos(energyAngle3) * 3 + Math.sin(energyAngle3 * 0.5) * 7;
+		energy3.position.y =
+			Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.1);
+
+		// EXPLAIN here we are multiplying cos and sin of x and y
+		// you can explain me in what shape this movement will happen
+
+		const energyAngle4 = elapsedTime * 1.6;
+		energy4.position.x =
+			Math.cos(energyAngle4) * (7 + Math.sin(elapsedTime * 0.32));
+		energy4.position.z =
+			Math.sin(energyAngle4) * (7 + Math.sin(elapsedTime * 0.5));
+		energy4.position.y =
+			Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5);
+
 		orbitControls.update();
 
 		renderer.render(scene, camera);
