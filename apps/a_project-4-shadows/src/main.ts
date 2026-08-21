@@ -194,12 +194,15 @@ async function init() {
 	// ------------------------------------------------------
 	// 0.2 - Shadows stuff globaly related
 
-	// shadows disabled for now gloabaly
-	// renderer.shadowMap.enabled = true;
+	// EXPLAIN: we enable shadows; don't forget to go to each light
+	// and castShadow by the light (all except ambient light)
+	// and don't forget  to set castShadow on all appropriate objects
+	// and receiveShadow on all appropriate objects
+	renderer.shadowMap.enabled = true;
 
-	// renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
-	// using default for a start (don't need to set default but I will be explicit)
-	renderer.shadowMap.type = THREE.PCFShadowMap;
+	// EXPLAIN: we switched also an algorythm for shadow maps
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// renderer.shadowMap.type = THREE.PCFShadowMap;
 
 	// ------------------------------------------------------
 	// 3 -  texture stuff
@@ -280,8 +283,15 @@ async function init() {
 	directionalLight.color = new THREE.Color('#987dd6');
 	// directionalLight.intensity = 1.5 * Math.PI;
 	// directionalLight.intensity = 0.9 * Math.PI;
-	directionalLight.intensity = 0.02 * Math.PI;
+	// directionalLight.intensity = 0.02 * Math.PI;
+	// EXPLAIN: after tweaking increasing intesity
+	directionalLight.intensity = 1.424;
+
 	directionalLight.position.set(4, 5, -2);
+
+	// EXPLAIN: directional light or in this case moon light
+	// casting shadow
+	directionalLight.castShadow = true;
 
 	// directionalLight.visible = false;
 
@@ -291,18 +301,18 @@ async function init() {
 	// console.log(directionalLight.shadow);
 	// console.log(directionalLight.shadow.camera);
 
-	/* directionalLight.castShadow = true;
-	directionalLight.shadow.mapSize.width = 1024;
-	directionalLight.shadow.mapSize.height = 1024;
-	directionalLight.shadow.camera.near = 1;
-	directionalLight.shadow.camera.far = 10;
-	// directionalLight.shadow.camera.far = 6;
-	directionalLight.shadow.camera.top = 2;
-	directionalLight.shadow.camera.right = 2;
-	directionalLight.shadow.camera.bottom = -2;
-	directionalLight.shadow.camera.left = -2;
-	directionalLight.shadow.radius = 10;
-	directionalLight.shadow.intensity = 1; */ // default
+	// EXPLAIN: after gui tweaking I decided to use these options
+	// to better my scene
+	directionalLight.shadow.mapSize.width = 256;
+	directionalLight.shadow.mapSize.height = 256;
+	// directionalLight.shadow.camera.near = 1;
+	directionalLight.shadow.camera.far = 15;
+	directionalLight.shadow.camera.top = 7.941;
+	directionalLight.shadow.camera.right = 8.732;
+	directionalLight.shadow.camera.bottom = -7.512;
+	directionalLight.shadow.camera.left = -7.069;
+	// directionalLight.shadow.radius = 10;
+	// directionalLight.shadow.intensity = 1;// default
 	// directionalLight.shadow.bias = 0.0002; // default
 
 	//   //     //     //      //      //        //
@@ -312,7 +322,7 @@ async function init() {
 
 	// doorPointLight.intensity = 1.5 * Math.PI;
 	doorPointLight.intensity = 1.7 * Math.PI;
-	doorPointLight.distance = 7;
+	doorPointLight.distance = 8;
 
 	doorPointLight.position.set(
 		0,
@@ -320,12 +330,40 @@ async function init() {
 		mesuresAndColors.doorWidth + 0.6,
 	);
 
+	// EXPLAIN: door point light casting shadow
+	doorPointLight.castShadow = true;
+
+	// EXPLAIN: door point light shadow settings
+	doorPointLight.shadow.mapSize.width = 256;
+	doorPointLight.shadow.mapSize.height = 256;
+	doorPointLight.shadow.camera.far = 7;
+
 	// // // // // // // // -------------------------------
 	// EXPLAIN: adding 4 point lights that will move through the scene
 	const energy1 = new THREE.PointLight('#8c499a', 4 * Math.PI, 3);
 	const energy2 = new THREE.PointLight('#6fbcc0', 4 * Math.PI, 3);
 	const energy3 = new THREE.PointLight('#c75339', 4 * Math.PI, 3);
 	const energy4 = new THREE.PointLight('#d1b727', 4 * Math.PI, 3);
+
+	// EXPLAIN: all of these point lights casting shadow
+	energy1.castShadow = true;
+	energy2.castShadow = true;
+	energy3.castShadow = true;
+	energy4.castShadow = true;
+
+	// EXPLAIN: all moving point lights shadow settings
+	energy1.shadow.mapSize.width = 256;
+	energy1.shadow.mapSize.height = 256;
+	energy1.shadow.camera.far = 7;
+	energy2.shadow.mapSize.width = 256;
+	energy2.shadow.mapSize.height = 256;
+	energy2.shadow.camera.far = 7;
+	energy3.shadow.mapSize.width = 256;
+	energy3.shadow.mapSize.height = 256;
+	energy3.shadow.camera.far = 7;
+	energy4.shadow.mapSize.width = 256;
+	energy4.shadow.mapSize.height = 256;
+	energy4.shadow.camera.far = 7;
 
 	scene.add(energy1, energy2, energy3, energy4);
 	// -----------------------------------------------------
@@ -346,7 +384,10 @@ async function init() {
 	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 	floorMesh.rotation.x = -Math.PI / 2;
 	floorMesh.position.y = 0;
-	// floorMesh.receiveShadow = true;
+
+	// EXPLAIN: floor should receive shadow, and no use to cast it
+	floorMesh.receiveShadow = true;
+
 	scene.add(floorMesh);
 
 	const wallsGeometry = createWallBoxGeometry(
@@ -372,6 +413,10 @@ async function init() {
 		roughness: 0.8,
 	});
 	const wallsMesh = new THREE.Mesh(wallsGeometry, wallsMaterial);
+
+	// EXPLAIN: wall mesh should cast shadow
+	wallsMesh.castShadow = true;
+
 	//
 	const roofGeometry = new THREE.CylinderGeometry(
 		mesuresAndColors.roofRadiusTop,
@@ -382,7 +427,6 @@ async function init() {
 		// open cylinder
 		true,
 	);
-
 	const roofMaterial = new THREE.MeshStandardMaterial({
 		// color: '#d4def4',
 		map: albedoRoofTexture,
@@ -397,6 +441,10 @@ async function init() {
 		// metalness: 0.5,
 	});
 	const roofMesh = new THREE.Mesh(roofGeometry, roofMaterial);
+
+	// EXPLAIN: roof (decided not to cast shadow)
+	// roofMesh.castShadow = true;
+
 	roofMesh.position.y =
 		mesuresAndColors.wallHeight +
 		mesuresAndColors.roofHeight / 2 -
@@ -409,7 +457,6 @@ async function init() {
 		128,
 		128,
 	);
-
 	const planksRoofMaterial = new THREE.MeshStandardMaterial({
 		// color: '#a54841',
 		map: albedoPlanksTexture,
@@ -423,6 +470,10 @@ async function init() {
 		planksRoofPlane,
 		planksRoofMaterial,
 	);
+
+	// EXPLAIN: planks (decided not to cast shadow)
+	// planksRoofMesh.castShadow = true;
+
 	planksRoofMesh.rotation.x = Math.PI / 2;
 	planksRoofMesh.position.y = mesuresAndColors.wallHeight + 0.04;
 	// planksRoofMesh.scale.set(0.99, 1, 0.99);
@@ -434,8 +485,6 @@ async function init() {
 		100,
 		100,
 	);
-
-	//
 	const doorMaterial = new THREE.MeshStandardMaterial({
 		// color: '#5d4534',
 
@@ -492,6 +541,12 @@ async function init() {
 	const bushThreeMesh = new THREE.Mesh(bushGeometry, bushMaterial);
 	const bushFourMesh = new THREE.Mesh(bushGeometry, bushMaterial);
 
+	// EXPLAIN: bushes casting shadows
+	bushOneMesh.castShadow = true;
+	bushTwoMesh.castShadow = true;
+	bushThreeMesh.castShadow = true;
+	bushFourMesh.castShadow = true;
+
 	bushOneMesh.position.z = mesuresAndColors.wallDepth / 2 + 0.3;
 	bushOneMesh.position.x = mesuresAndColors.doorWidth / 2;
 	bushOneMesh.position.y = 0.5;
@@ -542,6 +597,10 @@ async function init() {
 			toombstoneGeometry,
 			toobstoneMaterial,
 		);
+
+		// EXPLAIN: every toombstone should cast shadow and receive shadows
+		toomb.castShadow = true;
+		toomb.receiveShadow = true;
 
 		toomb.position.set(x, 0.35, z);
 
@@ -666,20 +725,20 @@ async function init() {
 		.add(directionalLight.position, 'x')
 		.step(0.001)
 		.name('position.x')
-		.min(-5)
-		.max(5);
+		.min(-10)
+		.max(10);
 	directionalTweaks
 		.add(directionalLight.position, 'y')
 		.step(0.001)
 		.name('position.y')
-		.min(-5)
-		.max(5);
+		.min(-10)
+		.max(10);
 	directionalTweaks
 		.add(directionalLight.position, 'z')
 		.step(0.001)
 		.name('position.z')
-		.min(-5)
-		.max(5);
+		.min(-10)
+		.max(10);
 	directionalTweaks.addColor(directionalLight, 'color');
 	directionalTweaks
 		.add(directionalLight.rotation, 'x')
@@ -817,8 +876,8 @@ async function init() {
 		);
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'top')
-		.min(-5)
-		.max(5)
+		.min(-10)
+		.max(10)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.top')
 		.onChange(() => {
@@ -827,8 +886,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'right')
-		.min(-5)
-		.max(5)
+		.min(-10)
+		.max(10)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.right')
 		.onChange(() => {
@@ -837,8 +896,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'bottom')
-		.min(-5)
-		.max(5)
+		.min(-10)
+		.max(10)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.bottom')
 		.onChange(() => {
@@ -847,8 +906,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'left')
-		.min(-5)
-		.max(5)
+		.min(-10)
+		.max(10)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.left')
 		.onChange(() => {
@@ -970,10 +1029,9 @@ async function init() {
 		energy3.position.y =
 			Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.1);
 
+		const energyAngle4 = elapsedTime * 1.6;
 		// EXPLAIN here we are multiplying cos and sin of x and y
 		// you can explain me in what shape this movement will happen
-
-		const energyAngle4 = elapsedTime * 1.6;
 		energy4.position.x =
 			Math.cos(energyAngle4) * (7 + Math.sin(elapsedTime * 0.32));
 		energy4.position.z =
