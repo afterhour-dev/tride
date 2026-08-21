@@ -1,4 +1,4 @@
-# Project A - part three
+# Project A - part three - textures
 
 First project built to practice some of the learned things from previous lessons.
 
