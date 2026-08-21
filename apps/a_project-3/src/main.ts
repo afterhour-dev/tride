@@ -228,14 +228,65 @@ async function init() {
 	// over cylinder geometry, you explain why
 	albedoRoofTexture.wrapS = THREE.RepeatWrapping;
 	albedoRoofTexture.wrapT = THREE.RepeatWrapping;
+	aoRoofTexture.wrapS = THREE.RepeatWrapping;
+	aoRoofTexture.wrapT = THREE.RepeatWrapping;
+	heightRoofTexture.wrapS = THREE.RepeatWrapping;
+	heightRoofTexture.wrapT = THREE.RepeatWrapping;
+	normalRoofTexture.wrapS = THREE.RepeatWrapping;
+	normalRoofTexture.wrapT = THREE.RepeatWrapping;
+	roughnessRoofTexture.wrapS = THREE.RepeatWrapping;
+	roughnessRoofTexture.wrapT = THREE.RepeatWrapping;
+	metalnessRoofTexture.wrapS = THREE.RepeatWrapping;
+	metalnessRoofTexture.wrapT = THREE.RepeatWrapping;
+
 	albedoRoofTexture.repeat.set(8, 1); // Adjust numbers to fit your scale
+	aoRoofTexture.repeat.set(8, 1);
+	heightRoofTexture.repeat.set(8, 1);
+	normalRoofTexture.repeat.set(8, 1);
+	roughnessRoofTexture.repeat.set(8, 1);
+	metalnessRoofTexture.repeat.set(8, 1);
 
 	albedoPlanksTexture.colorSpace = THREE.SRGBColorSpace;
-	// albedoPlanksTexture.wrapS = THREE.RepeatWrapping;
-	// albedoPlanksTexture.wrapT = THREE.RepeatWrapping;
-	// albedoPlanksTexture.repeat.set(64, 2); // Adjust numbers to fit your scale
+
+	albedoPlanksTexture.repeat.set(2, 2);
+	aoPlanksTexture.repeat.set(2, 2);
+	heightPlanksTexture.repeat.set(2, 2);
+	normalPlanksTexture.repeat.set(2, 2);
+	roughnessPlanksTexture.repeat.set(2, 2);
+
+	albedoPlanksTexture.wrapS = THREE.RepeatWrapping;
+	albedoPlanksTexture.wrapT = THREE.RepeatWrapping;
+	aoPlanksTexture.wrapS = THREE.RepeatWrapping;
+	aoPlanksTexture.wrapT = THREE.RepeatWrapping;
+	heightPlanksTexture.wrapS = THREE.RepeatWrapping;
+	heightPlanksTexture.wrapT = THREE.RepeatWrapping;
+	normalPlanksTexture.wrapS = THREE.RepeatWrapping;
+	normalPlanksTexture.wrapT = THREE.RepeatWrapping;
+	roughnessPlanksTexture.wrapS = THREE.RepeatWrapping;
+	roughnessPlanksTexture.wrapT = THREE.RepeatWrapping;
 
 	albedoLeavesTexture.colorSpace = THREE.SRGBColorSpace;
+
+	albedoGrassTexture.colorSpace = THREE.SRGBColorSpace;
+	// EXPLAIN: I need smaller grass
+	// EXPLAIN: what are those wrapS and wrapT , and why are we using them
+	// and what effect thaey have. And do we need to use them on
+	// every texture
+	albedoGrassTexture.wrapS = THREE.RepeatWrapping;
+	albedoGrassTexture.wrapT = THREE.RepeatWrapping;
+	aoGrassTexture.wrapS = THREE.RepeatWrapping;
+	aoGrassTexture.wrapT = THREE.RepeatWrapping;
+	normalGrassTexture.wrapS = THREE.RepeatWrapping;
+	normalGrassTexture.wrapT = THREE.RepeatWrapping;
+	roughnessGrassTexture.wrapS = THREE.RepeatWrapping;
+	roughnessGrassTexture.wrapT = THREE.RepeatWrapping;
+
+	// EXPLAIN: I assume we have 10 times 10 repeat
+	albedoGrassTexture.repeat.set(10, 10);
+	aoGrassTexture.repeat.set(10, 10);
+	heightGrassTexture.repeat.set(10, 10);
+	normalGrassTexture.repeat.set(10, 10);
+	roughnessGrassTexture.repeat.set(10, 10);
 	// ------------------------------------------------------
 	// 4 - Text - font loading, TextGeometry, material, mesh
 
@@ -303,10 +354,25 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const floorGeometry = new THREE.PlaneGeometry(20, 20);
+	const floorGeometry = new THREE.PlaneGeometry(
+		20,
+		20,
+		// EXPLAIN: added some subdivisons because of displacment map
+		64,
+		64,
+	);
 	// const floorGeometry = new THREE.PlaneGeometry(20, 20, 100, 100);
-	const floorMaterial = new THREE.MeshStandardMaterial();
-	floorMaterial.color = new THREE.Color(mesuresAndColors.grassColor);
+	const floorMaterial = new THREE.MeshStandardMaterial({
+		// EXPLAIN: adding textures to the floor material
+		map: albedoGrassTexture,
+		aoMap: aoGrassTexture,
+		displacementMap: heightGrassTexture,
+		displacementScale: 0.6,
+		normalMap: normalGrassTexture,
+		roughnessMap: roughnessGrassTexture,
+	});
+
+	// floorMaterial.color = new THREE.Color(mesuresAndColors.grassColor);
 	// floorMaterial.roughness = 0.7;
 	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 	floorMesh.rotation.x = -Math.PI / 2;
