@@ -9,7 +9,7 @@ app_path: apps/a_project-3-textures
 
 # a Project 3 — Textures, Displacement, and the uv2/AO-Channel Question
 
-Project A continues. The scene (stylized house, 50 tombstones, fog, ambient + directional + point lighting) carries over from [[a_project-2-fog]]. Part three's whole job is **texturing**: every surface of the house is now dressed in loaded PBR-style maps — base color, ambient occlusion, height/displacement, normal, roughness, and (for the door and roof) opacity/metalness — on top of **shadows** (now finally enabled via `renderer.shadowMap`).
+Project A continues. The scene (stylized house, 50 tombstones, fog, ambient + directional + point lighting) carries over from [[a_project-2-fog]]. Part three's whole job is **texturing**: every surface of the house is now dressed in loaded PBR-style maps — base color, ambient occlusion, height/displacement, normal, roughness, and (for the door and roof) opacity/metalness.
 
 The heart of the lesson, per the README, is a tangle of genuine questions worth answering precisely:
 
@@ -150,7 +150,7 @@ The four walls come from `geo-util.ts`'s `createWallBoxGeometry`, which builds a
 - **`merged.computeTangents()`** is called explicitly because **normal maps need tangents** (the TBN basis), and after manually merging geometries three.js won't auto-derive them.
 - `useGroups=true` keeps each wall as a separate material group — handy if you later want different UV tiling per wall. The project passes one material to all walls (the whole merged mesh gets one `MeshStandardMaterial`), but the groups are preserved for the future anyway.
 
-### 10. Shadows, now enabled
+### 10. We will deal with shadows in next lesson
 
 `renderer.shadowMap.enabled`, `renderer.shadowMap.type`, per-light `castShadow`, per-mesh `castShadow`/`receiveShadow` are all wired (and fully exposable in the GUI). The shadow-mapping algorithm choices are `PCFShadowMap` (default here), `PCFSoftShadowMap`, `VSMShadowMap` — see [[13.0_shadows-intro]] for the deeper treatment. One GUI note: `shadow.radius` (blur) **doesn't work with `PCFSoftShadowMap`**, only with the plain `PCFShadowMap` used here.
 
