@@ -1,4 +1,4 @@
-# Project A - part two
+# Project A - part two - Lights, fog, colors
 
 First project built to practice some of the learned things from previous lessons.
 

@@ -4,7 +4,7 @@ topic: threejs
 date: 2026-08-20
 tags: [lights, fog, background, clearColor]
 difficulty: beginner
-app_path: apps/a_project-2
+app_path: apps/a_project-2-fog
 ---
 
 # a Project 2 — Fog, Background, and the Clear-Color Question

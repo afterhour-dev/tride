@@ -1,4 +1,4 @@
-# Project A - part one
+# Project A - part one - Math, trigonometry, geometry
 
 First project built to practice some of the learned things.
 

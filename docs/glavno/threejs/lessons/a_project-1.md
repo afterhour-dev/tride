@@ -4,7 +4,7 @@ topic: threejs
 date: 2026-08-19
 tags: [math, geometry]
 difficulty: beginner
-app_path: apps/a_project-1
+app_path: apps/a_project-1-geo
 ---
 
 # a Project 1 — Building a House from Primitives

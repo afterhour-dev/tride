@@ -2278,7 +2278,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/a_project-1:
+  apps/a_project-1-geo:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -2309,7 +2309,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/a_project-2:
+  apps/a_project-2-fog:
     dependencies:
       gsap:
         specifier: ^3.15.0
@@ -2340,7 +2340,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/a_project-3:
+  apps/a_project-3-textures:
     dependencies:
       gsap:
         specifier: ^3.15.0
