@@ -21,8 +21,8 @@ const gui = new GUI({
 });
 const debugObject = {};
 
-const cubeTweaks = gui.addFolder('cube Mesh');
-cubeTweaks.close();
+const pointsTweaks = gui.addFolder('particles (Points instance)');
+pointsTweaks.close();
 
 // --------------------------------------------------------
 const sizes = {
@@ -62,15 +62,25 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const boxGreometry = new THREE.BoxGeometry(1, 1, 1);
+	// EXPLAIN: geometry for our particles
+	const particlesGreometry = new THREE.SphereGeometry(1, 32, 32);
 
-	const material = new THREE.MeshBasicMaterial();
+	// EXPLAIN: material for our particles
+	const particlesMaterial = new THREE.PointsMaterial({
+		// EXPLAIN: size
+		size: 0.02,
+		// EXPLAIN: sizeAttenuation
+		sizeAttenuation: true,
+	});
 
-	// material.wireframe = true;
+	// EXPLAIN: our particles
+	const particles = new THREE.Points(
+		particlesGreometry,
+		particlesMaterial,
+	);
 
-	const cubeMesh = new THREE.Mesh(boxGreometry, material);
-
-	scene.add(cubeMesh);
+	// EXPLAIN: adding particles to the scene
+	scene.add(particles);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -89,7 +99,7 @@ async function init() {
 	// camera.position.x = 2;
 	camera.position.z = 3;
 
-	// camera.lookAt(cubeMesh.position);
+	// camera.lookAt(particles.position);
 
 	scene.add(camera);
 
@@ -150,20 +160,20 @@ async function init() {
 	// // // // // // // // // // ---------------------------------
 
 	// // // // // // // // // // // // // // // // // // //
-	cubeTweaks
-		.add(cubeMesh.position, 'x')
+	pointsTweaks
+		.add(particles.position, 'x')
 		.step(0.001)
 		.name('position.x')
 		.min(-5)
 		.max(5);
-	cubeTweaks
-		.add(cubeMesh.position, 'y')
+	pointsTweaks
+		.add(particles.position, 'y')
 		.step(0.001)
 		.name('position.y')
 		.min(0)
 		.max(5);
-	cubeTweaks
-		.add(cubeMesh.position, 'z')
+	pointsTweaks
+		.add(particles.position, 'z')
 		.step(0.001)
 		.name('position.z')
 		.min(-5)
