@@ -21,8 +21,8 @@ const gui = new GUI({
 });
 const debugObject = {};
 
-const cubeTweaks = gui.addFolder('cube Mesh');
-cubeTweaks.close();
+const sphereTweaks = gui.addFolder('sphere Mesh');
+sphereTweaks.close();
 
 // --------------------------------------------------------
 const sizes = {
@@ -67,15 +67,15 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const boxGreometry = new THREE.BoxGeometry(1, 1, 1);
+	const sphereGreometry = new THREE.SphereGeometry(0.5, 32, 32);
 
 	const material = new THREE.MeshBasicMaterial();
 
 	// material.wireframe = true;
 
-	const cubeMesh = new THREE.Mesh(boxGreometry, material);
+	const sphereMesh = new THREE.Mesh(sphereGreometry, material);
 
-	scene.add(cubeMesh);
+	scene.add(sphereMesh);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -94,7 +94,7 @@ async function init() {
 	// camera.position.x = 2;
 	camera.position.z = 3;
 
-	// camera.lookAt(cubeMesh.position);
+	// camera.lookAt(boxMesh.position);
 
 	scene.add(camera);
 
@@ -155,20 +155,20 @@ async function init() {
 	// // // // // // // // // // ---------------------------------
 
 	// // // // // // // // // // // // // // // // // // //
-	cubeTweaks
-		.add(cubeMesh.position, 'x')
+	sphereTweaks
+		.add(sphereMesh.position, 'x')
 		.step(0.001)
 		.name('position.x')
 		.min(-5)
 		.max(5);
-	cubeTweaks
-		.add(cubeMesh.position, 'y')
+	sphereTweaks
+		.add(sphereMesh.position, 'y')
 		.step(0.001)
 		.name('position.y')
 		.min(0)
 		.max(5);
-	cubeTweaks
-		.add(cubeMesh.position, 'z')
+	sphereTweaks
+		.add(sphereMesh.position, 'z')
 		.step(0.001)
 		.name('position.z')
 		.min(-5)

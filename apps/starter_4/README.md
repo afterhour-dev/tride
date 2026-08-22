@@ -1,5 +1,6 @@
 # Good starter 4
 
-## Namera / Intent
-
-## Šta treba objasniti u detalje
+- plane -> floor
+- sphere
+- directional light, ambient light
+- drop shadows settings disabled; you can enable it with gui
