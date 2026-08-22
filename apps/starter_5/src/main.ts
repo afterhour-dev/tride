@@ -46,11 +46,6 @@ async function init() {
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
 
-	// shadows disabled for now gloabaly
-	renderer.shadowMap.enabled = false; // default
-	// renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
-	renderer.shadowMap.type = THREE.PCFShadowMap; // default
-
 	// ------------------------------------------------------
 	// 3 -  texture stuff
 	// colorSpace and stuff
