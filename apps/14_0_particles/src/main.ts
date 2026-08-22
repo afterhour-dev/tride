@@ -7,8 +7,8 @@ import GUI from 'lil-gui';
 import { getRequiredElement } from './util';
 
 // loading textures -----------------------------------------
-const loadingManager = new THREE.LoadingManager();
-const textureLoader = new THREE.TextureLoader(loadingManager);
+// const loadingManager = new THREE.LoadingManager();
+// const textureLoader = new THREE.TextureLoader(loadingManager);
 
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
@@ -25,6 +25,9 @@ const debugObject = {
 
 const sphereTweaks = gui.addFolder('sphere Mesh');
 sphereTweaks.close();
+const boxTweaks = gui.addFolder('box Mesh');
+boxTweaks.close();
+const floorTweaks = gui.addFolder('floor Mesh');
 const ambientTweaks = gui.addFolder('Ambient Light');
 ambientTweaks.close();
 const directionalTweaks = gui.addFolder('Directional Light');
@@ -54,14 +57,12 @@ async function init() {
 	// 1 - Environment
 
 	// ------------------------------------------------------
-	// 0.2 - Shadows stuff globaly related
+	// 2 - Shadows stuff globaly related
 
 	// shadows disabled for now gloabaly
-	renderer.shadowMap.enabled = false;
-
+	renderer.shadowMap.enabled = false; // default
 	// renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
-	// using default for a start (doesn't have anty effect but leaving it here for start)
-	renderer.shadowMap.type = THREE.PCFShadowMap;
+	renderer.shadowMap.type = THREE.PCFShadowMap; // default
 
 	// ------------------------------------------------------
 	// 3 -  texture stuff
@@ -83,7 +84,7 @@ async function init() {
 	// // // // // // // // -------------------------------
 
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
-	directionalLight.intensity = 0.2 * Math.PI;
+	directionalLight.intensity = 0.4 * Math.PI;
 	directionalLight.position.set(2, 2, -1);
 	// directionalLight.visible = false;
 
@@ -93,7 +94,11 @@ async function init() {
 	// console.log(directionalLight.shadow);
 	// console.log(directionalLight.shadow.camera);
 
-	directionalLight.castShadow = true;
+	directionalLight.castShadow = false; // also default
+
+	// wonn't work anyways if drop shadows aren't allowed with
+	// renderer.shadowMap.enabled = true
+	//
 	directionalLight.shadow.mapSize.width = 1024;
 	directionalLight.shadow.mapSize.height = 1024;
 	directionalLight.shadow.camera.near = 1;
@@ -103,8 +108,8 @@ async function init() {
 	directionalLight.shadow.camera.bottom = -2;
 	directionalLight.shadow.camera.left = -2;
 	directionalLight.shadow.radius = 10;
-	directionalLight.shadow.intensity = 1; // default
-	// directionalLight.shadow.bias = 0.0002; // default
+	directionalLight.shadow.intensity = 1; // also default
+	// directionalLight.shadow.bias = 0.0002; // also default
 
 	// -----------------------------------------------------------
 	scene.add(directionalLight);
@@ -113,6 +118,7 @@ async function init() {
 	// 6 - Geometries Materials Meshes
 
 	const sphereGreometry = new THREE.SphereGeometry(0.5, 32, 32);
+	const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 	const floorGeometry = new THREE.PlaneGeometry(5, 5);
 
 	const material = new THREE.MeshStandardMaterial();
@@ -122,7 +128,9 @@ async function init() {
 	material.roughness = 0.7;
 
 	const sphereMesh = new THREE.Mesh(sphereGreometry, material);
-
+	sphereMesh.position.x = -1.1;
+	const boxMesh = new THREE.Mesh(boxGeometry, material);
+	boxMesh.position.x = 1.1;
 	const floorMesh = new THREE.Mesh(floorGeometry, material);
 
 	floorMesh.rotation.x = -Math.PI / 2;
@@ -130,11 +138,11 @@ async function init() {
 
 	//  ------------------------
 
-	floorMesh.receiveShadow = true;
+	floorMesh.receiveShadow = false; // also default
+	boxMesh.castShadow = false; // also default
+	sphereMesh.castShadow = false; // also default
 
-	sphereMesh.castShadow = true;
-
-	scene.add(sphereMesh, floorMesh);
+	scene.add(sphereMesh, floorMesh, boxMesh);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -368,6 +376,7 @@ async function init() {
 		});
 
 	// // // // // // // // // // // // // // // // // // // // //
+	directionalTweaks.add(directionalLight, 'castShadow');
 	directionalTweaks
 		.add(directionalLight, 'intensity')
 		.min(0)
@@ -442,7 +451,7 @@ async function init() {
 		.hide();
 
 	// // // // // // // // // // // // // // // // // // //
-
+	sphereTweaks.add(sphereMesh, 'castShadow');
 	sphereTweaks
 		.add(sphereMesh.position, 'x')
 		.step(0.001)
@@ -461,6 +470,30 @@ async function init() {
 		.name('position.z')
 		.min(-5)
 		.max(5);
+	// // // // // // // // // // // // // // // // // // //
+
+	boxTweaks.add(boxMesh, 'castShadow');
+	boxTweaks
+		.add(boxMesh.position, 'x')
+		.step(0.001)
+		.name('position.x')
+		.min(-5)
+		.max(5);
+	boxTweaks
+		.add(boxMesh.position, 'y')
+		.step(0.001)
+		.name('position.y')
+		.min(0)
+		.max(5);
+	boxTweaks
+		.add(boxMesh.position, 'z')
+		.step(0.001)
+		.name('position.z')
+		.min(-5)
+		.max(5);
+	// // // // // // // // // // // // // // // // // // //
+	floorTweaks.add(floorMesh, 'receiveShadow');
+
 	// // // // // // // // // // // // // // // // // // //
 
 	ambientTweaks
