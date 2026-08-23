@@ -82,3 +82,4 @@
 - [[a_project-3-textures]] — 2026-08-21
 - [[a_project-4-shadows]] — 2026-08-21
 - [[14.0_particles-webgl-intro]] — 2026-08-23
+- [[14.1_particles-custom-geometry]] — 2026-08-23
