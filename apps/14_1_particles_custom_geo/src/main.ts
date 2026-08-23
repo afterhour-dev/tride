@@ -1,6 +1,5 @@
-// EXPLAIN: using WebGL instead
-// import * as THREE from 'three/webgpu';
 import * as THREE from 'three';
+// import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import GUI from 'lil-gui';
@@ -39,7 +38,6 @@ const sizes = {
 
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
-	// EXPLAIN: using WebGL for this lesson
 	// const renderer = new THREE.WebGPURenderer({ canvas });
 	const renderer = new THREE.WebGLRenderer({ canvas });
 	// await renderer.init();
@@ -66,26 +64,45 @@ const sizes = {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes Particles
 
-	// EXPLAIN: geometry for our particles
-	const particlesGreometry = new THREE.SphereGeometry(1, 32, 32);
+	// const particlesGreometry = new THREE.SphereGeometry(1, 32, 32);
+	// EXPLAIN: creating custom geometry with BufferGeometry
+	const particlesGreometry = new THREE.BufferGeometry();
 
-	// EXPLAIN: material for our particles
-	const particlesMaterial = new THREE.PointsMaterial({
-		// size: 0.02,
-		// sizeAttenuation: true,
-	});
-	// EXPLAIN: size
-	particlesMaterial.size = 0.02;
-	// EXPLAIN: sizeAttenuation
+	// const count = 500;
+	const count = 5000;
+	// EXPLAI: we tried bigger counts and we didn't have any issues
+	// const count = 50000;
+	// const count = 500000;
+
+	// EXPLAIN: count * 3 because one point or one vertex is
+	// build from x,y,z
+	const positions = new Float32Array(count * 3);
+
+	// EXPLAIN: again count * 3 because we are assigning random
+	// values for x y z for every vertex
+	for (let i = 0; i < count * 3; i++) {
+		// EXPLAIN: -0.5 because we want also negative numbers
+		// in range from - 0.5 to 0.5
+		positions[i] = (Math.random() - 0.5) * 10;
+	}
+
+	// EXPLAIN: 3 is how many array elements make up a single vertex component
+	particlesGreometry.setAttribute(
+		'position',
+		new THREE.BufferAttribute(positions, 3),
+	);
+
+	const particlesMaterial = new THREE.PointsMaterial();
+	// EXPLAIN: we increased the size
+	// particlesMaterial.size = 0.02;
+	particlesMaterial.size = 0.1;
 	particlesMaterial.sizeAttenuation = true;
 
-	// EXPLAIN: particles or Points instance
 	const particles = new THREE.Points(
 		particlesGreometry,
 		particlesMaterial,
 	);
 
-	// EXPLAIN: adding particles to the scene
 	scene.add(particles);
 
 	// --------------------------------------------------------
@@ -271,4 +288,4 @@ const sizes = {
 	});
 }
 
-/* await */ init();
+/* await  */ init();
