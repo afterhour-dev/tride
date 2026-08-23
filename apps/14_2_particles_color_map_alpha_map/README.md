@@ -1,4 +1,4 @@
-# Particles with WebGL - color, map, alpha map, vertex colors
+# Particles with WebGL - color, map, alpha map, blending, vertex colors
 
 This app is built to explore and learn particles system in three.js. Not with WebGPU, with WebGL.
 
