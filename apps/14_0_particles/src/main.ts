@@ -1,4 +1,6 @@
-import * as THREE from 'three/webgpu';
+// EXPLAIN: using WebGL instead
+// import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import GUI from 'lil-gui';
@@ -37,8 +39,10 @@ async function init() {
 
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
-	const renderer = new THREE.WebGPURenderer({ canvas });
-	await renderer.init();
+	// EXPLAIN: using WebGL for this lesson
+	// const renderer = new THREE.WebGPURenderer({ canvas });
+	const renderer = new THREE.WebGLRenderer({ canvas });
+	// await renderer.init();
 
 	// -----------------------------------------------------
 	// 1 - Environment
@@ -60,20 +64,22 @@ async function init() {
 	//  5.1 - Shadow stuff related to directional light
 
 	// -----------------------------------------------------
-	// 6 - Geometries Materials Meshes
+	// 6 - Geometries Materials Meshes Particles
 
 	// EXPLAIN: geometry for our particles
 	const particlesGreometry = new THREE.SphereGeometry(1, 32, 32);
 
 	// EXPLAIN: material for our particles
 	const particlesMaterial = new THREE.PointsMaterial({
-		// EXPLAIN: size
-		size: 0.02,
-		// EXPLAIN: sizeAttenuation
-		sizeAttenuation: true,
+		// size: 0.02,
+		// sizeAttenuation: true,
 	});
+	// EXPLAIN: size
+	particlesMaterial.size = 0.02;
+	// EXPLAIN: sizeAttenuation
+	particlesMaterial.sizeAttenuation = true;
 
-	// EXPLAIN: our particles
+	// EXPLAIN: particles or Points instance
 	const particles = new THREE.Points(
 		particlesGreometry,
 		particlesMaterial,
