@@ -1,5 +1,5 @@
 {
-	"name": "@td/particles",
+	"name": "@td/particles-webgl-intro",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",

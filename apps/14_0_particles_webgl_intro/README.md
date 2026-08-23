@@ -1,4 +1,4 @@
-# Particles WebGL intro
+# Particles with WebGL intro
 
 This app is built to explore and learn particles system in three.js.
 

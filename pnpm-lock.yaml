@@ -1280,7 +1280,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/14_0_particles:
+  apps/14_0_particles_webgl_intro:
     dependencies:
       gsap:
         specifier: ^3.15.0
