@@ -8,9 +8,15 @@ import GUI from 'lil-gui';
 import { getRequiredElement } from './util';
 
 // loading textures -----------------------------------------
-// const loadingManager = new THREE.LoadingManager();
-// const textureLoader = new THREE.TextureLoader(loadingManager);
+const loadingManager = new THREE.LoadingManager();
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
+// EXPLAIN: loading textures I'm going to use as map or alphaMap
+// EXPLAIN: all of these textures I tried are black and white without
+// transparent parts by design
+const particleTexture = textureLoader.load(
+	'/textures/particles/circle_04.png',
+);
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
 
@@ -69,29 +75,68 @@ const sizes = {
 	const particlesGreometry = new THREE.BufferGeometry();
 
 	// const count = 500;
-	const count = 5000;
+	// const count = 5000;
+	const count = 20000;
 	// we tried bigger counts and we didn't have any issues
 	// const count = 50000;
 	// const count = 500000;
 
 	const positions = new Float32Array(count * 3);
+	// EXPLAIN: for adding different colors
+	const colors = new Float32Array(count * 3);
 
 	for (let i = 0; i < count * 3; i++) {
 		positions[i] = (Math.random() - 0.5) * 10;
+
+		// EXPLAIN: next line
+		colors[i] = Math.random();
 	}
 
 	particlesGreometry.setAttribute(
 		'position',
 		new THREE.BufferAttribute(positions, 3),
 	);
+	// EXPLAIN: setting color buffer attribute
+	particlesGreometry.setAttribute(
+		'color',
+		new THREE.BufferAttribute(colors, 3),
+	);
 
 	const particlesMaterial = new THREE.PointsMaterial();
 
 	// EXPLAIN: next properties
-	particlesMaterial.color = new THREE.Color('#8c499a');
+	// EXPLAIN: since we added different colors with attribute
+	// on geometry we can use this or not, if it stays
+	// it will interpolate with vertex colors we randomized
+	// I commented it out
+	// particlesMaterial.color = new THREE.Color('#8c499a');
+
+	// EXPLAIN: don't forget next line for different colors
+	particlesMaterial.vertexColors = true;
 
 	particlesMaterial.size = 0.1;
 	particlesMaterial.sizeAttenuation = true;
+
+	// EXPLAIN: setting texture as map
+	// EXPLAIN: because we wan't transparency on black and
+	// white texture, we won't use map
+	// particlesMaterial.map = particleTexture;
+
+	// EXPLAIN: we will use alphaMap and transparent set to true
+	particlesMaterial.transparent = true;
+	particlesMaterial.alphaMap = particleTexture;
+
+	// EXPLAIN: alphaTest
+	// particlesMaterial.alphaTest = 0.001;
+
+	// EXPLAIN: depthTest
+	// particlesMaterial.depthTest = false;
+
+	// EXPLAIN: depthWrite
+	particlesMaterial.depthWrite = false;
+
+	// EXPLAIN: blending
+	particlesMaterial.blending = THREE.AdditiveBlending;
 
 	const particles = new THREE.Points(
 		particlesGreometry,
@@ -99,6 +144,14 @@ const sizes = {
 	);
 
 	scene.add(particles);
+
+	// EXPLAIN: adding cube to the scene to se thar deactivating depth
+	// test isn't ideal and to examone depthWrite and blending
+	// const cube = new THREE.Mesh(
+	// new THREE.BoxGeometry(1, 1, 1),
+	// new THREE.MeshBasicMaterial(),
+	// );
+	// scene.add(cube);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
