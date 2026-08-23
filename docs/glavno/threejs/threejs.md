@@ -84,3 +84,4 @@
 - [[14.0_particles-webgl-intro]] — 2026-08-23
 - [[14.1_particles-custom-geometry]] — 2026-08-23
 - [[14.2_map-alpha-map-colors-blending]] — 2026-08-24
+- [[14.3_particle-animation]] — 2026-08-24
