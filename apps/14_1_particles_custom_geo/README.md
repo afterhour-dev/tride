@@ -1,10 +1,10 @@
-# Particles with WebGL intro
+# Particles with WebGL - Vustom Geometry
 
-This app is built to explore and learn particles system in three.js. Not with WebGPU, with WebGL.
+This app is built to explore and learn particles system in three.js. Not with WebGPU, but with WebGL.
 
 ## Namera / Intent
 
-Learning about particles
+Learning about particles and custom geometry
 
 ## Šta treba objasniti u detalje
 
