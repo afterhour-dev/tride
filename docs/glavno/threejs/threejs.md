@@ -81,3 +81,4 @@
 - [[a_project-2-fog]] — 2026-08-20
 - [[a_project-3-textures]] — 2026-08-21
 - [[a_project-4-shadows]] — 2026-08-21
+- [[14.0_particles-webgl-intro]] — 2026-08-23
