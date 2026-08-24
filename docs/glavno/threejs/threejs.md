@@ -87,3 +87,4 @@
 - [[a_project-4-shadows]] — 2026-08-21
 - [[b_project-1-particles]] — 2026-08-24
 - [[b_project-2_particle-angle-distribution]] — 2026-08-24
+- [[b_project-3_spin-randomness]] — 2026-08-25
