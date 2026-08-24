@@ -93,6 +93,8 @@ Math.random() * 2 * Math.PI
 
 a random `0 … 1` value multiplied by `2 × Math.PI` yields *any* angle covering the entire circle of radians. Here the fraction comes from the modulo, not from `Math.random()` — the modulo **deterministically** distributes the spokes; randomness only decides how far along each spoke a particle sits.
 
+![[glaxy-math.png]]
+
 ### Step 5 — trigonometry: turning "angle + distance" into `x, z`
 
 Radians alone are not coordinates. To place a point at distance `radius` and angle `angle` you need the two trigonometric projections:
