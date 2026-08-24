@@ -93,7 +93,7 @@ const sizes = {
 		}
 		if (material) {
 			material.dispose();
-			geometry = null;
+			material = null;
 		}
 
 		geometry = new THREE.BufferGeometry();
@@ -125,7 +125,7 @@ const sizes = {
 		particles = new THREE.Points(geometry, material);
 		scene.add(particles);
 
-		console.log(particles.parent);
+		// console.log(particles.parent);
 	};
 
 	generateGalaxy();
