@@ -1,12 +1,13 @@
-# Scroll based animation
+# Scroll based animation intro
 
 This app is made for learning how we can do scroll based animations in threejs, we want to integrate threejs properly with HTML content.
 
-we have :
+Important thing in this project:
 - cube in the center
 - no OrbitControls
 - gui
 - some HTML content
+- CSS
 
 ## Namera / Intent
 
@@ -25,3 +26,9 @@ Fonts available for these lessons are:
 ```bsh
 pnpm --filter=@td/scroll add @fontsource-variable/manrope @fontsource-variable/bitter @fontsource-variable/fira-code
 ```
+Fon't are not something important in this lesson but I decided to start with nice font that looks nice in cyrilic
+
+## Šta treba objasniti u detalje
+
+- our CSS setup we wrote in `src/style.css`
+- our html section elements and canvas element
