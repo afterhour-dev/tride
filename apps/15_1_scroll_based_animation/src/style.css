@@ -8,6 +8,9 @@ canvas#tride {
 html, body {
 	/* EXPLAIN: we enable overflow. Why? */
 	/* overflow: hidden; */
+
+	/* explain: we set up background color */
+	background-color: var(--color-surfacewh-800);
 }
 
 * {
@@ -18,7 +21,7 @@ section.sekcija {
 	border: var(--color-information-500) solid 0px;
 	position: relative;
 	height: 100vh;
-	color: var(--color-inkbl-100);
+	color: var(--color-inkbl-900);
 	/* this means depending of what is smaller -
 	heigh or width of viewport, your font color will be 7% of that
 	*/

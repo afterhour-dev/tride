@@ -29,7 +29,7 @@ const gui = new GUI({
 	closeFolders: true,
 });
 const debugObject = {
-	cubeColor: new THREE.Color('#ac3d3d'),
+	cubeColor: new THREE.Color('#a54841'),
 };
 
 const cubeTweaks = gui.addFolder('cube Mesh');
@@ -48,7 +48,15 @@ async function init() {
 
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
-	const renderer = new THREE.WebGPURenderer({ canvas });
+
+	const renderer = new THREE.WebGPURenderer({
+		canvas,
+		// EXPLAIN: I think that by default we don't need to set
+		// alpha to true if we want transparency because this is the default
+		// for WebGPU, so I didn't do it since I already
+		// have transparency and I didn't set setClearColor with opacity 1
+		// alpha: true,
+	});
 	await renderer.init();
 
 	// -----------------------------------------------------
@@ -195,7 +203,11 @@ async function init() {
 	// 0.2 - Renderer (second part)
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 	renderer.setSize(sizes.width, sizes.height);
-	renderer.setClearColor(0x000000, 1);
+	// renderer.setClearColor(0x000000, 1)
+	// EXPLAIN: We don't need this at all, our clearColor is transparent
+	// by default
+	// renderer.setClearColor(0x000000, 0);
+
 	renderer.render(scene, camera);
 
 	// --------------------------------------------------------------
