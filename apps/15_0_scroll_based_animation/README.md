@@ -2,6 +2,12 @@
 
 This app is made for learning how we can do scroll based animations in threejs, we want to integrate threejs properly with HTML content.
 
+we have :
+- cube in the center
+- no OrbitControls
+- gui
+- some HTML content
+
 ## Namera / Intent
 
 Intent is to:
