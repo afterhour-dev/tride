@@ -1404,7 +1404,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/15_0_scroll_based_animation:
+  apps/15_0_scroll_based_animation_starter:
     dependencies:
       '@fontsource-variable/bitter':
         specifier: ^5.3.0
