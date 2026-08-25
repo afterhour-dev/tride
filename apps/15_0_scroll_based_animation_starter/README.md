@@ -1,4 +1,4 @@
-# Scroll based animation intro
+# Scroll based animation starter
 
 This app is made for learning how we can do scroll based animations in threejs, we want to integrate threejs properly with HTML content.
 
