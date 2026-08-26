@@ -90,3 +90,4 @@
 - [[b_project-3_spin-randomness]] — 2026-08-25
 - [[b_project-4-color-mixing]] — 2026-08-25
 - [[15.0_scroll-based-animation-starter]] — 2026-08-25
+- [[15.1_scroll-based-animation-setup]] — 2026-08-26
