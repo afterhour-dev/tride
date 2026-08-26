@@ -318,6 +318,7 @@ async function init() {
 	window.addEventListener('scroll', () => {
 		scrollY = window.scrollY;
 		// console.log(scrollY);
+		// console.log(document.body.scrollHeight, window.scrollY);
 	});
 
 	// --------------------------------------------------------------
@@ -337,7 +338,56 @@ async function init() {
 
 		const elapsedTime = timer.getElapsed();
 
-		camera.position.y = -scrollY * 0.01;
+		// EXPLAIN: first we need to divide scrollY value
+		// by height of the viewport
+		// which will not get us a value
+		// of how much viewports heights can we put in
+		// entire page height which is (document.body.scrollHeight)
+		// what you will get is how much entire viewport can you put
+		// inside (scrollHeight - 100vh),
+		// and when we in our example have 3 sections where each is
+		// 100vh height, we will get -2 max as a result of -scrollY / sizes.height
+		// when we are at the bottom, so we have range of values
+		// from 0 to -2; but when I think about this, thisisn't so important
+		// so forgot scroll height, because I brought her up for
+		// reson that I forgot scrolling values in html and how to get
+		// the thing that is important is proportion
+		// between scrollY and sum of all distances between objects
+		// like this:
+		// scrollY / sizes.height = camera.position.y / debugObject.objectsDistance
+		// scrollY * debugObject.objectsDistance = sizes.height * camera.position.y
+		// camera.position.y = - (scrollY * debugObject.objectsDistance) / sizes.height
+		// or:
+		// scrollY / (document.body.scrollHeight - sizes.height) = camera.position.y / (3*debugObject.objectsDistance - debugObject.objectsDistance)
+		// camera.position.y * (document.body.scrollHeight - sizes.height) = (3*debugObject.objectsDistance - debugObject.objectsDistance) * scrollY
+		/* camera.position.y =
+			-(
+				(3 * debugObject.objectsDistance -
+					debugObject.objectsDistance) *
+				scrollY
+			) /
+			(document.body.scrollHeight - sizes.height); */
+
+		// which gives me two possible solutions
+
+		// EXPLAIN: for some stupid reason I know that I
+		// overcomplicated it in here, but I thought this is the
+		// only solution because I didn't see other one
+		/* 		camera.position.y =
+			-(
+				(3 * debugObject.objectsDistance -
+					debugObject.objectsDistance) *
+				scrollY
+			) /
+			(document.body.scrollHeight - sizes.height);
+ 			*/
+
+		// EXPLAIN: at the end I picked up this solution, but you can
+		// present both solutions and tell which one is better
+		camera.position.y =
+			-(scrollY * debugObject.objectsDistance) / sizes.height;
+
+		// console.log(camera.position.y);
 
 		for (const mesh of selectionMeshes) {
 			mesh.rotation.x = elapsedTime * 0.1;
