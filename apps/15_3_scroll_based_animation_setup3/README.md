@@ -10,4 +10,4 @@ Learn how to utalize techique of scroll based animation with Three.js.
 
 ## Šta treba objasniti u detalje
 
-- two solutions I gave up in the comments
+- two solutions I gave up in the comments. What is better and why?
