@@ -91,3 +91,4 @@
 - [[b_project-4-color-mixing]] — 2026-08-25
 - [[15.0_scroll-based-animation-starter]] — 2026-08-25
 - [[15.1_scroll-based-animation-elastic-scroll-toon-material-fov-background]] — 2026-08-26
+- [[15.2_scroll-animation-positions-rotation]] — 2026-08-26
