@@ -130,7 +130,6 @@ async function init() {
 	coneMesh.position.y = -debugObject.objectsDistance * 1;
 	knotMesh.position.y = -debugObject.objectsDistance * 2;
 
-	// EXPLAIN: positioning meshes by x
 	torusMesh.position.x = 2;
 	coneMesh.position.x = -2;
 	knotMesh.position.x = 2;
@@ -157,9 +156,6 @@ async function init() {
 	camera.position.z = 3;
 
 	// camera.lookAt(cubeMesh.position);
-
-	// EXPLAIN: we will create group and add camera to the group
-	// I explained why inside tick function
 
 	const cameraGroup = new THREE.Group();
 	cameraGroup.add(camera);
@@ -335,12 +331,10 @@ async function init() {
 	// --------------------------------------------------------------
 	// --------------------------------------------------------------
 	// --------------------- Getting cursor values ------------------------------
-	// EXPLAIN: getting cursor values
 	const cursor = { x: 0, y: 0 };
 	window.addEventListener('mousemove', (ev) => {
 		// console.log(ev.clientX, ev.clientY);
-		// EXPLAIN: first we make values go from 0 to 1
-		// and then we make them to go from -0.5 to 0.5
+
 		cursor.x = ev.clientX / sizes.width - 0.5;
 		cursor.y = ev.clientY / sizes.height - 0.5;
 
@@ -364,35 +358,14 @@ async function init() {
 
 		const elapsedTime = timer.getElapsed();
 
-		// EXPLAIN: rember this from previous lesson, we better use this
-		// as offset when doing parallax, so we can comment this out
-		// and add it to the parallaxY value, but I did something
-		// different and you'll see way
 		camera.position.y =
 			-(scrollY * debugObject.objectsDistance) / sizes.height;
 
-		// EXPLAIN: moving camera with values comming from a cursor
-		// to be precise with values we calculated or nomalized
-		// but making sure that we have right directions while
-		// moving camera by y so paralaxY needs to be prefixed
-		// with minus so as we move cursor camera moves up and not down
 		const parallaxX = cursor.x;
 		const parallaxY = -cursor.y;
-		// EXPLAIN: what I told you that I am going to do different is
-		//  this, just incremented to increment because we need to
-		// respect previous offset
-		// camera.position.y += parallaxY;
 
-		// EXPLAIN: but there is another way and that is putting
-		// cammera in a group and moving goroup
-		// just by parallax value, where we can move with with
-		// scroll directly, like we already doing.
-		// Also you can tell me which solution from these two is better
 		cameraGroup.position.y = parallaxY;
-		//EXPLAIN: we could move group or camera, it doesn't
-		// metter because problematic was y and not x, but to be
-		// consistent we will move group here also
-		// camera.position.x = parallaxX;
+
 		cameraGroup.position.x = parallaxX;
 
 		for (const mesh of selectionMeshes) {
