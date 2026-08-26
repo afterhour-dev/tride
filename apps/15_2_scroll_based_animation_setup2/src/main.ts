@@ -37,6 +37,12 @@ const debugObject = {
 	torusColor: new THREE.Color('#a54841'),
 	coneColor: new THREE.Color('#2d3e63'),
 	knotColor: new THREE.Color('#a259b3'),
+	// EXPLAIN: vertical distance or distance by `y`,
+	// that will determine how far will objects be from each other
+	// vertically; this value will be handy later in other lesson
+	// so we saved it in debugObject
+	// objectsDistance: 2,
+	objectsDistance: 4,
 };
 
 // const cubeTweaks = gui.addFolder('cube Mesh');
@@ -105,14 +111,12 @@ async function init() {
 	torusMaterial.color = new THREE.Color(debugObject.torusColor);
 	torusMaterial.gradientMap = gradientTexture;
 	const torusMesh = new THREE.Mesh(torusGreometry, torusMaterial);
-	scene.add(torusMesh);
 
 	const coneGreometry = new THREE.ConeGeometry(1, 2, 32);
 	const coneMaterial = new THREE.MeshToonMaterial();
 	coneMaterial.color = new THREE.Color(debugObject.coneColor);
 	coneMaterial.gradientMap = gradientTexture;
 	const coneMesh = new THREE.Mesh(coneGreometry, coneMaterial);
-	scene.add(coneMesh);
 
 	const knotGreometry = new THREE.TorusKnotGeometry(
 		0.8,
@@ -124,13 +128,21 @@ async function init() {
 	knotMaterial.color = new THREE.Color(debugObject.knotColor);
 	knotMaterial.gradientMap = gradientTexture;
 	const knotMesh = new THREE.Mesh(knotGreometry, knotMaterial);
-	scene.add(knotMesh);
 
-	torusMesh.position.y = 2;
-	torusMesh.scale.setScalar(0.5);
-	coneMesh.visible = false;
-	knotMesh.position.y = -2;
-	knotMesh.scale.setScalar(0.5);
+	// EXPLAIN: moving objects by y, in a smart way in order
+	// to space them equally. Making sure we are placing first one
+	// in the center of the scen currently, but other two we move
+	// bellow visibility of the camera eqauly which will decide
+	// our changing of objectsDistance value in upper debugObject
+	torusMesh.position.y = -debugObject.objectsDistance * 0;
+	coneMesh.position.y = -debugObject.objectsDistance * 1;
+	knotMesh.position.y = -debugObject.objectsDistance * 2;
+
+	scene.add(torusMesh, coneMesh, knotMesh);
+
+	// EXPLAIN: adding our meshes to array because it will be easier
+	// to use them for permanent rotation we want to get to
+	const selectionMeshes = [torusMesh, coneMesh, knotMesh];
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -308,6 +320,20 @@ async function init() {
 	// --------------------------------------------------------------
 	// --------------------------------------------------------------
 	// --------------------------------------------------------------
+	// --------------------- Getting Scroll value ------------------------------
+
+	//
+	// EXPLAIN: getting scroll value and updating it with user scroll
+	let scrollY = window.scrollY;
+	console.log(scrollY);
+	window.addEventListener('scroll', () => {
+		scrollY = window.scrollY;
+		// console.log(scrollY);
+	});
+
+	// --------------------------------------------------------------
+	// --------------------------------------------------------------
+	// --------------------------------------------------------------
 	// --------------------- ANIMATION ------------------------------
 	// --------------------------------------------------------------
 	// --------------------------------------------------------------
@@ -320,7 +346,20 @@ async function init() {
 	function tick(timestamp: number) {
 		timer.update(timestamp);
 
-		// const elapsedTime = timer.getElapsed();
+		const elapsedTime = timer.getElapsed();
+
+		// EXPLAIN: animating camera with the scroll
+		// but this isn't final solution
+		// we will explore final solution in next lesson
+		// what we just wanted to accomplish is using scroll value as
+		// to move camera
+		camera.position.y = -scrollY * 0.01;
+
+		// EXPLAIN: adding some permanent rotation to our meshes
+		for (const mesh of selectionMeshes) {
+			mesh.rotation.x = elapsedTime * 0.1;
+			mesh.rotation.y = elapsedTime * 0.12;
+		}
 
 		// orbitControls.update();
 
