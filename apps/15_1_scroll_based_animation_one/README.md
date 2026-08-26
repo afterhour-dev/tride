@@ -1,4 +1,4 @@
-# Scroll based animation - setup: fixing elastic scroll, adding objects, adding texture, toon material, colors, looking into fov etc.
+# Scroll based animation - fixing elastic scroll, adding objects, adding texture, toon material, colors, looking into fov etc.
 
 This app is made for learning how we can do scroll based animations in threejs, we want to integrate threejs properly with HTML content.
 

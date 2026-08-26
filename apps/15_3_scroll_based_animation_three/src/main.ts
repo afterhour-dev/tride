@@ -314,7 +314,7 @@ async function init() {
 
 	//
 	let scrollY = window.scrollY;
-	console.log(scrollY);
+	// console.log(scrollY);
 	window.addEventListener('scroll', () => {
 		scrollY = window.scrollY;
 		// console.log(scrollY);
