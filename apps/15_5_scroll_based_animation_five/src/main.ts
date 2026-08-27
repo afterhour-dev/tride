@@ -350,6 +350,12 @@ async function init() {
 	// --------------------------------------------------------------
 	const timer = new THREE.Timer();
 
+	// EXPLAIN: if we still want to use delta time, do we need
+	// to calculate it or we can use it from Timer instance
+	// I think we don't need to calculate it ourself, I tested
+	// it out
+	// let previousTime = 0;
+
 	renderer.setAnimationLoop(tick);
 	// ----------------------------------------------------
 
@@ -361,12 +367,63 @@ async function init() {
 		camera.position.y =
 			-(scrollY * debugObject.objectsDistance) / sizes.height;
 
-		const parallaxX = cursor.x;
-		const parallaxY = -cursor.y;
+		// EXPLAIN: this change we made up at the end to lower the
+		//  amplitude; so you can explain this at the end
+		// const parallaxX = cursor.x;
+		// const parallaxY = -cursor.y;
+		const parallaxX = cursor.x * 0.5;
+		const parallaxY = -cursor.y * 0.5;
 
-		cameraGroup.position.y = parallaxY;
+		// EXPLAIN: so instead of just = we are doing +=
+		// cameraGroup.position.y = parallaxY;
+		// cameraGroup.position.x = parallaxX;
+		// which will mess up the thing completly as we move mouse
+		// very fast your camera will move to far
+		// which we don't want
+		// cameraGroup.position.y += parallaxY;
+		// cameraGroup.position.y += parallaxY;
+		// and then lets try subtracting current position
+		// and you explain me how exactly camera is going to move
+		// when we do that, it will give the effect of smoothing
+		// in animation but you can, we are somhow calculating
+		// delta value in terms of position, so that delta is different
+		// for any value given by our modified cursor values; so we
+		// don't have even values on every mouse move
+		// cameraGroup.position.x += parallaxX - cameraGroup.position.x;
+		// cameraGroup.position.y += parallaxY - cameraGroup.position.y;
 
-		cameraGroup.position.x = parallaxX;
+		// EXPLAIN: but we want 1/10 of the value so we
+		// will multiply by 0.10 or let it be smaller in orther to be
+		// more smooth
+		// cameraGroup.position.x +=
+		// 	(parallaxX - cameraGroup.position.x) /* * 0.1*/ * 0.08;
+		// cameraGroup.position.y +=
+		// 	(parallaxY - cameraGroup.position.y) /* * 0.1*/ * 0.08;
+
+		// EXPLAIN: but there is problem with upper solution; if you
+		// test the experience on a high frequency screen,
+		// the tick function will be called more often and
+		// the camera will move faster toward the target;
+		// This is not a big issue, but it's not accurate and it's
+		// preferable to have the same result across devices
+		// as much as possible
+		// EXPLAIN: we need to use time spent between each frame
+		// and that is delta time
+		// I think we don't need to calculate it
+		// const deltaTime = elapsedTime - previousTime;
+		// previousTime = elapsedTime;
+		const delta = timer.getDelta();
+
+		// console.log(delta, deltaTime);
+
+		// EXPLAIN: but since delta time has very small value,
+		// magnitude of 0.016 for most common screens running at
+		// 60fps; so we can change our 0.08 to be 5 for example
+
+		cameraGroup.position.x +=
+			(parallaxX - cameraGroup.position.x) /* * 0.08 */ * 5 * delta;
+		cameraGroup.position.y +=
+			(parallaxY - cameraGroup.position.y) /* * 0.08 */ * 5 * delta;
 
 		for (const mesh of selectionMeshes) {
 			mesh.rotation.x = elapsedTime * 0.1;
