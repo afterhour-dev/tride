@@ -5,7 +5,10 @@ import '@fontsource-variable/fira-code/wght.css';
 // Supports weights 100-900
 import '@fontsource-variable/bitter/wght.css';
 
-import * as THREE from 'three/webgpu';
+// EXPLAIN: because we are using particles ,we must
+// use different import
+// import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 // no orbit controls
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -40,6 +43,8 @@ const debugObject = {
 
 	// objectsDistance: 2,
 	objectsDistance: 4,
+	//
+	particlesColor: new THREE.Color('#785b45'),
 };
 
 // const cubeTweaks = gui.addFolder('cube Mesh');
@@ -59,18 +64,26 @@ const sizes = {
 };
 // --------------------------------------------------------
 
-async function init() {
+/* async  */ function init() {
 	// Scene
 	const scene = new THREE.Scene();
 
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
 
-	const renderer = new THREE.WebGPURenderer({
+	// EXPLAIN: because of particles we are switching to WebGL
+	/* const renderer = new THREE.WebGPURenderer({
 		canvas,
 		// alpha: true, // default
+	}); */
+	const renderer = new THREE.WebGLRenderer({
+		canvas,
+		// EXPLAIN: when we have WebGLRenderer, alpha is not true
+		// by default so I have to set it
+		alpha: true,
 	});
-	await renderer.init();
+	// EXPLAIN: and we don't init when WebGLRenderer
+	// await renderer.init();
 
 	// -----------------------------------------------------
 	// 1 - Environment
@@ -137,6 +150,47 @@ async function init() {
 	scene.add(torusMesh, coneMesh, knotMesh);
 
 	const selectionMeshes = [torusMesh, coneMesh, knotMesh];
+
+	// -----------------------------------------------------
+	// 6.1 - Particles
+
+	// EXPLAIN: we added particles
+	const particlesCount = 200;
+	const positions = new Float32Array(particlesCount * 3);
+	for (let i = 0; i < particlesCount * 3; i++) {
+		//
+
+		positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
+		positions[i * 3 + 1] =
+			// EXPLAIN: since we want particles to span by y as much
+			// as we move camera and we move camera rlative to the
+			//vertical  distance between meshes we did this; Can you
+			// explain this better, in steps how someone would get to this
+			// result for y
+			debugObject.objectsDistance * 0.5 -
+			Math.random() *
+				debugObject.objectsDistance *
+				// 3 *
+				// EXPLAIN: why length?
+				selectionMeshes.length;
+		positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+	}
+
+	const pointsGeometry = new THREE.BufferGeometry();
+	pointsGeometry.setAttribute(
+		'position',
+		new THREE.BufferAttribute(positions, 3),
+	);
+
+	const pointsMaterial = new THREE.PointsMaterial({
+		color: debugObject.particlesColor,
+		size: 0.03,
+		sizeAttenuation: true,
+	});
+
+	const points = new THREE.Points(pointsGeometry, pointsMaterial);
+
+	scene.add(points);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -294,6 +348,14 @@ async function init() {
 		.name('position.z')
 		.min(-5)
 		.max(5);
+
+	// EXPLAIN: particles color tweaks
+	gui
+		.addColor(debugObject, 'particlesColor')
+		.onChange((col: THREE.Color) => {
+			pointsMaterial.color.set(col);
+			console.log(col.getHexString());
+		});
 	// // // // // // // // // // // // // // // // // // //
 
 	// ----------------------------------------------------
