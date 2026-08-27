@@ -11,7 +11,8 @@ import * as THREE from 'three';
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import GUI from 'lil-gui';
-// import gsap from 'gsap';
+// EXPLAIN: we will be using gsap
+import gsap from 'gsap';
 
 import { getRequiredElement } from './util';
 
@@ -368,10 +369,39 @@ const sizes = {
 
 	let scrollY = window.scrollY;
 	// console.log(scrollY);
+
+	// EXPLAIN: we added currentSectiom
+	let currentSection = 0;
+
 	window.addEventListener('scroll', () => {
 		scrollY = window.scrollY;
-		// console.log(scrollY);
-		// console.log(document.body.scrollHeight, window.scrollY);
+
+		// EXPLAIN: well, we can calculate new section by dividin
+		// scrollY by viewport height, which gives as values
+		// from 0 to 2 in this case
+		// we will round that value, and when we do that
+		// we will get three possible values: 0 , 1, 2
+		const newSection = Math.round(scrollY / sizes.height);
+		// EXPLAIN: we can calculate this like that because our
+		// sections are exactly 100vh
+
+		// EXPLAIN: now we change current section
+		if (currentSection !== newSection) {
+			currentSection = newSection;
+			// console.log('Section changed ', currentSection);
+
+			// EXPLAIN: we will do simple roataion animation
+			// when section changes, but this won't work
+			// if rotation of meshes ih happening in tick
+			// function, which means on every frame on every frame
+			gsap.to(selectionMeshes[currentSection].rotation, {
+				duration: 1.5,
+				ease: 'power2.inOut',
+				x: '+=6',
+				y: '+=3',
+				z: '+=1.5',
+			});
+		}
 	});
 
 	// --------------------------------------------------------------
@@ -423,8 +453,21 @@ const sizes = {
 			(parallaxY - cameraGroup.position.y) /* * 0.08 */ * 5 * delta;
 
 		for (const mesh of selectionMeshes) {
-			mesh.rotation.x = elapsedTime * 0.1;
-			mesh.rotation.y = elapsedTime * 0.12;
+			// EXPLAIN: this is preventing our gsap animation
+			// because this animation
+			// assigns the value on every frame
+			// mesh.rotation.x = elapsedTime * 0.1;
+			// mesh.rotation.y = elapsedTime * 0.12;
+			// so we fix it by using increment because gsap is also
+			// incrementing, and this is also incrementing
+			// so we will have added values, but we will not use
+			// elapsed time, we will use delta time since we are
+			// doing increment, because if we wouldn't magnitude of
+			// the value would be too big and rotation would be hugr
+			mesh.rotation.x += delta * 0.1;
+			mesh.rotation.y += delta * 0.12;
+			// EXPLAIN: I want you to exaplain this above in steps so
+			// it would be perfectly clear in a best way possible
 		}
 
 		// orbitControls.update();
