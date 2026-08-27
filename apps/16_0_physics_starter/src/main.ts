@@ -23,8 +23,8 @@ const debugObject = {
 	directLookAtCenter: () => {},
 };
 
-const boxTweaks = gui.addFolder('box Mesh');
-boxTweaks.close();
+const sphereTweaks = gui.addFolder('sphere Mesh');
+sphereTweaks.close();
 const floorTweaks = gui.addFolder('floor Mesh');
 const ambientTweaks = gui.addFolder('Ambient Light');
 ambientTweaks.close();
@@ -57,14 +57,13 @@ async function init() {
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
 
-	// shadows disabled for now gloabaly
-	renderer.shadowMap.enabled = false; // default
-	// renderer.shadowMap.type = THREE.PCFSoftShadowMap; // oter ones in gui
-	renderer.shadowMap.type = THREE.PCFShadowMap; // default
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// renderer.shadowMap.type = THREE.PCFShadowMap; // default
 
 	// ------------------------------------------------------
 	// 3 -  texture stuff
-	// colorSpace and stuff
+	// colorSpace, magFilter and stuff
 
 	// ------------------------------------------------------
 	// 4 - Text - font loading, TextGeometry, material, mesh
@@ -74,7 +73,8 @@ async function init() {
 
 	const ambientLight = new THREE.AmbientLight();
 	ambientLight.color = new THREE.Color(0xffffff);
-	ambientLight.intensity = 0.3;
+	// ambientLight.intensity = 0.3;
+	ambientLight.intensity = 2.1;
 	// ambientLight.visible = false;
 
 	scene.add(ambientLight);
@@ -83,7 +83,7 @@ async function init() {
 
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
 	directionalLight.intensity = 0.4 * Math.PI;
-	directionalLight.position.set(2, 2, -1);
+	directionalLight.position.set(5, 5, 5);
 	// directionalLight.visible = false;
 
 	// ----------------------------------------------------------
@@ -92,21 +92,25 @@ async function init() {
 	// console.log(directionalLight.shadow);
 	// console.log(directionalLight.shadow.camera);
 
-	directionalLight.castShadow = false; // also default
+	directionalLight.castShadow = true;
 
-	// wonn't work anyways if drop shadows aren't allowed with
-	// renderer.shadowMap.enabled = true
 	//
-	directionalLight.shadow.mapSize.width = 1024;
-	directionalLight.shadow.mapSize.height = 1024;
-	directionalLight.shadow.camera.near = 1;
-	directionalLight.shadow.camera.far = 6;
-	directionalLight.shadow.camera.top = 2;
-	directionalLight.shadow.camera.right = 2;
-	directionalLight.shadow.camera.bottom = -2;
-	directionalLight.shadow.camera.left = -2;
-	directionalLight.shadow.radius = 10;
-	directionalLight.shadow.intensity = 1; // also default
+	// directionalLight.shadow.mapSize.width = 1024;
+	// directionalLight.shadow.mapSize.height = 1024;
+	directionalLight.shadow.mapSize.setScalar(1024);
+	// near is by default 0.5, we will leave that value
+	// (I think when I hover near it says that it is 0.1 default,
+	// but I don't think that's true)
+	// directionalLight.shadow.camera.near = 1;
+	directionalLight.shadow.camera.far = 15;
+	directionalLight.shadow.camera.top = 7;
+	directionalLight.shadow.camera.right = 7;
+	directionalLight.shadow.camera.bottom = -7;
+	directionalLight.shadow.camera.left = -7;
+	// doesn't work with PCFSoftShadowMap
+	// directionalLight.shadow.radius = 10;
+	// using defaults anyway
+	// directionalLight.shadow.intensity = 1; // default
 	// directionalLight.shadow.bias = 0.0002; // also default
 
 	// -----------------------------------------------------------
@@ -115,27 +119,31 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-	const floorGeometry = new THREE.PlaneGeometry(5, 5);
+	const sphereGreometry = new THREE.SphereGeometry(0.5, 32, 32);
+	const sphereMaterial = new THREE.MeshStandardMaterial();
+	sphereMaterial.roughness = 0.4;
+	sphereMaterial.metalness = 0.3;
+	const sphereMesh = new THREE.Mesh(sphereGreometry, sphereMaterial);
 
-	const material = new THREE.MeshStandardMaterial();
+	sphereMesh.position.y = 0.5;
 
-	// material.wireframe = true;
+	sphereMesh.castShadow = true;
 
-	material.roughness = 0.7;
+	// sphereMaterial.wireframe = true;
 
-	const boxMesh = new THREE.Mesh(boxGeometry, material);
-	const floorMesh = new THREE.Mesh(floorGeometry, material);
+	const floorGeometry = new THREE.PlaneGeometry(10, 10);
+	const floorMaterial = new THREE.MeshStandardMaterial();
+	floorMaterial.roughness = 0.4;
+	floorMaterial.metalness = 0.3;
+	floorMaterial.color = new THREE.Color('#928192');
+	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 
 	floorMesh.rotation.x = -Math.PI / 2;
-	floorMesh.position.y = -0.5;
 
+	floorMesh.receiveShadow = true;
 	//  ------------------------
 
-	floorMesh.receiveShadow = false; // also default
-	boxMesh.castShadow = false; // also default
-
-	scene.add(floorMesh, boxMesh);
+	scene.add(sphereMesh, floorMesh);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -146,14 +154,11 @@ async function init() {
 		100,
 	);
 
-	// camera.position.z = 3;
-	// camera.position.y = 1.5;
-	// camera.position.x = 1;
-	camera.position.z = 1;
-	camera.position.y = 1;
-	camera.position.x = 2;
+	// camera.position.z = 1;
+	// camera.position.y = 1;
+	// camera.position.x = 2;
 
-	// camera.lookAt(boxMesh.position);
+	camera.position.set(-3, 3, 3);
 
 	scene.add(camera);
 
@@ -200,7 +205,7 @@ async function init() {
 		directionalLight.shadow.camera,
 	);
 
-	directionalLightShadowCameraHelper.visible = false;
+	// directionalLightShadowCameraHelper.visible = false;
 
 	scene.add(directionalLightShadowCameraHelper);
 
@@ -329,8 +334,8 @@ async function init() {
 		);
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'top')
-		.min(-5)
-		.max(5)
+		.min(-8)
+		.max(8)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.top')
 		.onChange(() => {
@@ -339,8 +344,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'right')
-		.min(-5)
-		.max(5)
+		.min(-8)
+		.max(8)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.right')
 		.onChange(() => {
@@ -349,8 +354,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'bottom')
-		.min(-5)
-		.max(5)
+		.min(-8)
+		.max(8)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.bottom')
 		.onChange(() => {
@@ -359,8 +364,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'left')
-		.min(-5)
-		.max(5)
+		.min(-8)
+		.max(8)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.left')
 		.onChange(() => {
@@ -444,28 +449,27 @@ async function init() {
 		.hide();
 
 	// // // // // // // // // // // // // // // // // // //
-
-	// // // // // // // // // // // // // // // // // // //
-
-	boxTweaks.add(boxMesh, 'castShadow');
-	boxTweaks
-		.add(boxMesh.position, 'x')
+	sphereTweaks.add(sphereMesh, 'castShadow');
+	sphereTweaks
+		.add(sphereMesh.position, 'x')
 		.step(0.001)
 		.name('position.x')
 		.min(-5)
 		.max(5);
-	boxTweaks
-		.add(boxMesh.position, 'y')
+	sphereTweaks
+		.add(sphereMesh.position, 'y')
 		.step(0.001)
 		.name('position.y')
 		.min(0)
 		.max(5);
-	boxTweaks
-		.add(boxMesh.position, 'z')
+	sphereTweaks
+		.add(sphereMesh.position, 'z')
 		.step(0.001)
 		.name('position.z')
 		.min(-5)
 		.max(5);
+	// // // // // // // // // // // // // // // // // // //
+
 	// // // // // // // // // // // // // // // // // // //
 	floorTweaks.add(floorMesh, 'receiveShadow');
 
