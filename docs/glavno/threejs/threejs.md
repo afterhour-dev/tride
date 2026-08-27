@@ -95,3 +95,4 @@
 - [[15.3_scroll-animation-proportion-camera]] — 2026-08-26
 - [[15.4_scroll-based-animation-parallax]] — 2026-08-27
 - [[15.5_scroll-based-animation-easing-lerp]] — 2026-08-27
+- [[15.6_scroll-based-animation-particles]] — 2026-08-27
