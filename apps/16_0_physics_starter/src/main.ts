@@ -61,13 +61,13 @@ const debugObject = {
 	directLookAtCenter: () => {},
 };
 
-const sphereTweaks = gui.addFolder('sphere Mesh');
-sphereTweaks.close();
+const envMapTweaks = gui.addFolder('Environment Map (cube map)');
+const sphereMaterialTweaks = gui.addFolder('sphere Material');
+const sphereMeshTweaks = gui.addFolder('sphere Mesh');
 const floorTweaks = gui.addFolder('floor Mesh');
 const ambientTweaks = gui.addFolder('Ambient Light');
-ambientTweaks.close();
+// ambientTweaks.close();
 const directionalTweaks = gui.addFolder('Directional Light');
-directionalTweaks.close();
 const directionalShadowTweaks = gui.addFolder(
 	'Directional Light Shadow tweaks',
 );
@@ -339,6 +339,25 @@ async function init() {
 	// // // // // // // // // // ---------------------------------
 	// gui - Folders ----------------
 	// // // // // // // // // // ---------------------------------
+
+	// EXPLAIN: all tweaks we created for environment map
+	const envMapTextures = {
+		studio: environmentMapTextureStudio,
+		lumber: environmentMapTextureLumber,
+		glasshouse: environmentMapTextureGlasshouse,
+		creek: environmentMapTextureCreek,
+		none: null,
+	};
+
+	envMapTweaks
+		.add(scene, 'environment', envMapTextures)
+		.name('scene.environment');
+	envMapTweaks
+		.add(scene, 'background', envMapTextures)
+		.name('scene.background');
+
+	// // // // // // // // // // // // // // // //
+
 	directionalShadowTweaks
 		.add({ a: '' }, 'a')
 		.disable()
@@ -542,24 +561,33 @@ async function init() {
 		.hide();
 
 	// // // // // // // // // // // // // // // // // // //
-	sphereTweaks.add(sphereMesh, 'castShadow');
-	sphereTweaks
+	sphereMeshTweaks.add(sphereMesh, 'castShadow');
+	sphereMeshTweaks
 		.add(sphereMesh.position, 'x')
 		.step(0.001)
 		.name('position.x')
 		.min(-5)
 		.max(5);
-	sphereTweaks
+	sphereMeshTweaks
 		.add(sphereMesh.position, 'y')
 		.step(0.001)
 		.name('position.y')
 		.min(0)
 		.max(5);
-	sphereTweaks
+	sphereMeshTweaks
 		.add(sphereMesh.position, 'z')
 		.step(0.001)
 		.name('position.z')
 		.min(-5)
+		.max(5);
+
+	// EXPLAIN: added this tweak mainly for overring global env map
+	// for this spere material
+	sphereMaterialTweaks.add(sphereMaterial, 'envMap', envMapTextures);
+	sphereMaterialTweaks
+		.add(sphereMaterial, 'envMapIntensity')
+		.step(0.001)
+		.min(0)
 		.max(5);
 	// // // // // // // // // // // // // // // // // // //
 
