@@ -1,4 +1,4 @@
-# Physics app setup - cube map, lights, drop shadows
+# Physics app setup - cube map, lights, drop shadows (IRRELEVANT NOT GOINF TO COMPLETE IT SINCE IT USES Cannon.js and not Rapier)
 
 Starter for the app in which we explore physics by using physics library in Three.js
 

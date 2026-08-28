@@ -1,6 +1,6 @@
-# Physics app intro
+# Physics app intro (IRRELEVANT NOT GOINF TO COMPLETE IT SINCE IT USES Cannon.js and not Rapier)
 
-App in which we explore physics by using physics library in Three.js. We are using Cannon. But 
+App in which we explore physics by using physics library in Three.js. We are using Cannon.
 
 Continuation in next app/lesson
 

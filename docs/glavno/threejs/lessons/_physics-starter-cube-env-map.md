@@ -6,7 +6,7 @@ tags: [webgpu, material, CubeTextureLoader, envMap, envMapIntensity, background,
 difficulty: beginner
 app_path: apps/16_0_physics_starter
 ---
-
+# Abandonde because of old library
 ## Concept
 
 This is the starter scene for the upcoming physics experiments. There is no physics code yet — the goal of this lesson's app is to build a clean, well-lit environment with **environment-map lighting** and **drop shadows**, plus a lil-gui panel to poke at every setting. The scene is minimal: a sphere above a floor plane, lit by an ambient light, a directional light, and an environment map.
