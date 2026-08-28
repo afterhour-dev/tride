@@ -97,4 +97,4 @@
 - [[15.5_scroll-based-animation-easing-lerp]] — 2026-08-27
 - [[15.6_scroll-based-animation-particles]] — 2026-08-27
 - [[15.7_scroll-based-animation-seven-triggered]] — 2026-08-27
-- [[16.0_physics-starter-cube-texture]] — 2026-08-28
+- [[16.0_physics-starter-cube-env-map]] — 2026-08-28

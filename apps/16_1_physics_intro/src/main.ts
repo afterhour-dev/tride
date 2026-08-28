@@ -1,6 +1,9 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+// EXPLAIN: imported physics library
+import CANNON from 'cannon';
+
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
 
@@ -57,6 +60,14 @@ async function init() {
 	// 0.1 - Renderer (first part)
 	const renderer = new THREE.WebGPURenderer({ canvas });
 	await renderer.init();
+
+	// ----------------------------------------------------
+	// a.    Physics
+	// EXPLAIN: creating the physics world and setting gravity;
+	// gravity is CANNON.Vec3
+	const world = new CANNON.World();
+
+	world.gravity.set(0, -9.82, 0); // m/s^2
 
 	// -----------------------------------------------------
 	// 1 - Environment
