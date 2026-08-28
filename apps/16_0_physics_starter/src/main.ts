@@ -211,7 +211,7 @@ async function init() {
 	sphereMaterial.metalness = 0.3;
 	// EXPLAIN: I wanted to override current global environment map
 	// just for one material, by adding texture to desired material
-	sphereMaterial.envMap = environmentMapTextureLumber;
+	sphereMaterial.envMap = environmentMapTextureCreek;
 	// EXPLAIN: envMapIntensity is set to 1 by default I think
 	// so I decreased it
 	sphereMaterial.envMapIntensity = 0.5;
@@ -583,12 +583,28 @@ async function init() {
 
 	// EXPLAIN: added this tweak mainly for overring global env map
 	// for this spere material
+	// EXPLAIN: but also as I switch between environment maps I don't
+	// se any difference just when I set it to null or when I change to
+	// some map, chenging between maps looks the same, can you explain
+	// what could be the issue
+	// and should I opt out from overriding the environment map on the
+	// specifiv material and just set global one
 	sphereMaterialTweaks.add(sphereMaterial, 'envMap', envMapTextures);
 	sphereMaterialTweaks
 		.add(sphereMaterial, 'envMapIntensity')
 		.step(0.001)
 		.min(0)
 		.max(5);
+	sphereMaterialTweaks
+		.add(sphereMaterial, 'metalness')
+		.step(0.001)
+		.min(0)
+		.max(1);
+	sphereMaterialTweaks
+		.add(sphereMaterial, 'roughness')
+		.step(0.001)
+		.min(0)
+		.max(1);
 	// // // // // // // // // // // // // // // // // // //
 
 	// // // // // // // // // // // // // // // // // // //
