@@ -7,15 +7,53 @@ import GUI from 'lil-gui';
 import { getRequiredElement } from './util';
 
 // loading textures -----------------------------------------
-// const loadingManager = new THREE.LoadingManager();
+const loadingManager = new THREE.LoadingManager();
 // const textureLoader = new THREE.TextureLoader(loadingManager);
+// EXPLAIN: we are using CubeTextureLoader to load environment map
+const cubeTextureLoader = new THREE.CubeTextureLoader(
+	loadingManager,
+); /* .setPath('/textures/environmentMaps/') */
 
+loadingManager.onProgress = (textureFilePath: string) => {
+	console.log(textureFilePath);
+};
+
+// EXPLAIN: I synchronously loaded these textures here like this
+// but when I tried to override gloabal env map for some
+// materials I got this kind of error:
+/* installHook.js:1 THREE.TSL: TypeError: Cannot read properties of null (reading 'isRenderTargetTexture') "PMREMNode.setup()" at "three_webgpu.js:18385"
+    at PMREMNode.setup (:5173/three_webgpu.js:18385:24)
+    at PMREMNode.build (:5173/three_webgpu.js:1456:34)
+    at PMREMNode.build (:5173/three_webgpu.js:1769:16)
+    at ContextNode.setup (:5173/three_webgpu.js:5507:13)
+    at ContextNode.build (:5173/three_webgpu.js:1456:34)
+    at OperatorNode.build (:5173/three_webgpu.js:1463:16)
+    at OperatorNode.build (:5173/three_webgpu.js:1769:16)
+    at VarNode.build (:5173/three_webgpu.js:5751:58)
+    at IsolateNode.build (:5173/three_webgpu.js:7227:26)
+    at OperatorNode.build (:5173/three_webgpu.js:1463:16) */
+// so I decided to load textures async in the body in init
+// function but with awaiting the async loads
+// Can yo uexplain why is this happening
+/* const environmentMapTextureStudio = cubeTextureLoader
+	.setPath('/textures/environmentMaps/studio/')
+	.load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
+const environmentMapTextureLumber = cubeTextureLoader
+	.setPath('/textures/environmentMaps/lumber/')
+	.load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
+const environmentMapTextureCreek = cubeTextureLoader
+	.setPath('/textures/environmentMaps/creek/')
+	.load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
+const environmentMapTextureGlasshouse = cubeTextureLoader
+	.setPath('/textures/environmentMaps/glasshouse/')
+	.load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
+ */
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
 
 // Gui -----------------------------------------------------
 const gui = new GUI({
-	width: 350,
+	width: 250,
 	title: 'Tweaks',
 	closeFolders: true,
 });
@@ -54,6 +92,54 @@ async function init() {
 	// -----------------------------------------------------
 	// 1 - Environment
 
+	// EXPLAIN: like I mentioned I loaded them async and error disapeard
+	// and it worked
+	const environmentMapTextureStudio = await cubeTextureLoader
+		.setPath('/textures/environmentMaps/studio/')
+		.loadAsync([
+			'px.png',
+			'nx.png',
+			'py.png',
+			'ny.png',
+			'pz.png',
+			'nz.png',
+		]);
+	const environmentMapTextureLumber = await cubeTextureLoader
+		.setPath('/textures/environmentMaps/lumber/')
+		.loadAsync([
+			'px.png',
+			'nx.png',
+			'py.png',
+			'ny.png',
+			'pz.png',
+			'nz.png',
+		]);
+	const environmentMapTextureCreek = await cubeTextureLoader
+		.setPath('/textures/environmentMaps/creek/')
+		.loadAsync([
+			'px.png',
+			'nx.png',
+			'py.png',
+			'ny.png',
+			'pz.png',
+			'nz.png',
+		]);
+	const environmentMapTextureGlasshouse = await cubeTextureLoader
+		.setPath('/textures/environmentMaps/glasshouse/')
+		.loadAsync([
+			'px.png',
+			'nx.png',
+			'py.png',
+			'ny.png',
+			'pz.png',
+			'nz.png',
+		]);
+
+	// EXPLAIN: we are using lights from environment map
+	scene.environment = environmentMapTextureStudio;
+	// EXPLAIN: we don't need to see env map so I am not
+	// setting it as background, but we can with gui if we want
+	// scene.background = environmentMapTexture;
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
 
@@ -123,6 +209,13 @@ async function init() {
 	const sphereMaterial = new THREE.MeshStandardMaterial();
 	sphereMaterial.roughness = 0.4;
 	sphereMaterial.metalness = 0.3;
+	// EXPLAIN: I wanted to override current global environment map
+	// just for one material, by adding texture to desired material
+	sphereMaterial.envMap = environmentMapTextureLumber;
+	// EXPLAIN: envMapIntensity is set to 1 by default I think
+	// so I decreased it
+	sphereMaterial.envMapIntensity = 0.5;
+
 	const sphereMesh = new THREE.Mesh(sphereGreometry, sphereMaterial);
 
 	sphereMesh.position.y = 0.5;
@@ -205,7 +298,7 @@ async function init() {
 		directionalLight.shadow.camera,
 	);
 
-	// directionalLightShadowCameraHelper.visible = false;
+	directionalLightShadowCameraHelper.visible = false;
 
 	scene.add(directionalLightShadowCameraHelper);
 
@@ -478,7 +571,7 @@ async function init() {
 	ambientTweaks
 		.add(ambientLight, 'intensity')
 		.min(0)
-		.max(1)
+		.max(5)
 		.step(0.001);
 
 	ambientTweaks.addColor(ambientLight, 'color');

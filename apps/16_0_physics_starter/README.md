@@ -1,4 +1,4 @@
-# Physics starter with cube map, lights, drop shadows
+# Physics app setup - cube map, lights, drop shadows
 
 Starter for the app in which we explore physics by using physics library in Three.js
 
