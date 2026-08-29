@@ -1,21 +1,53 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+// EXPLAIN: we need GLTFLoader
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
 
 import { getRequiredElement } from './util';
 
-// loading textures -----------------------------------------
+// for loading textures -----------------------------------------
 const loadingManager = new THREE.LoadingManager();
 // const textureLoader = new THREE.TextureLoader(loadingManager);
 const cubeTextureLoader = new THREE.CubeTextureLoader(
 	loadingManager,
 ); /* .setPath('/textures/environmentMaps/') */
 
-loadingManager.onProgress = (textureFilePath: string) => {
-	console.log(textureFilePath);
+// for loading models ----------------------------------------
+const modelLoadingManager = new THREE.LoadingManager();
+// EXPLAIN: instatiating GLTFLoader
+const gltfLoader = new GLTFLoader(modelLoadingManager);
+
+// --------------------------------------------------------
+// EXPLAIN: since I am using loadAsync in this app and I found out
+// that loadAsync doesn't expose progress callback ,so I'm
+// using the manager. Since I have problems using load for
+// cube map I started using loadAsync. So my question is
+// would I have any problems using just load when loading model
+// my assumption is probably? What do you think what should I use?
+// Also I didn't have problems with load when loading individual
+// textures if that means anything to you.
+// Also, I didn't use loading manger that I used for cube map
+// only for clarity in this lesson to divide these two.
+// Should we use one laoding manager for everything
+modelLoadingManager.onProgress = (filePaths: string) => {
+	console.log('progess ', filePaths);
 };
+modelLoadingManager.onLoad = () => {
+	console.log('model/s loaded');
+};
+modelLoadingManager.onError = (e) => {
+	console.error(e);
+};
+modelLoadingManager.onStart = (filePath) => {
+	console.log('loading started ', filePath);
+};
+
+// EXPLAIN: if we would use load instead of loadAsync, we only
+// can access model inside callback of
 
 // ---------------------------------------------------------
 const canvas = getRequiredElement<HTMLCanvasElement>('canvas#tride');
@@ -31,8 +63,7 @@ const debugObject = {
 };
 
 const envMapTweaks = gui.addFolder('Environment Map (cube map)');
-const sphereMaterialTweaks = gui.addFolder('sphere Material');
-const sphereMeshTweaks = gui.addFolder('sphere Mesh');
+
 const floorTweaks = gui.addFolder('floor Mesh');
 const ambientTweaks = gui.addFolder('Ambient Light');
 // ambientTweaks.close();
@@ -103,8 +134,62 @@ async function init() {
 		]);
 
 	scene.environment = environmentMapTextureStudio;
-
 	// scene.background = environmentMapTexture;
+
+	// ----------------------------------
+	// A. ---- Loading Models
+	// EXPLAIN: loading of gltf model
+	const duckModel = await gltfLoader.loadAsync(
+		'/models/Duck/glTF/Duck.gltf',
+	);
+	// EXPLAIN: adding model to the scene
+
+	// EXPLAIN: what we have inside duckModel
+	// console.log(duckModel);
+
+	// EXPLAIN: duckModel.scene and duckModel.scenes
+	// console.log(duckModel.scene); // Grpup
+	// console.log(duckModel.scenes); // [Group]
+	// EXPLAIN: duckModel.scene.group.children
+	// console.log(duckModel.scene.children); // [Object3D]
+	// EXPLAIN: what we can find in
+	// duckModel.scene.children
+	// I found one Object3D
+
+	// EXPLAIN: in next line I found two instances, one PerspectiveCamera,
+	// and other is Mesh
+	// console.log(duckModel.scene.children[0].children);
+
+	// EXPLAIN: is it always like this, do we need to have do
+	// multiple loops and when we find meshes we add them to the scene
+
+	// EXPLAIN: in our case
+	// - the Mesh should be our duck
+	// - we don't need the PerspectiveCamera
+	// - the camera and the duck are in Object3D as children
+	// - The Object3D has a wrong `scale` (explain this)
+
+	// EXPLAIN: we have multiple ways of adding duck to the scene:
+	// - add the whole scene in our scene (ome people add the entire scene, and we will do
+	// this t some point in other lesson but not now)
+	// - add the children of the scene to our scene and ignore the
+	// PerspectiveCamera (scale will be perserved but we would get PerspectiveCamera)
+	// - filter the children before adding to the scene (traversing can be hard? Is this the case when model changed for example? )
+	// - add only Mesh and end up with duck with wrong scale, position
+	// and rotation (problem is the scale because scale is applied on the parent and not mesh itself)
+	// - open the file in 3D software, clean it and export it again
+
+	// EXPLAIN: to have right scale we will add scene.children[0]
+	// with this we are getting the right scale
+	scene.add(duckModel.scene.children[0]);
+
+	// EXPLAIN: this is undefind here now. Why?
+	console.log(duckModel.scene.children[0]);
+
+	// EXPLAIN: duck is one element and it was easy adding it
+	// to the scene since it is just one Mesh; you will see
+	// it won't be that easy when you get to the other models
+
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
 
@@ -170,23 +255,6 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const sphereGreometry = new THREE.SphereGeometry(0.5, 32, 32);
-	const sphereMaterial = new THREE.MeshStandardMaterial();
-	sphereMaterial.roughness = 0.4;
-	sphereMaterial.metalness = 0.3;
-
-	sphereMaterial.envMap = environmentMapTextureCreek;
-
-	sphereMaterial.envMapIntensity = 0.5;
-
-	const sphereMesh = new THREE.Mesh(sphereGreometry, sphereMaterial);
-
-	sphereMesh.position.y = 0.5;
-
-	sphereMesh.castShadow = true;
-
-	// sphereMaterial.wireframe = true;
-
 	const floorGeometry = new THREE.PlaneGeometry(10, 10);
 	const floorMaterial = new THREE.MeshStandardMaterial();
 	floorMaterial.roughness = 0.4;
@@ -195,11 +263,10 @@ async function init() {
 	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 
 	floorMesh.rotation.x = -Math.PI / 2;
-
 	floorMesh.receiveShadow = true;
 	//  ------------------------
 
-	scene.add(sphereMesh, floorMesh);
+	scene.add(floorMesh);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -522,43 +589,6 @@ async function init() {
 		.name('what direction is light comming from')
 		.hide();
 
-	// // // // // // // // // // // // // // // // // // //
-	sphereMeshTweaks.add(sphereMesh, 'castShadow');
-	sphereMeshTweaks
-		.add(sphereMesh.position, 'x')
-		.step(0.001)
-		.name('position.x')
-		.min(-5)
-		.max(5);
-	sphereMeshTweaks
-		.add(sphereMesh.position, 'y')
-		.step(0.001)
-		.name('position.y')
-		.min(0)
-		.max(5);
-	sphereMeshTweaks
-		.add(sphereMesh.position, 'z')
-		.step(0.001)
-		.name('position.z')
-		.min(-5)
-		.max(5);
-
-	sphereMaterialTweaks.add(sphereMaterial, 'envMap', envMapTextures);
-	sphereMaterialTweaks
-		.add(sphereMaterial, 'envMapIntensity')
-		.step(0.001)
-		.min(0)
-		.max(5);
-	sphereMaterialTweaks
-		.add(sphereMaterial, 'metalness')
-		.step(0.001)
-		.min(0)
-		.max(1);
-	sphereMaterialTweaks
-		.add(sphereMaterial, 'roughness')
-		.step(0.001)
-		.min(0)
-		.max(1);
 	// // // // // // // // // // // // // // // // // // //
 
 	// // // // // // // // // // // // // // // // // // //

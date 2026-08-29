@@ -76,13 +76,17 @@ This app is made to a project where we explore how to import models and all othe
     - JSON
     - Heavier
 
-- Choosing
-- 
+- Choosing right gltf format
+  - it's a matter of how you want to handle the assets
+  - if you want to be able to alter files, you better go with glTF-default
+  - loading multiple files can be faster
+  - if having one file is better for you, you better go for glTF-Binary
+  - anyway, you must decide if you want to use Draco compression or not (We will tako about Draco later in other lesson)
 
+- are models using pbr materials and therefore we need lights? Explain more about pbr (is that physical based rndering?)
+  - so in our setup we have directional and ambient light
 
 ## Šta samo ukratko pomenuti
-
-- {koncept koji nije fokus lekcije, ali se pojavljuje u kodu}
 
 ## Gotchas / Stvari koje lako zeznem
 
