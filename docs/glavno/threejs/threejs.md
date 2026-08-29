@@ -55,6 +55,7 @@
 - [[10.8_mesh-standard-material-part-one]] — 2026-08-08
 - [[10.9_mesh-standard-material-part-two]] — 2026-08-09
 - [[10.10_mesh-standard-material-part-three]] — 2026-08-10
+- [[10.10.x_mesh-standard-material-cube-map]] — 2026-08-27
 - [[10.11.0_mesh-physical-material]] — 2026-08-10
 - [[10.11.1_clearcoat-effect]] — 2026-08-10
 - [[10.11.2_sheen]] — 2026-08-10
