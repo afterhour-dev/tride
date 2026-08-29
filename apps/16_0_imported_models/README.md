@@ -29,11 +29,56 @@ This app is made to a project where we explore how to import models and all othe
     - etc.
   - you can even create your own format
   - Popular formats
-    -  
+    - OBJ
+    - FBX
+    - STL
+    - PLZ
+    - COLLADA
+    - 3DS
+    - GLTF
+  - one format is becoming a standard and should cover most of our needs and that is GLTF, but be open to others depending on your needs
 
+- GLTF or GL Transmission Format
+  - Made by the Khronos Group (OpenGL, WebGL, Vulkan, Collada and with many members like AMD / ATI, Nvidia, id Software, Google, Nintendo etc.)
+  - Very popular since few years
+  - Supports different sets of data like geometries, materials, cameras, lights, scene graph, animations, skeletons, morphing, etc.
+  - Various formats like json, binary, embed textures
+  - Becoming the standard when it comes to real-time and most 3D softwares, game engines, and binaries support it
+  - you don't need to use GLTF in all cases; question the data you need, the weight of the file, how much time to decompressit, etc.
 
-- {koncept 1 — zašto je bitan}
-- {koncept 2 — zašto je bitan}
+- Find a model
+  - gltf team provides various models for testing: <https://github.com/KhronosGroup/glTF-Sample-Models>: **You need to clone or download repository and take the files you need**
+  - we cloned repo and copied model 2.0/Duck to our project
+
+- Eeach of gltf format has advantage in relation to other
+- be careful, your OS might hide the extension of some of these files. Use your code editor. (I don't think I have any problems with this on fedora)
+
+- GLTF formats (Yes Gltf can have different formats) (open /public/models/Duck and you will see 4 main formats)
+  - glTF
+    - the default format
+    - multiple files
+    - Duck.gltf is a JSON that contains cameras, lights, scenes, materials, objects transformations, but no geometries
+    - Duck0.bin is the binary that usaully contains data like the geometries (vertices positions, UV coordinates, normals, colors, etc.)
+    - DuckCM.png is the texture
+    - We load the Duck.gltf file and the other files should load automatically
+  - glTF-Binary
+    - Only one file (Duck.glb)
+    - Contains all the data we talked about
+    - Binary
+    - Usually lighter
+    - Easier to load because only one file
+    - Hard to alter its data
+  - glTF-Draco
+    - like the glTF default format, but the buffer data is compressed using the Draco agorithm
+    - Much lighter
+  - glTF-Embedded
+    - Only one file (Duck.gltf)
+    - JSON
+    - Heavier
+
+- Choosing
+- 
+
 
 ## Šta samo ukratko pomenuti
 
