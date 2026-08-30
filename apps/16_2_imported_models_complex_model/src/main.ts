@@ -121,20 +121,78 @@ async function init() {
 
 	// ----------------------------------
 	// A. ---- Loading Models
-	const duckModel = await gltfLoader.loadAsync(
-		'/models/Duck/glTF/Duck.gltf',
+
+	// EXPLAIN: we are loading this complex model now
+	const flightHelmet = await gltfLoader.loadAsync(
+		'/models/FlightHelmet/glTF/FlightHelmet.gltf',
 	);
 
-	// console.log(duckModel);
+	// EXPLAIN: inspect this in console. I looked into
+	// scene.children property and I saw six Mesh instances
+	console.log(flightHelmet);
 
-	// console.log(duckModel.scene); // Grpup
-	// console.log(duckModel.scenes); // [Group]
-	// console.log(duckModel.scene.children); // [Object3D]
-	// console.log(duckModel.scene.children[0].children);
+	// console.log(flightHelmet.scene.children[0]);
+	// EXPLAIN: let's first try adding model like we did in previous
+	// lessons when we added duck; what you will see is that just
+	// one part of the model is added, I assume just one mesh. To be
+	// precise it is just a air pipe of the helmet.
+	// Well the reason for this is that we just added first child of the scene
+	// scene.add(flightHelmet.scene.children[0]);
 
-	// console.log(duckModel.scene.children[0]);
-	scene.add(duckModel.scene.children[0]);
-	// console.log(duckModel.scene.children[0]);
+	// EXPLAIN: How can we add all children of the scene of our model?
+	// Well, it's not that simple.
+	// We can try to loop on the children and add them to the scene
+	// Let's try doing that first
+	/* for (const item of flightHelmet.scene.children) {
+		// EXPLAIN: you will see that model isn complete
+		// there are missing parts
+		// (Some people when refresh page are getting different parts
+		// for me it is always same parts)
+		// Explain mewhy is this happening?
+		// EXPLAIN: Is this next assumption true?
+		// When we add single child to our scene, since that means that
+		// child is removed from the scene of the model, our for off
+		// loop is messed up because we are looping but also when
+		// we remove one item, the other item falls in its place
+		// and in next iteration, the one fallen into place of previous
+		// can't be reached and it doesn't get added to our scene?
+		scene.add(item);
+	} */
+
+	// EXPLAIN: there are couple of solutions for the loop
+	// problem we presented above, and one solution is using
+	// while loop with lengrth as condition, there we are sure when
+	// length gets to falsy 0, it will stop,
+	// and inside loop, we are always adding item with index 0
+	// always making sure that every item is added
+	/* while (flightHelmet.scene.children.length) {
+		// EXPLAIN: this worked, we added all parts of the model
+		scene.add(flightHelmet.scene.children[0]);
+	} */
+
+	// EXPLAIN: another solution is duplicating childrens array in order
+	// to have an unaltered independant array
+	// EXPLAIN: taking from the model scene and adding
+	// to our scene will not alter the length of this array since
+	// items aren't being removed from this array, because
+	// this array holds items references; it is not related to the
+	// model scene
+	/* const items = [...flightHelmet.scene.children];
+
+	for (const item of items) {
+		scene.add(item);
+		// EXPLAIN: also I assume we can make them castShadow
+		// Don't know if this is the right way of making model
+		// having a drop shadow, but it worked, I see shadow
+		item.castShadow = true;
+	} */
+
+	// EXPLAIN:there is also simples solution and that is
+	// to just add the scene of the model to our scene
+	// scene of the model is Group instance
+	// Explain me what is the best way from thre ways we presented
+	// console.log(flightHelmet.scene);
+	scene.add(flightHelmet.scene);
 
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
@@ -227,7 +285,7 @@ async function init() {
 	// camera.position.y = 1;
 	// camera.position.x = 2;
 
-	camera.position.set(-3, 3, 3);
+	camera.position.set(-0.5, 1, 0.6);
 
 	scene.add(camera);
 
