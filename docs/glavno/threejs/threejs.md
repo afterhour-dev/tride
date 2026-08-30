@@ -101,3 +101,4 @@
 - [[16.0_imported-models-intro]] — 2026-08-29
 - [[16.1_gltf-flavor-comparison]] — 2026-08-30
 - [[16.2_multi-mesh-scene-graph]] — 2026-08-30
+- [[16.3_draco]] — 2026-08-30
