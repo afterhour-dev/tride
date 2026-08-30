@@ -99,3 +99,4 @@
 - [[15.6_scroll-based-animation-particles]] — 2026-08-27
 - [[15.7_scroll-based-animation-seven-triggered]] — 2026-08-27
 - [[16.0_imported-models-intro]] — 2026-08-29
+- [[16.1_gltf-flavor-comparison]] — 2026-08-30
