@@ -24,7 +24,11 @@ We want to learn how to test models in threejs editor
 
 - AnimationAction
 
-- Tell me about threejs editor
-
+- Tell me about threejs editor: <https://threejs.org/editor/>
+  - Like a tiny online 3D software (you won't be able to do the same things like in Blender or Maya, but you can have fun in there)
+  - Good way to test models
+  - Only works with models composed of one file
+  
+- try dragging and dropping your duck model we used in previous lessons (for example drop binary glTF format Duck.glb). I saw there a mesh and the camera wee talked about in previous lessons. For some reason light is there so I was able to see pbr based material duck is made from, I didn't see just black duck (in older version light wasn't there by default I think). We can also add things like other built in threejs primitive geometries, and also lights etc. .Waht can you tell me more about it.
 
 ## Šta samo ukratko pomenuti
