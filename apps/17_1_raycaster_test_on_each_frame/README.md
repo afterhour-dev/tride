@@ -2,6 +2,10 @@
 
 In this app we explore raycaster with testing it on each frame. And we also use helper for easier visualization of ray hitting our mesh.
 
+```
+pnpm --filter @td/raycaster-frame-test add @gsimone/three-raycaster-helper
+```
+
 ## Namera / Intent
 
 App is made to learn raycaster and how to use it properly.

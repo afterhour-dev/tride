@@ -104,3 +104,4 @@
 - [[16.3_draco]] — 2026-08-30
 - [[16.4_imported-model-animations-and-editor]] — 2026-08-30
 - [[17.0_raycaster-intro]] — 2026-08-31
+- [[17.1_raycaster-test-on-each-frame]] — 2026-09-01
