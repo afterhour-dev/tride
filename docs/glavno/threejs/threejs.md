@@ -103,3 +103,4 @@
 - [[16.2_multi-mesh-scene-graph]] — 2026-08-30
 - [[16.3_draco]] — 2026-08-30
 - [[16.4_imported-model-animations-and-editor]] — 2026-08-30
+- [[17.0_raycaster-intro]] — 2026-08-31
