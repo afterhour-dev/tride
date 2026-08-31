@@ -1,11 +1,11 @@
 # Raycaster - test on each frame
 
-In this app we explore raycaster with testing it on each frame.
+In this app we explore raycaster with testing it on each frame. And we also use helper for easier visualization of ray hitting our mesh.
 
 ## Namera / Intent
 
 App is made to learn raycaster and how to use it properly.
-This lesson is in a way continuation of previous one.
+This lesson is in a way continuation of previous one where we explained basics.
 
 ## Šta treba objasniti u detalje
 

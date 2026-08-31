@@ -127,15 +127,41 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
+	// EXPLAIN: since in this example we will change colors
+	// for separate object and we need them to have diffrent color
+	// we can't use same material, but we can use same default color
+	const sphereColor = new THREE.Color('#e6cbe8');
 	const sphereGreometry = new THREE.SphereGeometry(0.5, 16, 16);
-	const sphereMaterial = new THREE.MeshStandardMaterial();
-	sphereMaterial.roughness = 0.4;
-	sphereMaterial.metalness = 0.3;
-	sphereMaterial.color = new THREE.Color('#e6cbe8');
+	// const sphereMaterial = new THREE.MeshStandardMaterial();
+	// sphereMaterial.roughness = 0.4;
+	// sphereMaterial.metalness = 0.3;
+	// sphereMaterial.color = new THREE.Color('#e6cbe8');
 
-	const sphereMesh1 = new THREE.Mesh(sphereGreometry, sphereMaterial);
-	const sphereMesh2 = new THREE.Mesh(sphereGreometry, sphereMaterial);
-	const sphereMesh3 = new THREE.Mesh(sphereGreometry, sphereMaterial);
+	// EXPLAIN: see, every mesh is using different material
+	const sphereMesh1 = new THREE.Mesh(
+		sphereGreometry,
+		new THREE.MeshStandardMaterial({
+			color: sphereColor,
+			roughness: 0.4,
+			metalness: 0.3,
+		}),
+	);
+	const sphereMesh2 = new THREE.Mesh(
+		sphereGreometry,
+		new THREE.MeshStandardMaterial({
+			color: sphereColor,
+			roughness: 0.4,
+			metalness: 0.3,
+		}),
+	);
+	const sphereMesh3 = new THREE.Mesh(
+		sphereGreometry,
+		new THREE.MeshStandardMaterial({
+			color: sphereColor,
+			roughness: 0.4,
+			metalness: 0.3,
+		}),
+	);
 
 	sphereMesh1.position.x = -2;
 	sphereMesh3.position.x = 2;
@@ -485,16 +511,6 @@ async function init() {
 		);
 
 	// // // // // // // // // // // // // // // // // // //
-	sphereMaterialTweaks
-		.add(sphereMaterial, 'metalness')
-		.step(0.001)
-		.min(0)
-		.max(1);
-	sphereMaterialTweaks
-		.add(sphereMaterial, 'roughness')
-		.step(0.001)
-		.min(0)
-		.max(1);
 
 	sphereMesh1Tweaks.add(sphereMesh1, 'castShadow');
 	sphereMesh1Tweaks
