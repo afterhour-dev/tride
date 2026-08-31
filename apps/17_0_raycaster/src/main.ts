@@ -132,8 +132,8 @@ async function init() {
 	const sphereMesh2 = new THREE.Mesh(sphereGreometry, sphereMaterial);
 	const sphereMesh3 = new THREE.Mesh(sphereGreometry, sphereMaterial);
 
-	sphereMesh1.position.x = 2;
-	sphereMesh3.position.x = -2;
+	sphereMesh1.position.x = -2;
+	sphereMesh3.position.x = 2;
 
 	// sphereMesh1.castShadow = true;
 	// sphereMesh2.castShadow = true;
@@ -166,6 +166,8 @@ async function init() {
 
 	// EXPLAIN: instantiating `origin` and `direction`
 	// also you need to normalize direction
+	// EXPLAIN: origin and direction can be set as arguments too;
+	// together with near and far
 
 	// EXPLAIN: setting origin and direction to raycaster;
 	// and since our meshes are positioned by x from -2 to 2
@@ -182,6 +184,31 @@ async function init() {
 	rayDirection.normalize();
 	console.log(rayDirection.length()); // 1
 	raycaster.set(rayOrigin, rayDirection);
+
+	// EXPLAIN: intersectObject and intersectObjects
+
+	const singleIntersect = raycaster.intersectObject(sphereMesh3);
+	// EXPLAIN: you get array of one object
+	console.log(singleIntersect); //
+
+	// EXPLAIN: why we had problem without ipdating matrix, where
+	// we had same values for the `distance` property where distance
+	// for every meshes was calculated as like all meshes were at the
+	// center but they weren't
+	// and when we did this update, the right distances from ray origin to
+	// collision point on the surface of mesh was correct;
+	// earlier it was 2.5 for every object and after update it is
+	// 0.5    2.5    4.5
+	scene.updateMatrixWorld(true);
+
+	const intersects = raycaster.intersectObjects([
+		sphereMesh1,
+		sphereMesh2,
+		sphereMesh3,
+	]);
+
+	// EXPLAIN: you get array of 3 objects
+	console.log(intersects);
 
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
@@ -226,17 +253,6 @@ async function init() {
 		.name('visualize directional light');
 
 	scene.add(directionalLightHelper);
-
-	const arrowHelper = new THREE.ArrowHelper(
-		directionalLight.position.clone().normalize(), // direction
-		new THREE.Vector3(0, 0, 0), // origin
-		1, // length
-		0xffffff, // color
-	);
-
-	arrowHelper.visible = false;
-
-	scene.add(arrowHelper);
 
 	// // // // // // // // //
 	const directionalLightShadowCameraHelper = new THREE.CameraHelper(
@@ -483,11 +499,6 @@ async function init() {
 		.name(
 			"The arrow direction is computed **once** at creation and never\nupdated. If you move the directional light, the arrow stays where it\nwas. For a dynamic arrow, you'd need to recreate or manually update\nit each frame.",
 		);
-
-	directionalTweaks
-		.add(arrowHelper, 'visible')
-		.name('what direction is light comming from')
-		.hide();
 
 	// // // // // // // // // // // // // // // // // // //
 	sphereMaterialTweaks
