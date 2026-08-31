@@ -1,23 +1,27 @@
 # Raycaster
 
-setup:
-
-- plane -> floor
-- cube
-- directional light, ambient light
-- drop shadows settings enabled; you can toggle them of/on it with gui but don't need to do that
-- environmentMap texture loaded with cubeTextureLoader
+In this app we explore raycaster.
+Main thing in setup is three spheres and we are going to shoot a ray through and see if those spheres intersect with it
 
 ## Namera / Intent
 
-{Zašto je ovaj app napravljen — koji koncept se vežba, šta je cilj lekcije.
-Ovo je važan deo za docmaker skill — koristi se da razume kontekst.}
+App is made to learn raycaster and how to use it properly.
 
 ## Šta treba objasniti u detalje
 
-- {koncept 1 — zašto je bitan}
-- {koncept 2 — zašto je bitan}
+- A Raycaster can cast a ray in a specific direction and test what objects intersect with it.
+
+- Usage examples
+  - Detect if there is a wall in front of the player
+  - Test if something is currently under the mouse to simulate mouse events
+  - Show an alert message if the spaceship is heading towards a planet
+
+- We can use `set` method on Raycaster instance to set up origin (`Vector3` instance) and direction (`Vector3` instance); but `direction` needs to be normalized (which means coordinates will be scaled down/up in order for distance from the center of the scene to the direction Vector3, to be precisely 1; am I right about this?)
+
+- I need better explanation of why direction vector needs to be normalized
+
+- Casting a ray, you have two options:
+  - intersectObject() to test one object
+  - intersectObjects() to test multiple objects
 
 ## Šta samo ukratko pomenuti
-
-- {koncept koji nije fokus lekcije, ali se pojavljuje u kodu}

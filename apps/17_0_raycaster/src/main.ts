@@ -64,8 +64,8 @@ async function init() {
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
 
-	renderer.shadowMap.enabled = true;
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// renderer.shadowMap.enabled = true;
+	// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	// renderer.shadowMap.type = THREE.PCFShadowMap; // default
 
 	// ------------------------------------------------------
@@ -105,18 +105,14 @@ async function init() {
 	// directionalLight.shadow.mapSize.width = 1024;
 	// directionalLight.shadow.mapSize.height = 1024;
 	directionalLight.shadow.mapSize.setScalar(1024);
-	// near is by default 0.5, we will leave that value
-	// (I think when I hover near it says that it is 0.1 default,
-	// but I don't think that's true)
+
 	// directionalLight.shadow.camera.near = 1;
 	directionalLight.shadow.camera.far = 15;
 	directionalLight.shadow.camera.top = 7;
 	directionalLight.shadow.camera.right = 7;
 	directionalLight.shadow.camera.bottom = -7;
 	directionalLight.shadow.camera.left = -7;
-	// doesn't work with PCFSoftShadowMap
 	// directionalLight.shadow.radius = 10;
-	// using defaults anyway
 	// directionalLight.shadow.intensity = 1; // default
 	// directionalLight.shadow.bias = 0.0002; // also default
 
@@ -126,7 +122,7 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const sphereGreometry = new THREE.SphereGeometry(0.5, 32, 32);
+	const sphereGreometry = new THREE.SphereGeometry(0.5, 16, 16);
 	const sphereMaterial = new THREE.MeshStandardMaterial();
 	sphereMaterial.roughness = 0.4;
 	sphereMaterial.metalness = 0.3;
@@ -136,7 +132,7 @@ async function init() {
 	const sphereMesh2 = new THREE.Mesh(sphereGreometry, sphereMaterial);
 	const sphereMesh3 = new THREE.Mesh(sphereGreometry, sphereMaterial);
 
-	sphereMesh2.position.x = 2;
+	sphereMesh1.position.x = 2;
 	sphereMesh3.position.x = -2;
 
 	// sphereMesh1.castShadow = true;
@@ -163,8 +159,32 @@ async function init() {
 
 	scene.add(sphereMesh1, sphereMesh2, sphereMesh3, floorMesh);
 
+	// -----------------------------------------------------
+	// 6 - Raycaster
+	// EXPLAIN: instatiating Raycaster
+	const raycaster = new THREE.Raycaster();
+
+	// EXPLAIN: instantiating `origin` and `direction`
+	// also you need to normalize direction
+
+	// EXPLAIN: setting origin and direction to raycaster;
+	// and since our meshes are positioned by x from -2 to 2
+	// an origin x coordinate is -3 so orgin lays in a row behind
+	// meshes if we can say i like that.
+	// but because we normalize direction vector, his coordinates
+	// are going to be 1,0,0 and not 10,0,0; which place this vector
+	// between soere2 and sphere3 since spere1 is in the center of the scene
+	// and sphere3 is distanced by 2 by x from the scene
+	const rayOrigin = new THREE.Vector3(-3, 0, 0);
+	const rayDirection = new THREE.Vector3(10, 0, 0);
+	// EXPLAIN: length will give distance from the center
+	console.log(rayDirection.length()); // 10
+	rayDirection.normalize();
+	console.log(rayDirection.length()); // 1
+	raycaster.set(rayOrigin, rayDirection);
+
 	// --------------------------------------------------------
-	// 7 - Camera - Perspective Camera
+	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
 		75,
 		sizes.width / sizes.height,
@@ -181,7 +201,7 @@ async function init() {
 	scene.add(camera);
 
 	// -----------------------------------------------------
-	// 8 - Orbit Controls
+	// 9 - Orbit Controls
 	const orbitControls = new OrbitControls(camera, canvas);
 
 	orbitControls.enableDamping = true;
@@ -189,7 +209,7 @@ async function init() {
 	// orbitControls.update()
 
 	// ------------------------------------------------
-	// 9 - helpers
+	// 10 - helpers
 
 	// // // // // // // // //
 	// Light Helpers
@@ -236,7 +256,7 @@ async function init() {
 	scene.add(axesHelper);
 	axesHelper.visible = false;
 
-	// 9 - GUI ---------------------------------------------------------
+	// 11 - GUI ---------------------------------------------------------
 
 	// // // // // // // // // //
 	// gui - Global -----------------
