@@ -1,6 +1,11 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+// EXPLAIN: I want to have helper for raycaster to have
+// better visual picture what is happening if we are testing inside
+// animation loop
+import { RaycasterHelper } from '@gsimone/three-raycaster-helper';
+
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
 
@@ -161,6 +166,7 @@ async function init() {
 
 	// -----------------------------------------------------
 	// 6 - Raycaster
+
 	const raycaster = new THREE.Raycaster();
 
 	/* const rayOrigin = new THREE.Vector3(-3, 0, 0);
@@ -245,6 +251,10 @@ async function init() {
 	axesHelper.setColors('red', 'green', 'blue');
 	scene.add(axesHelper);
 	axesHelper.visible = false;
+
+	// EXPLAIN: instantiating and adding raycasterHelper
+	const raycasterHelper = new RaycasterHelper(raycaster);
+	scene.add(raycasterHelper);
 
 	// 11 - GUI ---------------------------------------------------------
 
@@ -592,7 +602,48 @@ async function init() {
 	function tick(timestamp: number) {
 		timer.update(timestamp);
 
-		// const elapsedTime = timer.getElapsed();
+		const elapsedTime = timer.getElapsed();
+
+		// EXPLAIN: we are moving our spheres up and down wih
+		// different frequency (speed)
+		sphereMesh1.position.y = Math.sin(elapsedTime * 0.3) * 3;
+		sphereMesh2.position.y = Math.sin(elapsedTime * 0.8) * 2.5;
+		sphereMesh3.position.y = Math.sin(elapsedTime * 1.4) * 2;
+
+		const rayOrigin = new THREE.Vector3(-3, 0, 0);
+		const rayDirection = new THREE.Vector3(1, 0, 0);
+		// EXPLAIN: we already have distance 1 from the scene center
+		// but we are normalizing it anyway, in case if someone
+		// or me change thi value and forgets
+		rayDirection.normalize();
+
+		raycaster.set(rayOrigin, rayDirection);
+		// EXPLAIN: shooting the ray
+		const objectsToTest = [sphereMesh1, sphereMesh2, sphereMesh3];
+
+		const intersections = raycaster.intersectObjects(objectsToTest);
+		// console.log(intersections);
+
+		// EXPLAIN: but also let's set old color
+		// and we need to do it before we are setting colors on hits
+		for (const ob of objectsToTest) {
+			ob.material.color.set('#e6cbe8');
+		}
+		// EXPLAIN: setting color to the material of the object
+		// every time intersections happen
+		for (const item of intersections) {
+			// EXPLAIN: typescript is giving me problems here
+			// can you tell me if it would be normal just to
+			// remove if statment and ignore typescript error
+			if (item.object instanceof THREE.Mesh) {
+				// EXPLAIN: so we set colors when ray hits
+				item.object.material.color.set('#344e70');
+			}
+		}
+
+		// EXPLAIN: we use helper like this
+		raycasterHelper.hits = intersections; // or helper.hits = hits, depending on version
+		raycasterHelper.update();
 
 		orbitControls.update();
 
