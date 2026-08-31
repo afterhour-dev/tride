@@ -1,10 +1,7 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-// EXPLAIN: I want to have helper for raycaster to have
-// better visual picture what is happening if we are testing inside
-// animation loop
-import { RaycasterHelper } from '@gsimone/three-raycaster-helper';
+// import { RaycasterHelper } from '@gsimone/three-raycaster-helper';
 
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
@@ -127,9 +124,6 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	// EXPLAIN: since in this example we will change colors
-	// for separate object and we need them to have diffrent color
-	// we can't use same material, but we can use same default color
 	const sphereColor = new THREE.Color('#e6cbe8');
 	const sphereGreometry = new THREE.SphereGeometry(0.5, 16, 16);
 	// const sphereMaterial = new THREE.MeshStandardMaterial();
@@ -137,7 +131,6 @@ async function init() {
 	// sphereMaterial.metalness = 0.3;
 	// sphereMaterial.color = new THREE.Color('#e6cbe8');
 
-	// EXPLAIN: see, every mesh is using different material
 	const sphereMesh1 = new THREE.Mesh(
 		sphereGreometry,
 		new THREE.MeshStandardMaterial({
@@ -214,8 +207,8 @@ async function init() {
 		sphereMesh2,
 		sphereMesh3,
 	]);
-	console.log(intersects);
- */
+	console.log(intersects); */
+
 	// --------------------------------------------------------
 	// 8 - Camera - Perspective Camera
 	const camera = new THREE.PerspectiveCamera(
@@ -278,9 +271,8 @@ async function init() {
 	scene.add(axesHelper);
 	axesHelper.visible = false;
 
-	// EXPLAIN: instantiating and adding raycasterHelper
-	const raycasterHelper = new RaycasterHelper(raycaster);
-	scene.add(raycasterHelper);
+	// const raycasterHelper = new RaycasterHelper(raycaster);
+	// scene.add(raycasterHelper);
 
 	// 11 - GUI ---------------------------------------------------------
 
@@ -618,49 +610,30 @@ async function init() {
 	function tick(timestamp: number) {
 		timer.update(timestamp);
 
-		const elapsedTime = timer.getElapsed();
+		// const elapsedTime = timer.getElapsed();
 
-		// EXPLAIN: we are moving our spheres up and down wih
-		// different frequency (speed)
-		sphereMesh1.position.y = Math.sin(elapsedTime * 0.3) * 3;
-		sphereMesh2.position.y = Math.sin(elapsedTime * 0.8) * 2.5;
-		sphereMesh3.position.y = Math.sin(elapsedTime * 1.4) * 2;
+		// sphereMesh1.position.y = Math.sin(elapsedTime * 0.3) * 3;
+		// sphereMesh2.position.y = Math.sin(elapsedTime * 0.8) * 2.5;
+		// sphereMesh3.position.y = Math.sin(elapsedTime * 1.4) * 2;
+		// const rayOrigin = new THREE.Vector3(-3, 0, 0);
+		// const rayDirection = new THREE.Vector3(1, 0, 0);
+		// rayDirection.normalize();
+		// raycaster.set(rayOrigin, rayDirection);
+		// const objectsToTest = [sphereMesh1, sphereMesh2, sphereMesh3];
+		// const intersections = raycaster.intersectObjects(objectsToTest);
+		// // console.log(intersections);
+		// for (const ob of objectsToTest) {
+		// 	ob.material.color.set('#e6cbe8');
+		// }
+		// for (const item of intersections) {
+		// 	if (item.object instanceof THREE.Mesh) {
+		// 		item.object.material.color.set('#344e70');
+		// 	}
+		// }
 
-		const rayOrigin = new THREE.Vector3(-3, 0, 0);
-		const rayDirection = new THREE.Vector3(1, 0, 0);
-		// EXPLAIN: we already have distance 1 from the scene center
-		// but we are normalizing it anyway, in case if someone
-		// or me change thi value and forgets
-		rayDirection.normalize();
+		// raycasterHelper.hits = intersections;
 
-		raycaster.set(rayOrigin, rayDirection);
-		// EXPLAIN: shooting the ray
-		const objectsToTest = [sphereMesh1, sphereMesh2, sphereMesh3];
-
-		const intersections = raycaster.intersectObjects(objectsToTest);
-		// console.log(intersections);
-
-		// EXPLAIN: but also let's set old color
-		// and we need to do it before we are setting colors on hits
-		for (const ob of objectsToTest) {
-			ob.material.color.set('#e6cbe8');
-		}
-		// EXPLAIN: setting color to the material of the object
-		// every time intersections happen
-		for (const item of intersections) {
-			// EXPLAIN: typescript is giving me problems here
-			// can you tell me if it would be normal just to
-			// remove if statment and ignore typescript error
-			if (item.object instanceof THREE.Mesh) {
-				// EXPLAIN: so we set colors when ray hits
-				item.object.material.color.set('#344e70');
-			}
-		}
-
-		// EXPLAIN: we use helper like this
-		// @ts-expect-error for some reson doesn't accept the value
-		raycasterHelper.hits = intersections;
-		raycasterHelper.update();
+		// raycasterHelper.update();
 
 		orbitControls.update();
 
