@@ -49,7 +49,6 @@ const sizes = {
 // --------------------------------------------------------
 
 async function init() {
-	// EXPLAIN: for holding mousemove x and y values
 	const mouse = new THREE.Vector2(0, 0);
 
 	// Scene
@@ -189,6 +188,11 @@ async function init() {
 	// 6 - Raycaster
 
 	const raycaster = new THREE.Raycaster();
+
+	// EXPLAIN: I created variable that is going to hold
+	// currenyly intersected object or null
+	let currentIntersect: THREE.Intersection | null = null;
+	//
 
 	/* const rayOrigin = new THREE.Vector3(-3, 0, 0);
 	const rayDirection = new THREE.Vector3(10, 0, 0);
@@ -611,38 +615,59 @@ async function init() {
 
 		const elapsedTime = timer.getElapsed();
 
-		// EXPLAIN: you can comment this movement out if you want
-		// your sphere to stay stacionary after you shoot the ray
-		// or not, ether way as you move orbit control and you
-		// hover with mouse over the spheres you will see how
-		// one or many spheres are changing colors depending how many
-		// meshes our ray cuts through
 		sphereMesh1.position.y = Math.sin(elapsedTime * 0.3) * 1.5;
 		sphereMesh2.position.y = Math.sin(elapsedTime * 0.8) * 1.5;
 		sphereMesh3.position.y = Math.sin(elapsedTime * 1.4) * 1.5;
 
-		// EXPLAIN: setFrameCamera
+		//
 		raycaster.setFromCamera(mouse, camera);
 
-		// EXPLAIN: we don't need origin and direction since I assume
-		// they are nov calculated with ours mouse coordinates
 		// const rayOrigin = new THREE.Vector3(-3, 0, 0);
 		// const rayDirection = new THREE.Vector3(1, 0, 0);
 		// rayDirection.normalize();
 		// raycaster.set(rayOrigin, rayDirection);
 
-		// EXPLAIN: this stays the same
 		const objectsToTest = [sphereMesh1, sphereMesh2, sphereMesh3];
 		const intersections = raycaster.intersectObjects(objectsToTest);
-		// // console.log(intersections);
-		for (const ob of objectsToTest) {
-			ob.material.color.set('#e6cbe8');
-		}
-		for (const item of intersections) {
-			if (item.object instanceof THREE.Mesh) {
-				item.object.material.color.set('#344e70');
+		// console.log(intersections);
+
+		// EXPLAIN: this is how we store current intersect in the
+		// variable
+		if (intersections.length) {
+			if (!currentIntersect) {
+				// console.log('mouse enter');
 			}
+			currentIntersect = intersections[0];
+			//
+			// EXPLAIN: we didn't need to do this but I just wanted to
+			// do color change here to see if I can
+			// @ts-expect-error material is there
+			currentIntersect.object.material.color.set('#344e70');
+		} else {
+			if (currentIntersect) {
+				// console.log('mouse leave');
+				// EXPLAIN: we didn't need to do this but I just wanted to
+				// do color change here to see if I can
+				// @ts-expect-error material is there
+				currentIntersect.object.material.color.set('#e6cbe8');
+			}
+			currentIntersect = null;
 		}
+
+		// EXPLAIN: we could keep this if we didn't change color
+		// already above, but since our logic
+		// is recording currnt hovered object, we colored
+		// just that object which also means if raycaster pierces
+		// two or thre objects only first will change color
+
+		// for (const ob of objectsToTest) {
+		// 	ob.material.color.set('#e6cbe8');
+		// }
+		// for (const item of intersections) {
+		// 	if (item.object instanceof THREE.Mesh) {
+		// 		item.object.material.color.set('#344e70');
+		// 	}
+		// }
 
 		// raycasterHelper.hits = intersections;
 
@@ -661,36 +686,20 @@ async function init() {
 	// // // // // // // // // // // // // // // // // // // // // //
 	// // // // // // // // // // // // // // // // // // // // // //
 
-	// EXPLAIN: handling mousemove
 	window.addEventListener('mousemove', (e) => {
 		// console.log(e.clientX);
 		// console.log(e.clientY);
-
-		// EXPLAIN: from 0 to 1
 		// const x = e.clientX / sizes.width;
 		// const y = -(e.clientY / sizes.height);
-
-		// EXPLAIN: from -0.5 to 0.5
 		// const x = e.clientX / sizes.width - 0.5;
 		// const y = -(e.clientY / sizes.height - 0.5);
-
-		// EXPLAIN: from -1 to 1 (I like this most but I choosen next one)
 		// const x = (e.clientX / sizes.width - 0.5) * 2;
 		// const y = -(e.clientY / sizes.height - 0.5) * 2;
 		// console.log({ x, y });
 
-		// EXPLAIN: also from -1 to 1
 		mouse.x = (e.clientX / sizes.width) * 2 - 1;
 		mouse.y = -((e.clientY / sizes.height) * 2 - 1);
 		// console.log(mouse);
-
-		// EXPLAIN: instead of shooting ray here we are going to do
-		// that inside tick function, becuse this mousemove handler
-		// is executed more times than the animation frame; so
-		// more mouse move then the framrate per unit of time?
-		// EXPLAIN: can you tell me what kind of problems
-		// we would encounter if any if we would cast a ray in this
-		// handler?
 	});
 
 	window.addEventListener('keydown', (ev) => {

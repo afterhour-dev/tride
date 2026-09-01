@@ -28,9 +28,7 @@ const gui = new GUI({
 	title: 'Tweaks',
 	closeFolders: true,
 });
-const debugObject = {
-	directLookAtCenter: () => {},
-};
+const debugObject = {};
 
 const sphereMesh1Tweaks = gui.addFolder('sphere Mesh 1');
 const sphereMesh2Tweaks = gui.addFolder('sphere Mesh 2');
@@ -492,10 +490,7 @@ async function init() {
 			"this `directLookAtCenter` isn't doing what I thought it would. Which\n would be pointing to the center of the scene.\nBut it doesen't do an rotations",
 		)
 		.hide();
-	debugObject.directLookAtCenter = () => {
-		directionalLight.lookAt(new THREE.Vector3());
-	};
-	directionalTweaks.add(debugObject, 'directLookAtCenter').hide();
+
 	// -
 
 	directionalTweaks
