@@ -614,26 +614,40 @@ async function init() {
 	function tick(timestamp: number) {
 		timer.update(timestamp);
 
-		// const elapsedTime = timer.getElapsed();
+		const elapsedTime = timer.getElapsed();
 
-		// sphereMesh1.position.y = Math.sin(elapsedTime * 0.3) * 3;
-		// sphereMesh2.position.y = Math.sin(elapsedTime * 0.8) * 2.5;
-		// sphereMesh3.position.y = Math.sin(elapsedTime * 1.4) * 2;
+		// EXPLAIN: you can comment this movement out if you want
+		// your sphere to stay stacionary after you shoot the ray
+		// or not, ether way as you move orbit control and you
+		// hover with mouse over the spheres you will see how
+		// one or many spheres are changing colors depending how many
+		// meshes our ray cuts through
+		sphereMesh1.position.y = Math.sin(elapsedTime * 0.3) * 1.5;
+		sphereMesh2.position.y = Math.sin(elapsedTime * 0.8) * 1.5;
+		sphereMesh3.position.y = Math.sin(elapsedTime * 1.4) * 1.5;
+
+		// EXPLAIN: setFrameCamera
+		raycaster.setFromCamera(mouse, camera);
+
+		// EXPLAIN: we don't need origin and direction since I assume
+		// they are nov calculated with ours mouse coordinates
 		// const rayOrigin = new THREE.Vector3(-3, 0, 0);
 		// const rayDirection = new THREE.Vector3(1, 0, 0);
 		// rayDirection.normalize();
 		// raycaster.set(rayOrigin, rayDirection);
-		// const objectsToTest = [sphereMesh1, sphereMesh2, sphereMesh3];
-		// const intersections = raycaster.intersectObjects(objectsToTest);
+
+		// EXPLAIN: this stays the same
+		const objectsToTest = [sphereMesh1, sphereMesh2, sphereMesh3];
+		const intersections = raycaster.intersectObjects(objectsToTest);
 		// // console.log(intersections);
-		// for (const ob of objectsToTest) {
-		// 	ob.material.color.set('#e6cbe8');
-		// }
-		// for (const item of intersections) {
-		// 	if (item.object instanceof THREE.Mesh) {
-		// 		item.object.material.color.set('#344e70');
-		// 	}
-		// }
+		for (const ob of objectsToTest) {
+			ob.material.color.set('#e6cbe8');
+		}
+		for (const item of intersections) {
+			if (item.object instanceof THREE.Mesh) {
+				item.object.material.color.set('#344e70');
+			}
+		}
 
 		// raycasterHelper.hits = intersections;
 
@@ -673,7 +687,15 @@ async function init() {
 		// EXPLAIN: also from -1 to 1
 		mouse.x = (e.clientX / sizes.width) * 2 - 1;
 		mouse.y = -((e.clientY / sizes.height) * 2 - 1);
-		console.log(mouse);
+		// console.log(mouse);
+
+		// EXPLAIN: instead of shooting ray here we are going to do
+		// that inside tick function, becuse this mousemove handler
+		// is executed more times than the animation frame; so
+		// more mouse move then the framrate per unit of time?
+		// EXPLAIN: can you tell me what kind of problems
+		// we would encounter if any if we would cast a ray in this
+		// handler?
 	});
 
 	window.addEventListener('keydown', (ev) => {
