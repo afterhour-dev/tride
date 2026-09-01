@@ -29,7 +29,7 @@ const debugObject = {
 	directLookAtCenter: () => {},
 };
 
-const sphereMaterialTweaks = gui.addFolder('sphere Material');
+// const sphereMaterialTweaks = gui.addFolder('sphere Material');
 const sphereMesh1Tweaks = gui.addFolder('sphere Mesh 1');
 const sphereMesh2Tweaks = gui.addFolder('sphere Mesh 2');
 const sphereMesh3Tweaks = gui.addFolder('sphere Mesh 3');
@@ -47,9 +47,13 @@ const sizes = {
 	width: window.innerWidth,
 	height: window.innerHeight,
 };
+
 // --------------------------------------------------------
 
 async function init() {
+	// EXPLAIN: for holding mousemove x and y values
+	const mouse = new THREE.Vector2(0, 0);
+
 	// Scene
 	const scene = new THREE.Scene();
 
@@ -643,10 +647,34 @@ async function init() {
 	// // // // // // // // // // // // // // // // // // // // // //
 	// // // // // // // // // // // // // // // // // // // // // //
 	// // // // // // // // // // // // // // // // // // // // // //
-	//     TOGGLE GUI            RESIZE              FULL SCREEN
+	// MOUSEMOVE     TOGGLE GUI       RESIZE       FULL SCREEN
 	// // // // // // // // // // // // // // // // // // // // // //
 	// // // // // // // // // // // // // // // // // // // // // //
 	// // // // // // // // // // // // // // // // // // // // // //
+
+	// EXPLAIN: handling mousemove
+	window.addEventListener('mousemove', (e) => {
+		// console.log(e.clientX);
+		// console.log(e.clientY);
+
+		// EXPLAIN: from 0 to 1
+		// const x = e.clientX / sizes.width;
+		// const y = -(e.clientY / sizes.height);
+
+		// EXPLAIN: from -0.5 to 0.5
+		// const x = e.clientX / sizes.width - 0.5;
+		// const y = -(e.clientY / sizes.height - 0.5);
+
+		// EXPLAIN: from -1 to 1 (I like this most but I choosen next one)
+		// const x = (e.clientX / sizes.width - 0.5) * 2;
+		// const y = -(e.clientY / sizes.height - 0.5) * 2;
+		// console.log({ x, y });
+
+		// EXPLAIN: also from -1 to 1
+		mouse.x = (e.clientX / sizes.width) * 2 - 1;
+		mouse.y = -((e.clientY / sizes.height) * 2 - 1);
+		console.log(mouse);
+	});
 
 	window.addEventListener('keydown', (ev) => {
 		if (ev.key === 'h') {

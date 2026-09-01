@@ -32,7 +32,6 @@ const debugObject = {
 	directLookAtCenter: () => {},
 };
 
-const sphereMaterialTweaks = gui.addFolder('sphere Material');
 const sphereMesh1Tweaks = gui.addFolder('sphere Mesh 1');
 const sphereMesh2Tweaks = gui.addFolder('sphere Mesh 2');
 const sphereMesh3Tweaks = gui.addFolder('sphere Mesh 3');
