@@ -106,3 +106,4 @@
 - [[17.0_raycaster-intro]] — 2026-08-31
 - [[17.1_raycaster-test-on-each-frame]] — 2026-09-01
 - [[17.2_raycaster-with-mouse]] — 2026-09-01
+- [[17.3_raycaster-hover-enter-leave]] — 2026-09-01
