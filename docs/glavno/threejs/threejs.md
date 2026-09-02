@@ -108,3 +108,4 @@
 - [[17.2_raycaster-with-mouse]] — 2026-09-01
 - [[17.3_raycaster-hover-enter-leave]] — 2026-09-01
 - [[17.4_raycaster-mouse-click]] — 2026-09-01
+- [[17.5_raycasting-with-models]] — 2026-09-02
