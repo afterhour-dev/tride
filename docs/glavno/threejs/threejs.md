@@ -109,3 +109,4 @@
 - [[17.3_raycaster-hover-enter-leave]] — 2026-09-01
 - [[17.4_raycaster-mouse-click]] — 2026-09-01
 - [[17.5_raycasting-with-models]] — 2026-09-02
+- [[18.0_blender-exporting-model-and-loading]] — 2026-09-12
