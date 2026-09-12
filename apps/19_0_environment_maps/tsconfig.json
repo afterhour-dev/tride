@@ -1,0 +1,5 @@
+{
+	"extends": "@td/ts-config/vite-starter.json",
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}
