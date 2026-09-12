@@ -140,12 +140,25 @@ async function init() {
 	// EXPLAIN: loading the model and adding it to the scene
 
 	const gamingConsoleModel = await gltfLoader.loadAsync(
-		'/models/1_console/console.gltf',
+		'/models/1_game_console/console-for-export.gltf',
 	);
 
 	console.log(gamingConsoleModel);
 
 	scene.add(gamingConsoleModel.scene);
+
+	// EXPLAIN: checking if I didn't export my model correctly
+	// and it has double face which I don't want
+	gamingConsoleModel.scene.traverse((child) => {
+		// @ts-expect-error isMesh is a property of Object3D, but TypeScript doesn't know that child is a Mesh
+		if (child.isMesh) {
+			// @ts-expect-error material is a property of Mesh, but TypeScript doesn't know that child is a Mesh
+			console.log(child.material.side); // 2 = THREE.DoubleSide
+
+			// EXPLAIN: I also enabled shadows here
+			child.castShadow = true;
+		}
+	});
 
 	gamingConsoleModel.scene.scale.setScalar(20);
 	// ----------------------------------
