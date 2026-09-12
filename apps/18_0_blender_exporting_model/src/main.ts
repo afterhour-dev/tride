@@ -1,5 +1,8 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// EXPLAIN: provided all the loaders
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
@@ -14,7 +17,32 @@ const cubeTextureLoader = new THREE.CubeTextureLoader(
 ); /* .setPath('/textures/environmentMaps/') */
 
 loadingManager.onProgress = (textureFilePath: string) => {
-	console.log(textureFilePath);
+	// console.log(textureFilePath);
+};
+
+// for loading models ----------------------------------------
+
+// EXPLAIN: using all the loaders we need
+
+const dracoLoader = new DRACOLoader();
+
+dracoLoader.setDecoderPath('/draco/');
+
+const modelLoadingManager = new THREE.LoadingManager();
+const gltfLoader = new GLTFLoader(modelLoadingManager);
+gltfLoader.setDRACOLoader(dracoLoader);
+
+modelLoadingManager.onProgress = (filePaths: string) => {
+	console.log('progess ', filePaths);
+};
+modelLoadingManager.onLoad = () => {
+	console.log('model/s loaded');
+};
+modelLoadingManager.onError = (e) => {
+	console.error(e);
+};
+modelLoadingManager.onStart = (filePath) => {
+	console.log('loading started ', filePath);
 };
 
 // ---------------------------------------------------------
@@ -31,8 +59,7 @@ const debugObject = {
 };
 
 const envMapTweaks = gui.addFolder('Environment Map (cube map)');
-const sphereMaterialTweaks = gui.addFolder('sphere Material');
-const sphereMeshTweaks = gui.addFolder('sphere Mesh');
+
 const floorTweaks = gui.addFolder('floor Mesh');
 const ambientTweaks = gui.addFolder('Ambient Light');
 // ambientTweaks.close();
@@ -106,6 +133,23 @@ async function init() {
 
 	// scene.background = environmentMapTexture;
 	// ------------------------------------------------------
+
+	// ----------------------------------
+	// A. ---- Loading Models
+
+	// EXPLAIN: loading the model and adding it to the scene
+
+	const gamingConsoleModel = await gltfLoader.loadAsync(
+		'/models/1_console/console.gltf',
+	);
+
+	console.log(gamingConsoleModel);
+
+	scene.add(gamingConsoleModel.scene);
+
+	gamingConsoleModel.scene.scale.setScalar(20);
+	// ----------------------------------
+
 	// 2 - Shadows stuff globaly related
 
 	renderer.shadowMap.enabled = true;
@@ -170,23 +214,6 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const sphereGreometry = new THREE.SphereGeometry(0.5, 32, 32);
-	const sphereMaterial = new THREE.MeshStandardMaterial();
-	sphereMaterial.roughness = 0.4;
-	sphereMaterial.metalness = 0.3;
-
-	sphereMaterial.envMap = environmentMapTextureCreek;
-
-	sphereMaterial.envMapIntensity = 0.5;
-
-	const sphereMesh = new THREE.Mesh(sphereGreometry, sphereMaterial);
-
-	sphereMesh.position.y = 0.5;
-
-	sphereMesh.castShadow = true;
-
-	// sphereMaterial.wireframe = true;
-
 	const floorGeometry = new THREE.PlaneGeometry(10, 10);
 	const floorMaterial = new THREE.MeshStandardMaterial();
 	floorMaterial.roughness = 0.4;
@@ -199,7 +226,7 @@ async function init() {
 	floorMesh.receiveShadow = true;
 	//  ------------------------
 
-	scene.add(sphereMesh, floorMesh);
+	scene.add(floorMesh);
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -523,42 +550,7 @@ async function init() {
 		.hide();
 
 	// // // // // // // // // // // // // // // // // // //
-	sphereMeshTweaks.add(sphereMesh, 'castShadow');
-	sphereMeshTweaks
-		.add(sphereMesh.position, 'x')
-		.step(0.001)
-		.name('position.x')
-		.min(-5)
-		.max(5);
-	sphereMeshTweaks
-		.add(sphereMesh.position, 'y')
-		.step(0.001)
-		.name('position.y')
-		.min(0)
-		.max(5);
-	sphereMeshTweaks
-		.add(sphereMesh.position, 'z')
-		.step(0.001)
-		.name('position.z')
-		.min(-5)
-		.max(5);
 
-	sphereMaterialTweaks.add(sphereMaterial, 'envMap', envMapTextures);
-	sphereMaterialTweaks
-		.add(sphereMaterial, 'envMapIntensity')
-		.step(0.001)
-		.min(0)
-		.max(5);
-	sphereMaterialTweaks
-		.add(sphereMaterial, 'metalness')
-		.step(0.001)
-		.min(0)
-		.max(1);
-	sphereMaterialTweaks
-		.add(sphereMaterial, 'roughness')
-		.step(0.001)
-		.min(0)
-		.max(1);
 	// // // // // // // // // // // // // // // // // // //
 
 	// // // // // // // // // // // // // // // // // // //
