@@ -12,6 +12,9 @@ import { getRequiredElement } from './util';
 // for loading textures -----------------------------------------
 const loadingManager = new THREE.LoadingManager();
 // const textureLoader = new THREE.TextureLoader(loadingManager);
+
+// EXPLAIN: using CubeTextureLoader because
+// we are loading a cube map (6 images for the 6 faces of a cube)
 const cubeTextureLoader = new THREE.CubeTextureLoader(
 	loadingManager,
 ); /* .setPath('/textures/environmentMaps/') */
@@ -47,13 +50,13 @@ const gui = new GUI({
 	closeFolders: true,
 });
 const debugObject = {
-	directLookAtCenter: () => {},
+	//
 };
 
 const envMapTweaks = gui.addFolder('Environment Map (cube map)');
 
 const floorTweaks = gui.addFolder('floor Mesh');
-const knotTweaks = gui.addFolder('torus knot Mesh');
+const knotTweaks = gui.addFolder('torus knot Mesh and Material');
 const ambientTweaks = gui.addFolder('Ambient Light');
 // ambientTweaks.close();
 const directionalTweaks = gui.addFolder('Directional Light');
@@ -80,7 +83,7 @@ async function init() {
 
 	// -----------------------------------------------------
 	// 1 - Environment
-
+	// EXPLAIN: using cubeTextureLoader
 	const environmentMapTextureStudio = await cubeTextureLoader
 		.setPath('/textures/environmentMaps/studio/')
 		.loadAsync([
@@ -122,8 +125,23 @@ async function init() {
 			'nz.png',
 		]);
 
-	scene.environment = environmentMapTextureStudio;
-	// scene.background = environmentMapTexture;
+	// EXPLAIN: we are setting the environment and background
+	// of the scene to the creek environment map texture.
+	// EXPLAIN: This will affect how materials in the scene reflect light
+	scene.environment = environmentMapTextureGlasshouse;
+
+	// EXPLAIN: This will affect what is visible in the background.
+	scene.background = environmentMapTextureGlasshouse;
+
+	// EXPLAIN: Since we made our directional and ambient light invisible,
+	//  we are relying on the environment map to provide lighting for the scene.
+	//  The environment map will provide reflections and ambient lighting for the objects in the scene.
+
+	// EXPLAIN: I didn't want other lights at first because
+	// I want to have complete darkness and only to
+	// have the scene.environment provide the lighting at first
+	// but you can turn on light isn gui and see how it looks with the environment map
+	// and ambient and directional lights together.
 
 	// ----------------------------------
 	// A. ---- Loading Models
@@ -193,7 +211,10 @@ async function init() {
 	ambientLight.color = new THREE.Color(0xffffff);
 	// ambientLight.intensity = 0.3;
 	ambientLight.intensity = 2.1;
-	// ambientLight.visible = false;
+	// EXPLAIN: we are setting the ambient light to be invisible
+	// by default. Since we want only lighting from
+	// cube texture environment map
+	ambientLight.visible = false;
 
 	scene.add(ambientLight);
 
@@ -202,7 +223,10 @@ async function init() {
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
 	directionalLight.intensity = 0.4 * Math.PI;
 	directionalLight.position.set(5, 5, 5);
-	// directionalLight.visible = false;
+	// EXPLAIN: we are setting the directional light to be invisible
+	// by default. Since we want only lighting from
+	// cube texture environment map
+	directionalLight.visible = false;
 
 	// ----------------------------------------------------------
 	//  5.1 - Shadow stuff related to directional light
@@ -237,17 +261,19 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const knotGeometry = new THREE.TorusKnotGeometry(1.5, 0.4, 64, 8);
+	const knotGeometry = new THREE.TorusKnotGeometry(1.5, 0.5, 100, 16);
 	const knotMaterial = new THREE.MeshStandardMaterial();
-	knotMaterial.color = new THREE.Color(0xffffff);
-	knotMaterial.roughness = 0.2;
-	knotMaterial.metalness = 0.8;
+	knotMaterial.color = new THREE.Color(0xaaaaaa);
+	// EXPLAIN: roughness and metalness are important for how the
+	// material will reflect the environment map
+	knotMaterial.roughness = 0.1;
+	knotMaterial.metalness = 1;
 	const knotMesh = new THREE.Mesh(knotGeometry, knotMaterial);
 
 	knotMesh.position.set(8, 4);
 
 	knotMesh.castShadow = true;
-	knotMesh.visible = false;
+	// knotMesh.visible = false;
 
 	scene.add(knotMesh);
 
@@ -378,6 +404,10 @@ async function init() {
 		none: null,
 	};
 
+	// EXPLAIN: since we have multiple environment maps,
+	// we can use the GUI to switch between them.
+	// The user can select which environment map to use for
+	// the scene's environment and background.
 	envMapTweaks
 		.add(scene, 'environment', envMapTextures)
 		.name('scene.environment');
@@ -592,6 +622,9 @@ async function init() {
 	// // // // // // // // // // // // // // // // // // //
 	knotTweaks.add(knotMesh, 'visible');
 	knotTweaks.add(knotMesh, 'receiveShadow');
+	knotTweaks.add(knotMaterial, 'roughness').min(0).max(1).step(0.001);
+	knotTweaks.add(knotMaterial, 'metalness').min(0).max(1).step(0.001);
+
 	// // // // // // // // // // // // // // // // // // //
 	floorTweaks.add(floorMesh, 'receiveShadow');
 	floorTweaks.add(floorMesh, 'visible');
