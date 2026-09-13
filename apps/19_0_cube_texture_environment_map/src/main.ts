@@ -145,6 +145,16 @@ async function init() {
 
 	// EXPLAIN: environment map intensity
 	scene.environmentIntensity = 1.9; // default is 1.0
+
+	// EXPLAIN: backgroundBluriness is very useful when resolution of
+	// the environment map is low. It will blur the background and make it look better.
+	scene.backgroundBlurriness = 0.2; // default is 0.0
+	// scene.backgroundBlurriness = 0;
+
+	// EXPLAIN: backgroundIntensity is useful when you want to have a
+	// bright background but don't want it to affect the lighting of the scene.
+	scene.backgroundIntensity = 2.4; // default is 1.0
+	// scene.backgroundIntensity = 1;
 	// ----------------------------------
 	// A. ---- Loading Models
 
@@ -424,6 +434,21 @@ async function init() {
 		.max(5)
 		.step(0.001)
 		.name('scene.environmentIntensity');
+	// EXPLAIN: tweaking background blurriness using GUI
+	envMapTweaks
+		.add(scene, 'backgroundBlurriness')
+		.min(0)
+		.max(1)
+		.step(0.001)
+		.name('scene.backgroundBlurriness');
+
+	// EXPLAIN: tweaking background intensity using GUI
+	envMapTweaks
+		.add(scene, 'backgroundIntensity')
+		.min(0)
+		.max(10)
+		.step(0.001)
+		.name('scene.backgroundIntensity');
 
 	// // // // // // // // // // // // // // // //
 

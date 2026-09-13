@@ -35,6 +35,8 @@ To gain knowledge about environment map and it's settings by using cube texture 
 
 - `traverse` method is available on every Object3D and classes that inherit from it like: `Group`, `Mesh`, or even `Scene`, but we don't need to use it for setting environment map intensity since we can do it globaly (explain it since seems very useful), whatis also useful is that we ca nacces booleans like `child.isMesh` or `child.isMeshStandardMaterial`
 
+- what are allowed ranges of values for `scene.backgroundIntensity`
+
 ## Šta samo ukratko pomenuti
 
 We dealt with cube map texture already in some previous lesson (when we were dealing with mesh standard material):
