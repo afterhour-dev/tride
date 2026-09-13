@@ -67,7 +67,7 @@ const debugObject = {
 
 const envMapTweaks = gui.addFolder('Environment Map');
 
-const floorTweaks = gui.addFolder('floor Mesh');
+// const floorTweaks = gui.addFolder('floor Mesh');
 const knotTweaks = gui.addFolder('torus knot Mesh and Material');
 const ambientTweaks = gui.addFolder('Ambient Light');
 // ambientTweaks.close();
@@ -97,19 +97,19 @@ async function init() {
 	// 1 - Environment
 
 	// EXPLAIN: loading our hdris
-	const environmentMapBridge = await hdriLoader.loadAsync(
+	const environmentMapBridgeTexture = await hdriLoader.loadAsync(
 		'/textures/environmentMaps/nqweba_bridge_2k.hdr',
 	);
-	const environmentMapStudio = await hdriLoader.loadAsync(
+	const environmentMapStudioTexture = await hdriLoader.loadAsync(
 		'/textures/environmentMaps/studio_kontrast_02_2k.hdr',
 	);
-	const environmentMapWoods = await hdriLoader.loadAsync(
+	const environmentMapWoodsTexture = await hdriLoader.loadAsync(
 		'/textures/environmentMaps/tief_etz_2k.hdr',
 	);
 
 	// EXPLAIN: setting up our env map for lights (environment) and background
-	scene.environment = environmentMapWoods;
-	scene.background = environmentMapWoods;
+	scene.environment = environmentMapWoodsTexture;
+	scene.background = environmentMapWoodsTexture;
 
 	scene.environmentIntensity = 1.9; // default is 1.0
 
@@ -117,8 +117,18 @@ async function init() {
 	// but I think it is always 0, so it doesn't apply
 	// in case of hdri (it applied on cube map from previous lesson
 	// but here doesn't work)
-	scene.backgroundBlurriness = 0.2; // default is 0.0
-	// scene.backgroundBlurriness = 0;
+	// scene.backgroundBlurriness = 0.2; // default is 0.0
+	scene.backgroundBlurriness = 0;
+
+	// EXPLAIN: so without this texture mapping
+	// I had problems with blurriness and intensity, so I added this line
+	// also it looked skewed, so I added this line, and it fixed the problem
+	environmentMapBridgeTexture.mapping =
+		THREE.EquirectangularReflectionMapping;
+	environmentMapStudioTexture.mapping =
+		THREE.EquirectangularReflectionMapping;
+	environmentMapWoodsTexture.mapping =
+		THREE.EquirectangularReflectionMapping;
 
 	scene.backgroundIntensity = 2.4; // default is 1.0
 	// scene.backgroundIntensity = 1;
@@ -130,15 +140,15 @@ async function init() {
 		'/models/FlightHelmet/glTF/FlightHelmet.gltf',
 	);
 
-	flightHelmet.scene.traverse((child) => {
-		// @ts-expect-error isMesh is a property of Object3D, but TypeScript doesn't know that child is a Mesh
-		if (child.isMesh) {
-			// ts-expect-error material is a property of Mesh, but TypeScript doesn't know that child is a Mesh
-			// console.log(child.material.side); // 2 = THREE.DoubleSide
+	// flightHelmet.scene.traverse((child) => {
+	// 	// @ts-expect-error isMesh is a property of Object3D, but TypeScript doesn't know that child is a Mesh
+	// 	if (child.isMesh) {
+	// 		// ts-expect-error material is a property of Mesh, but TypeScript doesn't know that child is a Mesh
+	// 		// console.log(child.material.side); // 2 = THREE.DoubleSide
 
-			child.castShadow = true;
-		}
-	});
+	// 		child.castShadow = true;
+	// 	}
+	// });
 
 	flightHelmet.scene.scale.setScalar(10);
 	flightHelmet.scene.position.y = -2;
@@ -154,7 +164,7 @@ async function init() {
 
 	// kept this here only for the reason if you ever revisit this
 	// app to see that you can use traverse
-	gamingConsoleModel.scene.traverse((child) => {
+	/* gamingConsoleModel.scene.traverse((child) => {
 		// @ts-expect-error isMesh is a property of Object3D, but TypeScript doesn't know that child is a Mesh
 		if (child.isMesh) {
 			// ts-expect-error material is a property of Mesh, but TypeScript doesn't know that child is a Mesh
@@ -163,7 +173,7 @@ async function init() {
 			// enabled shadows here
 			child.castShadow = true;
 		}
-	});
+	}); */
 
 	gamingConsoleModel.scene.scale.setScalar(21);
 
@@ -173,8 +183,8 @@ async function init() {
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
 
-	renderer.shadowMap.enabled = true;
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+	// renderer.shadowMap.enabled = true;
+	// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	// renderer.shadowMap.type = THREE.PCFShadowMap; // default
 
 	// ------------------------------------------------------
@@ -214,21 +224,19 @@ async function init() {
 	// console.log(directionalLight.shadow);
 	// console.log(directionalLight.shadow.camera);
 
-	directionalLight.castShadow = true;
+	// directionalLight.castShadow = true;
 
 	//
 	// directionalLight.shadow.mapSize.width = 1024;
 	// directionalLight.shadow.mapSize.height = 1024;
-	directionalLight.shadow.mapSize.setScalar(1024);
-	// near is by default 0.5, we will leave that value
-	// (I think when I hover near it says that it is 0.1 default,
-	// but I don't think that's true)
+	// directionalLight.shadow.mapSize.setScalar(1024);
+
 	// directionalLight.shadow.camera.near = 1;
-	directionalLight.shadow.camera.far = 15;
-	directionalLight.shadow.camera.top = 7;
-	directionalLight.shadow.camera.right = 7;
-	directionalLight.shadow.camera.bottom = -7;
-	directionalLight.shadow.camera.left = -7;
+	// directionalLight.shadow.camera.far = 15;
+	// directionalLight.shadow.camera.top = 7;
+	// directionalLight.shadow.camera.right = 7;
+	// directionalLight.shadow.camera.bottom = -7;
+	// directionalLight.shadow.camera.left = -7;
 	// doesn't work with PCFSoftShadowMap
 	// directionalLight.shadow.radius = 10;
 	// using defaults anyway
@@ -257,7 +265,7 @@ async function init() {
 
 	scene.add(knotMesh);
 
-	const floorGeometry = new THREE.PlaneGeometry(10, 10);
+	/* const floorGeometry = new THREE.PlaneGeometry(10, 10);
 	const floorMaterial = new THREE.MeshStandardMaterial();
 	floorMaterial.roughness = 0.4;
 	floorMaterial.metalness = 0.3;
@@ -272,7 +280,7 @@ async function init() {
 	floorMesh.visible = false;
 	//  ------------------------
 
-	scene.add(floorMesh);
+	scene.add(floorMesh); */
 
 	// --------------------------------------------------------
 	// 7 - Camera - Perspective Camera
@@ -368,9 +376,9 @@ async function init() {
 	// EXPLAIN: we want to be able to switch environment maps in
 	// our gui
 	const myEnvMaps = {
-		bridge: environmentMapBridge,
-		studio: environmentMapStudio,
-		woods: environmentMapWoods,
+		bridge: environmentMapBridgeTexture,
+		studio: environmentMapStudioTexture,
+		woods: environmentMapWoodsTexture,
 		none: null,
 	};
 
@@ -598,8 +606,8 @@ async function init() {
 	knotTweaks.add(knotMaterial, 'metalness').min(0).max(1).step(0.001);
 
 	// // // // // // // // // // // // // // // // // // //
-	floorTweaks.add(floorMesh, 'receiveShadow');
-	floorTweaks.add(floorMesh, 'visible');
+	// floorTweaks.add(floorMesh, 'receiveShadow');
+	// floorTweaks.add(floorMesh, 'visible');
 
 	// // // // // // // // // // // // // // // // // // //
 

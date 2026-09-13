@@ -12,9 +12,14 @@ To gain knowledge about environment map and it's settings by using HDRI Equirect
 
 ## Šta treba objasniti u detalje
 
-- 
+- extension is .hdr which means "High Dynamic Range", and we often say "HDRI", where "I" stands for "Image"
+  - Color values stored have much higher range than a traditional image (ideal to store luminosity data)
+  - Equirectangular
+    - this means that is only one file (unlike cube texture map), only one picture containing kind of 360deg view of surrounding
+    - Also see the sky and the floor (stretched)
 
-- What loader should we use? HDRLoader or RGBELoader?
+- What loader is suggested to be used? HDRLoader or RGBELoader? I used HDRLoader in this app
 
 ## Šta samo ukratko pomenuti
 
+- HDRI environment map doesn't have to be equirectangular, but it's often the case
