@@ -2101,7 +2101,7 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
 
-  apps/19_0_environment_maps:
+  apps/19_0_cube_texture_environment_map:
     dependencies:
       gsap:
         specifier: ^3.15.0

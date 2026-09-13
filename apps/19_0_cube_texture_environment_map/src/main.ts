@@ -17,7 +17,6 @@ const cubeTextureLoader = new THREE.CubeTextureLoader(
 ); /* .setPath('/textures/environmentMaps/') */
 
 // for loading models ----------------------------------------
-
 const dracoLoader = new DRACOLoader();
 
 dracoLoader.setDecoderPath('/draco/');
@@ -54,6 +53,7 @@ const debugObject = {
 const envMapTweaks = gui.addFolder('Environment Map (cube map)');
 
 const floorTweaks = gui.addFolder('floor Mesh');
+const knotTweaks = gui.addFolder('torus knot Mesh');
 const ambientTweaks = gui.addFolder('Ambient Light');
 // ambientTweaks.close();
 const directionalTweaks = gui.addFolder('Directional Light');
@@ -143,6 +143,8 @@ async function init() {
 		}
 	});
 
+	flightHelmet.scene.scale.setScalar(10);
+
 	scene.add(flightHelmet.scene);
 
 	// model I created in blender
@@ -165,9 +167,9 @@ async function init() {
 		}
 	});
 
-	gamingConsoleModel.scene.scale.setScalar(2.4);
+	gamingConsoleModel.scene.scale.setScalar(21);
 
-	gamingConsoleModel.scene.position.x = -0.8;
+	gamingConsoleModel.scene.position.x = -6;
 
 	scene.add(gamingConsoleModel.scene);
 	// ------------------------------------------------------
@@ -235,16 +237,17 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	const knotGeometry = new THREE.TorusKnotGeometry(0.2, 0.07, 64, 8);
+	const knotGeometry = new THREE.TorusKnotGeometry(1.5, 0.4, 64, 8);
 	const knotMaterial = new THREE.MeshStandardMaterial();
 	knotMaterial.color = new THREE.Color(0xffffff);
 	knotMaterial.roughness = 0.2;
 	knotMaterial.metalness = 0.8;
 	const knotMesh = new THREE.Mesh(knotGeometry, knotMaterial);
 
-	knotMesh.position.set(1.2, 0.6);
+	knotMesh.position.set(8, 4);
 
 	knotMesh.castShadow = true;
+	knotMesh.visible = false;
 
 	scene.add(knotMesh);
 
@@ -255,8 +258,12 @@ async function init() {
 	floorMaterial.color = new THREE.Color('#928192');
 	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 
+	floorMesh.scale.setScalar(3);
+
 	floorMesh.rotation.x = -Math.PI / 2;
 	floorMesh.receiveShadow = true;
+
+	floorMesh.visible = false;
 	//  ------------------------
 
 	scene.add(floorMesh);
@@ -274,7 +281,7 @@ async function init() {
 	// camera.position.y = 1;
 	// camera.position.x = 2;
 
-	camera.position.set(-0.5, 1, 0.6);
+	camera.position.set(-7, 9, 6);
 
 	scene.add(camera);
 
@@ -583,9 +590,11 @@ async function init() {
 		.hide();
 
 	// // // // // // // // // // // // // // // // // // //
-
+	knotTweaks.add(knotMesh, 'visible');
+	knotTweaks.add(knotMesh, 'receiveShadow');
 	// // // // // // // // // // // // // // // // // // //
 	floorTweaks.add(floorMesh, 'receiveShadow');
+	floorTweaks.add(floorMesh, 'visible');
 
 	// // // // // // // // // // // // // // // // // // //
 

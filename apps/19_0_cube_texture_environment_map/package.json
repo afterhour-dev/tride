@@ -1,5 +1,5 @@
 {
-	"name": "@td/env-maps",
+	"name": "@td/cube-env-map",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
