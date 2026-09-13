@@ -18,7 +18,10 @@ To gain knowledge about environment map and it's settings by using HDRI Equirect
     - this means that is only one file (unlike cube texture map), only one picture containing kind of 360deg view of surrounding
     - Also see the sky and the floor (stretched)
 
-- What loader is suggested to be used? HDRLoader or RGBELoader? I used HDRLoader in this app
+- Downsides
+  - Usually much heavier to load and render; you can mitigate with a lower resolution and blurred background (is this true? So idea is to use hdri with small resution. My current is 2K. And use it only for the lighting (environment property) and use blury background if needed (backgroundBlurrines)?)
+
+- What loader is suggested to be used? HDRLoader or RGBELoader? I used HDRLoader in this app but in some older apps I see RGBELoader
 
 ## Šta samo ukratko pomenuti
 

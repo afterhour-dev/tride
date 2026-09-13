@@ -111,24 +111,25 @@ async function init() {
 	scene.environment = environmentMapWoodsTexture;
 	scene.background = environmentMapWoodsTexture;
 
-	scene.environmentIntensity = 1.9; // default is 1.0
-
-	// EXPLAIN: tried changing this here and with gui
-	// but I think it is always 0, so it doesn't apply
-	// in case of hdri (it applied on cube map from previous lesson
-	// but here doesn't work)
-	// scene.backgroundBlurriness = 0.2; // default is 0.0
-	scene.backgroundBlurriness = 0;
-
 	// EXPLAIN: so without this texture mapping
 	// I had problems with blurriness and intensity, so I added this line
-	// also it looked skewed, so I added this line, and it fixed the problem
+	// also it looked skewed, so I added this line, and it fixed the problem,
+	// but you can explain me better why we need this
 	environmentMapBridgeTexture.mapping =
 		THREE.EquirectangularReflectionMapping;
 	environmentMapStudioTexture.mapping =
 		THREE.EquirectangularReflectionMapping;
 	environmentMapWoodsTexture.mapping =
 		THREE.EquirectangularReflectionMapping;
+
+	scene.environmentIntensity = 1.9; // default is 1.0
+
+	// EXPLAIN: without EquirectangularReflectionMapping
+	// I tried changing this here and with gui also
+	// but I think it was always was 0, so it didn't apply
+	// without EquirectangularReflectionMapping
+	// scene.backgroundBlurriness = 0.2; // default is 0.0
+	scene.backgroundBlurriness = 0;
 
 	scene.backgroundIntensity = 2.4; // default is 1.0
 	// scene.backgroundIntensity = 1;
