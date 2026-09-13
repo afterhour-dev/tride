@@ -53,7 +53,7 @@ const debugObject = {
 	//
 };
 
-const envMapTweaks = gui.addFolder('Environment Map (cube map)');
+const envMapTweaks = gui.addFolder('Environment Map');
 
 const floorTweaks = gui.addFolder('floor Mesh');
 const knotTweaks = gui.addFolder('torus knot Mesh and Material');
@@ -143,6 +143,8 @@ async function init() {
 	// but you can turn on light isn gui and see how it looks with the environment map
 	// and ambient and directional lights together.
 
+	// EXPLAIN: environment map intensity
+	scene.environmentIntensity = 1.9; // default is 1.0
 	// ----------------------------------
 	// A. ---- Loading Models
 
@@ -415,6 +417,14 @@ async function init() {
 		.add(scene, 'background', envMapTextures)
 		.name('scene.background');
 
+	// EXPLAIN: changing environment map intensity using GUI
+	envMapTweaks
+		.add(scene, 'environmentIntensity')
+		.min(0)
+		.max(5)
+		.step(0.001)
+		.name('scene.environmentIntensity');
+
 	// // // // // // // // // // // // // // // //
 
 	directionalShadowTweaks
@@ -589,18 +599,6 @@ async function init() {
 		.name('rotation.z')
 		.step(0.001);
 
-	// should be removed -
-	directionalTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			"this `directLookAtCenter` isn't doing what I thought it would. Which\n would be pointing to the center of the scene.\nBut it doesen't do an rotations",
-		)
-		.hide();
-	debugObject.directLookAtCenter = () => {
-		directionalLight.lookAt(new THREE.Vector3());
-	};
-	directionalTweaks.add(debugObject, 'directLookAtCenter').hide();
 	// -
 
 	directionalTweaks

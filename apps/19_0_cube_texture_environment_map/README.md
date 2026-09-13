@@ -1,4 +1,4 @@
-# Environment maps - Cube texture environment map
+# Environment maps - Inro with Cube texture environment map and other environment map related settings
 
 App used for Exploring environment maps.
 
@@ -6,9 +6,7 @@ In terms of meshes and models in this app we are loading Flight Helmet model: <h
 
 ## Namera / Intent
 
-To gain knowledge about cube texture environment maps.
-
-
+To gain knowledge about environment map and it's settings by using cube texture environment maps for now.
 
 ## Šta treba objasniti u detalje
 
@@ -28,8 +26,14 @@ To gain knowledge about cube texture environment maps.
   - it would work and look ok, but would be very limited and only serve as a background
   - wouldn't do anything in terms of lighting
 
-- to control environment map intesity we must do it per material basis, which is a bit anoying when we have loaded model, but we can traverse the model and set intensity on each material
-  - `traverse` method is available on every Object3D and classes that inherit from it like: `Group`, `Mesh`, or even `Scene`
+- Is this approach or claim deprecated:
+  - to control environment map intesity we must do it per material basis, which is a bit anoying when we have loaded model, but we can traverse the model and set intensity on each material?
+- What I heard is that we don't need to set environment map intensity it per material since mid 2024
+  - material.envMapIntensity → only affects material.envMap (a per-material override texture)
+  - scene.environmentIntensity → only affects scene.environment (the global IBL (Image-Based Lighting)) (I used this one and tweaked with gui and it works, it affects all material, no matter if thety are from instatieded (by me) materials or from materials coming from models I loaded)
+    - is just a plain floating-point multiplier — three.js doesn't clamp or restrict it to a fixed range
+
+- `traverse` method is available on every Object3D and classes that inherit from it like: `Group`, `Mesh`, or even `Scene`, but we don't need to use it for setting environment map intensity since we can do it globaly (explain it since seems very useful), whatis also useful is that we ca nacces booleans like `child.isMesh` or `child.isMeshStandardMaterial`
 
 ## Šta samo ukratko pomenuti
 
