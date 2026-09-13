@@ -110,3 +110,4 @@
 - [[17.4_raycaster-mouse-click]] — 2026-09-01
 - [[17.5_raycasting-with-models]] — 2026-09-02
 - [[18.0_blender-exporting-model-and-loading]] — 2026-09-12
+- [[19.0_environment-map-intro-with-cube-texture-map]] — 2026-09-13
