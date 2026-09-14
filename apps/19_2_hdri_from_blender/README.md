@@ -1,4 +1,4 @@
-# Environment maps - HDRI Equirectangular environment map made in blender and loaded in this app
+# Environment maps - HDRI Equirectangular environment maps made in blender; and loaded in this app
 
 App used for Exploring environment maps.
 
@@ -77,5 +77,3 @@ To gain knowledge about environment map and it's settings by using HDRI Equirect
   - I also lowered the power for these color lights, one is 500W, other 300W
   - we can render it after that same way we did for previous env map
   - you can change color and power if you don't like the result, I created third one where all lights had power 1000W, and this one looked ok, since the previous one was too dim
-
-## Šta samo ukratko pomenuti
