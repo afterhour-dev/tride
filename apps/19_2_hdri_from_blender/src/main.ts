@@ -101,10 +101,26 @@ async function init() {
 		'/textures/environmentMaps/blender-one-2K.hdr',
 	);
 
+	// EXPLAIN: our second hdri we build, just containing lights
+	const environmentMapBlenderTwo = await hdriLoader.loadAsync(
+		'/textures/environmentMaps/blender-two-2K.hdr',
+	);
+
+	// EXPLAIN: third one
+	const environmentMapBlenderThree = await hdriLoader.loadAsync(
+		'/textures/environmentMaps/blender-three-2K.hdr',
+	);
+
 	scene.environment = environmentMapBlenderOne;
 	scene.background = environmentMapBlenderOne;
 
+	// EXPLAIN: never forget the mapping type,
+	// otherwise your env map will not work properly
 	environmentMapBlenderOne.mapping =
+		THREE.EquirectangularReflectionMapping;
+	environmentMapBlenderTwo.mapping =
+		THREE.EquirectangularReflectionMapping;
+	environmentMapBlenderThree.mapping =
 		THREE.EquirectangularReflectionMapping;
 
 	scene.environmentIntensity = 1.9; // default is 1.0
@@ -356,6 +372,8 @@ async function init() {
 	//  the lighting and reflections in the scene.
 	const myEnvMaps = {
 		'blender-one': environmentMapBlenderOne,
+		'blender-two': environmentMapBlenderTwo,
+		'blender-three': environmentMapBlenderThree,
 		none: null,
 	};
 

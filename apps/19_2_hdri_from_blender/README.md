@@ -72,7 +72,10 @@ To gain knowledge about environment map and it's settings by using HDRI Equirect
 
 - Studio lighting
   - we could create a full scene with cool effects, buildings, planets, etc. but it would take quite a long time; So we are going to create studio setup for our second environment map we are going to generate with blender
-  - we are deleting everything from our scene (all objects), just leaving area light we built
-  - 
+  - we are deleting everything from our scene (all objects), just leaving area light we built; and the camera
+  - what we want to do is to have three lights; one bright white, red one behind; and blue one on the other side (just duplicete white one couple of times, move them and change thir color); red one can be on the floor (0.1 by z for example); blue can be moved to be more from bellow
+  - I also lowered the power for these color lights, one is 500W, other 300W
+  - we can render it after that same way we did for previous env map
+  - you can change color and power if you don't like the result, I created third one where all lights had power 1000W, and this one looked ok, since the previous one was too dim
 
 ## Šta samo ukratko pomenuti
