@@ -95,14 +95,16 @@ async function init() {
 	// -----------------------------------------------------
 	// 1 - Environment
 
-	const environmentMapWoodsTexture = await hdriLoader.loadAsync(
-		'/textures/environmentMaps/tief_etz_2k.hdr',
+	// EXPLAIN: as you can se we are loading and using our first
+	// env map we built in blender
+	const environmentMapBlenderOne = await hdriLoader.loadAsync(
+		'/textures/environmentMaps/blender-one-2K.hdr',
 	);
 
-	scene.environment = environmentMapWoodsTexture;
-	scene.background = environmentMapWoodsTexture;
+	scene.environment = environmentMapBlenderOne;
+	scene.background = environmentMapBlenderOne;
 
-	environmentMapWoodsTexture.mapping =
+	environmentMapBlenderOne.mapping =
 		THREE.EquirectangularReflectionMapping;
 
 	scene.environmentIntensity = 1.9; // default is 1.0
@@ -348,8 +350,12 @@ async function init() {
 	// gui - Folders ----------------
 	// // // // // // // // // // ---------------------------------
 
+	// EXPLAIN: I am also adding to gui our env maps we build in blender
+	// so we can switch them on the fly and see how they look in our scene. This is a good
+	//  way to test different env maps and see how they affect
+	//  the lighting and reflections in the scene.
 	const myEnvMaps = {
-		woods: environmentMapWoodsTexture,
+		'blender-one': environmentMapBlenderOne,
 		none: null,
 	};
 

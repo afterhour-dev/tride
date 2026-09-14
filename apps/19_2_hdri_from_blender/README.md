@@ -62,7 +62,17 @@ To gain knowledge about environment map and it's settings by using HDRI Equirect
   - We can preview our light by going into render mode (shortcut Z)
   
 - We want to be able to see the light; our to be precise our camera to see the light; we are not talking about viewport; So we make it visible
-  - Camera -> Object ->  
-  
+  - Our Area Light -> Object ->  Ray Visibility; make sure you check the Camera ; which will make this object (a light) visible to a camera
+
+- After all this settings we made we can do first render just to test it (we don't have beutiful mountains and roads and woods but this is good enough to test the result)
+  - We do this with `F12` (on my laptop `fn` + `F12`); and after some time (I assume because of cycles) image will complete rendering and we have visual insight when will that happen
+  - after rendering you can save hdri by going to Image (top left) and press `Save as` (or do `Alt` + `S`) and in dialog you can select other format than png which is defaul; **we selech .hdr (Radiance HDR)**
+  - for the name I chosen `blender-one-2K.hdr` (I guess resolution we picked earlier is 2K)
+  - now you can load it in your app and test it how it looks
+
+- Studio lighting
+  - we could create a full scene with cool effects, buildings, planets, etc. but it would take quite a long time; So we are going to create studio setup for our second environment map we are going to generate with blender
+  - we are deleting everything from our scene (all objects), just leaving area light we built
+  - 
 
 ## Šta samo ukratko pomenuti
