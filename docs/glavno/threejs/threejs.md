@@ -112,3 +112,4 @@
 - [[18.0_blender-exporting-model-and-loading]] — 2026-09-12
 - [[19.0_environment-map-intro-with-cube-texture-map]] — 2026-09-13
 - [[19.1_equirectangular-hdri]] — 2026-09-14
+- [[19.2_hdri-from-blender]] — 2026-09-15
