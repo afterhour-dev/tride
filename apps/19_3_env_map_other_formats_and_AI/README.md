@@ -21,8 +21,7 @@ To gain knowledge about other formats of environment map, besides .hdr and cube 
   - Another format is jpeg image when we have low resolution and low LDR (Explain what does this mean?) (We use TextureLoader for this?)
   - you can provide short code samples how we deal with mentioned format
 
-
 - there is more way to generate environment map
   - AI generated environment map using NVIDIA Canvas (software is in beta and only works on windows I don't use so we can't use this one); what is your honest opinion, I see that this one is in beta pretty long so are people using this at all? Or is there a free one alternative, online or linux? This one produces .exr format of environment map
   - AI generated environment map using Skybox Lab by BlockadeLabs, also paid service (don't want to pay it)
-  - you can tell me is there any free modern good tools to do this
+  - you can tell me is there any free modern good tools to do this, online or not; if not free, the ones that don't have subscription but pay per token

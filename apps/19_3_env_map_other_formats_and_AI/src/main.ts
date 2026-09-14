@@ -4,7 +4,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
-import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+// EXPLAIN: we need EXRLoader
+import { EXRLoader } from 'three/addons/loaders/EXRLoader.js';
 
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
@@ -12,21 +13,39 @@ import GUI from 'lil-gui';
 import { getRequiredElement } from './util';
 
 // for loading textures -----------------------------------------
-const hdrLoadingManager = new THREE.LoadingManager();
-// const textureLoader = new THREE.TextureLoader(loadingManager);
+const exrEnvMapLoadingManager = new THREE.LoadingManager();
+const loadingManager = new THREE.LoadingManager();
 
-const hdriLoader = new HDRLoader(hdrLoadingManager);
+// EXPLAIN: we instantiate EXRLoader now
+const exrLoader = new EXRLoader(exrEnvMapLoadingManager);
 
-hdrLoadingManager.onProgress = (filePaths: string) => {
+// EXPLAIN: we also instantiate texture loader for other type
+// type of environment maps, which are images (jpeg) LDR equirectangular
+const textureLoader = new THREE.TextureLoader(loadingManager);
+
+exrEnvMapLoadingManager.onProgress = (filePaths: string) => {
 	console.log('progess ', filePaths);
 };
-hdrLoadingManager.onLoad = () => {
-	console.log('hdri loaded');
+exrEnvMapLoadingManager.onLoad = () => {
+	console.log('exrl loaded');
 };
-hdrLoadingManager.onError = (e) => {
+exrEnvMapLoadingManager.onError = (e) => {
 	console.error(e);
 };
-hdrLoadingManager.onStart = (filePath) => {
+exrEnvMapLoadingManager.onStart = (filePath) => {
+	console.log('loading started ', filePath);
+};
+
+loadingManager.onProgress = (filePaths: string) => {
+	console.log('progess ', filePaths);
+};
+loadingManager.onLoad = () => {
+	console.log('image loaded');
+};
+loadingManager.onError = (e) => {
+	console.error(e);
+};
+loadingManager.onStart = (filePath) => {
 	console.log('loading started ', filePath);
 };
 
@@ -95,27 +114,51 @@ async function init() {
 	// -----------------------------------------------------
 	// 1 - Environment
 
-	const environmentMapBlenderOne = await hdriLoader.loadAsync(
-		'/textures/environmentMaps/blender-one-2K.hdr',
+	// EXPLAIN: loading with exrLoader and using our environment map
+	const environmentMapExr = await exrLoader.loadAsync(
+		'/textures/environmentMaps/ai-4k.exr',
 	);
 
-	const environmentMapBlenderTwo = await hdriLoader.loadAsync(
-		'/textures/environmentMaps/blender-two-2K.hdr',
+	// EXPLAIN: we are also going to load mentioned jpeg format
+	// of environment maps that are AI generated
+	// LDR equirectangular
+	const cabinTexture = await textureLoader.loadAsync(
+		'/textures/environmentMaps/ai-images/cabin_interior.jpg',
+	);
+	const castleTexture = await textureLoader.loadAsync(
+		'/textures/environmentMaps/ai-images/castle.jpg',
+	);
+	const japanTreesTexture = await textureLoader.loadAsync(
+		'/textures/environmentMaps/ai-images/japan_trees_cherry.jpg',
+	);
+	const neonCityTexture = await textureLoader.loadAsync(
+		'/textures/environmentMaps/ai-images/neon_city.jpg',
+	);
+	const sciFiSkyTexture = await textureLoader.loadAsync(
+		'/textures/environmentMaps/ai-images/scifi_white_sky.jpg',
 	);
 
-	const environmentMapBlenderThree = await hdriLoader.loadAsync(
-		'/textures/environmentMaps/blender-three-2K.hdr',
-	);
+	// scene.environment = environmentMapExr;
+	// scene.background = environmentMapExr;
+	scene.environment = neonCityTexture;
+	scene.background = neonCityTexture;
 
-	scene.environment = environmentMapBlenderOne;
-	scene.background = environmentMapBlenderOne;
+	// EXPLAIN: also we don't want to forget mapping
+	environmentMapExr.mapping = THREE.EquirectangularReflectionMapping;
+	cabinTexture.mapping = THREE.EquirectangularReflectionMapping;
+	castleTexture.mapping = THREE.EquirectangularReflectionMapping;
+	japanTreesTexture.mapping = THREE.EquirectangularReflectionMapping;
+	neonCityTexture.mapping = THREE.EquirectangularReflectionMapping;
+	sciFiSkyTexture.mapping = THREE.EquirectangularReflectionMapping;
 
-	environmentMapBlenderOne.mapping =
-		THREE.EquirectangularReflectionMapping;
-	environmentMapBlenderTwo.mapping =
-		THREE.EquirectangularReflectionMapping;
-	environmentMapBlenderThree.mapping =
-		THREE.EquirectangularReflectionMapping;
+	// EXPLAIN: these ones, LDR equirectangular need different
+	// colorSpace to look better; without it env map would
+	// look washed out
+	cabinTexture.colorSpace = THREE.SRGBColorSpace;
+	castleTexture.colorSpace = THREE.SRGBColorSpace;
+	japanTreesTexture.colorSpace = THREE.SRGBColorSpace;
+	neonCityTexture.colorSpace = THREE.SRGBColorSpace;
+	sciFiSkyTexture.colorSpace = THREE.SRGBColorSpace;
 
 	scene.environmentIntensity = 1.9; // default is 1.0
 
@@ -360,10 +403,15 @@ async function init() {
 	// gui - Folders ----------------
 	// // // // // // // // // // ---------------------------------
 
+	// EXPLAIN: and using exr environment map in our gui,
+	// but alo other env map textures
 	const myEnvMaps = {
-		'blender-one': environmentMapBlenderOne,
-		'blender-two': environmentMapBlenderTwo,
-		'blender-three': environmentMapBlenderThree,
+		exr: environmentMapExr,
+		cabin: cabinTexture,
+		castle: castleTexture,
+		japan_trees: japanTreesTexture,
+		neon_city: neonCityTexture,
+		sci_fi_sky: sciFiSkyTexture,
 		none: null,
 	};
 
