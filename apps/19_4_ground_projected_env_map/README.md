@@ -22,7 +22,7 @@ To gain knowledge about ground projected environment map.
 
 - is floor alwys (0,0,0) of the scene?
 
-- We can encounter issues that is related to the radius of the skybox and camera far value, in my case initialy I have set radius to be 100 which was the same value as my camera far value; this caused me seeing parts of the black orb as I was zooming; so solution is that our far value of camera be comfortably bigger, maybe 3 times bigger than skybox radius; am I right?; you can get more into it and explain the bug and it's solution and add more info if needed, or if you have better solution?
+- We can encounter issues that is related to the radius of the skybox and camera far value, in my case initialy I have set radius to be 100 which was the same value as my camera far value; this caused me seeing parts of the black orb as I was zooming; so solution is that our far value of camera be comfortably bigger, maybe 3 times bigger than skybox radius (is this to much?); am I right?; you can get more into it and explain the bug and it's solution and add more info if needed, or if you have better solution?
 
 - We could also clamp OrbitControls so the camera can never dolly outside the sphere. We can do this by setting MaxDistance of orbit controls like this:
   ```ts

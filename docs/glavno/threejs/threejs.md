@@ -114,3 +114,4 @@
 - [[19.1_equirectangular-hdri]] — 2026-09-14
 - [[19.2_hdri-from-blender]] — 2026-09-15
 - [[19.3_env-map-other-formats-and-ai]] — 2026-09-15
+- [[19.4_ground-projected-skybox]] — 2026-09-15
