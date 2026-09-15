@@ -64,6 +64,7 @@ const debugObject = {
 };
 
 const realisticTweaks = gui.addFolder('Realistic render tweaks');
+realisticTweaks.open();
 const envMapTweaks = gui.addFolder('Environment Map');
 
 // const floorTweaks = gui.addFolder('floor Mesh');
@@ -89,7 +90,32 @@ async function init() {
 
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
-	const renderer = new THREE.WebGPURenderer({ canvas });
+	const renderer = new THREE.WebGPURenderer({
+		canvas,
+		// EXPLAIN: setting antialias to true will make the renderer
+		// use MSAA (Multi-Sample Anti-Aliasing) if the device supports it.
+		// This can improve the visual quality of the rendered scene by reducing
+		// jagged edges on objects, especially when rendering at lower resolutions.
+		// However, enabling antialiasing can also have a performance impact,
+		// as it requires additional processing power to compute the multiple samples per pixel.
+		// Therefore, it's important to consider the target hardware and performance requirements
+		// of your application when deciding whether to enable antialiasing.
+		antialias: true,
+		// EXPLAIN: I think it works for me, I don't see jagged edges anymore
+	});
+
+	// EXPLAIN: According to the example from docs, toneMapping is
+	// set before calling init; Does it matter (I have read somwhere
+	// that it isn't) but I set it here anyway (also we did it in the gui)
+	// renderer.toneMapping = THREE.NoToneMapping;// default
+	// EXPLAIN: we will set ReinhardToneMapping here throgh
+	// this series of lesson I think
+	renderer.toneMapping = THREE.ReinhardToneMapping;
+
+	// EXPLAIN: toneMappingExposure
+	// renderer.toneMappingExposure = 2;
+	renderer.toneMappingExposure = 3;
+
 	await renderer.init();
 
 	// -----------------------------------------------------
@@ -350,6 +376,30 @@ async function init() {
 	// gui - Folders ----------------
 	// // // // // // // // // // ---------------------------------
 
+	// EXPLAIN: tweaks for settings for realistic render
+
+	// EXPLAIN: different values of tone mapping
+	const toneMappingValues = {
+		NoToneMapping: THREE.NoToneMapping,
+		LinearToneMapping: THREE.LinearToneMapping,
+		ReinhardToneMapping: THREE.ReinhardToneMapping,
+		CineonToneMapping: THREE.CineonToneMapping,
+		ACESFilmicToneMapping: THREE.ACESFilmicToneMapping,
+	};
+
+	realisticTweaks
+		.add(renderer, 'toneMapping', toneMappingValues)
+		.name('renderer.toneMapping');
+
+	// EXPLAIN: tweaking toneMappingExposure
+	realisticTweaks
+		.add(renderer, 'toneMappingExposure')
+		.min(1)
+		.max(10)
+		.step(0.001)
+		.name('renderer.toneMappingExposure');
+
+	// // // // // // // // // // // // // // // // // // // // //
 	const myEnvMaps = {
 		abandoned_garage: environmentMapAbandonedGarageTexture,
 
