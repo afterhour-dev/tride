@@ -1,5 +1,5 @@
 {
-	"name": "@td/realistic-render",
+	"name": "@td/realistic-render-tonemapping-antialiasing",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",

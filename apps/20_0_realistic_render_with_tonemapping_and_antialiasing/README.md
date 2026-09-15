@@ -1,4 +1,4 @@
-# Realistic render
+# Realistic render - Tone mapping and antialiasing
 
 Setup for this app:
   - Flight Helmet model: <https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/FlightHelmet>
