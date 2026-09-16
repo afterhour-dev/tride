@@ -63,13 +63,15 @@ const debugObject = {
 	//
 };
 
-const realisticTweaks = gui.addFolder('Realistic render tweaks');
-realisticTweaks.open();
+const toneAntAliasTweaks = gui.addFolder(
+	'Tone Mapping and antialiasing',
+);
+toneAntAliasTweaks.open();
 const envMapTweaks = gui.addFolder('Environment Map');
 
 // const floorTweaks = gui.addFolder('floor Mesh');
 // const knotTweaks = gui.addFolder('torus knot Mesh and Material');
-const ambientTweaks = gui.addFolder('Ambient Light');
+// const ambientTweaks = gui.addFolder('Ambient Light');
 // ambientTweaks.close();
 const directionalTweaks = gui.addFolder('Directional Light');
 const directionalShadowTweaks = gui.addFolder(
@@ -136,7 +138,7 @@ async function init() {
 	// EXPLAIN: flight helmet meshes need to cast the shadow
 	flightHelmet.scene.traverse((child) => {
 		// @ts-expect-error isMesh is a property of Object3D, but TypeScript doesn't know that child is a Mesh
-		if (child.isMesh) {
+		if (child.isMesh && child.material.isMeshStandardMaterial) {
 			// ts-expect-error material is a property of Mesh, but TypeScript doesn't know that child is a Mesh
 			// console.log(child.material.side); // 2 = THREE.DoubleSide
 
@@ -178,8 +180,9 @@ async function init() {
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
 
-	// EXPLAIN: enabling shadow map and other values
+	// EXPLAIN: enabling shadow map
 	renderer.shadowMap.enabled = true;
+	// EXPLAIN: picking PCFSoftShadowMap
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	// renderer.shadowMap.type = THREE.PCFShadowMap; // default
 
@@ -193,7 +196,7 @@ async function init() {
 	// --------------------------------------------------
 	// 5 - Lights
 
-	const ambientLight = new THREE.AmbientLight();
+	/* const ambientLight = new THREE.AmbientLight();
 	ambientLight.color = new THREE.Color(0xffffff);
 	// ambientLight.intensity = 0.3;
 	ambientLight.intensity = 2.1;
@@ -201,17 +204,30 @@ async function init() {
 	ambientLight.visible = false;
 
 	scene.add(ambientLight);
-
+ */
 	// // // // // // // // -------------------------------
 
 	// EXPLAIN: so we will make our directional light visible
 	// and also we will place it rougly where source of light is in
 	// environment map; and light helper can help us to place the light
-	// we can alo add position to the gui
+	// we can also add position to the gui which we did
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
-	directionalLight.intensity = 0.4 * Math.PI;
-	directionalLight.position.set(10, 18, 10);
+	// directionalLight.intensity = 0.4 * Math.PI;
+	directionalLight.intensity = 1.895;
+	directionalLight.position.set(6, 10, 6);
 	// directionalLight.visible = false;
+
+	// EXPLAIN: setting target of directional light.
+	// by default it is in 0,0,0 but we want to lift it a little bit
+	// so it goes closer to the middle of the flight helmet model, and
+	// not at its base since flight helmet is placed at 0,0,0
+	directionalLight.target.position.set(0, 3, 0);
+	// EXPLAIN: so in some tutorial this changing of posi(tion of target didn't
+	// work, but it worked for me (So why there i nsome older version
+	// it didn't work? And they were using WebGL is that matters?)
+	// So I did it it anyway to be consistent (updating ow world matrix), because I needed
+	// to do it in onChange of gui (there I needed to do it because it didn't work)
+	directionalLight.target.updateWorldMatrix(true, false);
 
 	// ----------------------------------------------------------
 	//  5.1 - Shadow stuff related to directional light
@@ -222,22 +238,26 @@ async function init() {
 	// EXPLAIN: directional light needs to cast the shadow
 	directionalLight.castShadow = true;
 
-	//
-	directionalLight.shadow.mapSize.width = 1024;
-	directionalLight.shadow.mapSize.height = 1024;
+	// EXPLAIN: and we are setting shadow map settings
+	// and other shadow settings we can change with gui also
+	// directionalLight.shadow.mapSize.width = 1024;
+	// directionalLight.shadow.mapSize.height = 1024;
 	directionalLight.shadow.mapSize.setScalar(1024);
-
-	directionalLight.shadow.camera.near = 1;
-	directionalLight.shadow.camera.far = 15;
-	directionalLight.shadow.camera.top = 7;
-	directionalLight.shadow.camera.right = 7;
-	directionalLight.shadow.camera.bottom = -7;
-	directionalLight.shadow.camera.left = -7;
 	// doesn't work with PCFSoftShadowMap
 	directionalLight.shadow.radius = 10;
 	// using defaults anyway
 	directionalLight.shadow.intensity = 1; // default
 	directionalLight.shadow.bias = 0.0002; // also default
+
+	// EXPLAIN: also setting shadow camera settings
+	// we can change with gui also
+	directionalLight.shadow.camera.near = 1;
+	// directionalLight.shadow.camera.far = 15;
+	directionalLight.shadow.camera.far = 25;
+	directionalLight.shadow.camera.top = 7;
+	directionalLight.shadow.camera.right = 7;
+	directionalLight.shadow.camera.bottom = -7;
+	directionalLight.shadow.camera.left = -7;
 
 	// -----------------------------------------------------------
 	scene.add(directionalLight);
@@ -372,11 +392,11 @@ async function init() {
 		ACESFilmicToneMapping: THREE.ACESFilmicToneMapping,
 	};
 
-	realisticTweaks
+	toneAntAliasTweaks
 		.add(renderer, 'toneMapping', toneMappingValues)
 		.name('renderer.toneMapping');
 
-	realisticTweaks
+	toneAntAliasTweaks
 		.add(renderer, 'toneMappingExposure')
 		.min(1)
 		.max(10)
@@ -416,7 +436,108 @@ async function init() {
 		.step(0.001)
 		.name('scene.backgroundIntensity');
 
+	// // // // // // // // // // // // // // // // // // // // //
+
+	// EXPLAIN: these directional light tweaks are important now
+	// since as we use gui in oour app it is easier to adopt
+	// values that will make scene more realistic
+	directionalTweaks
+		.add(directionalLight, 'visible')
+		.name('show directional light');
+
+	directionalTweaks
+		.add(directionalLightHelper, 'visible')
+		.name('helper');
+	directionalTweaks.add(directionalLight, 'castShadow');
+	directionalTweaks
+		.add(directionalLight, 'intensity')
+		.min(0)
+		.max(10)
+		.step(0.001);
+	directionalTweaks
+		.add(directionalLight.position, 'x')
+		.step(0.001)
+		.name('position.x')
+		.min(-10)
+		.max(10);
+	directionalTweaks
+		.add(directionalLight.position, 'y')
+		.step(0.001)
+		.name('position.y')
+		.min(-10)
+		.max(10);
+	directionalTweaks
+		.add(directionalLight.position, 'z')
+		.step(0.001)
+		.name('position.z')
+		.min(-10)
+		.max(10);
+	directionalTweaks.addColor(directionalLight, 'color');
+	// EXPLAIN: it seams that rotation of directional ligh
+	// isn't doing anything so I am commenting it out
+	// since I am changing position of light and its target position,
+	// I don't need to change its rotation
+	/* directionalTweaks
+		.add(directionalLight.rotation, 'x')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.name('rotation.x')
+		.step(0.001);
+	directionalTweaks
+		.add(directionalLight.rotation, 'y')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.name('rotation.y')
+		.step(0.001);
+	directionalTweaks
+		.add(directionalLight.rotation, 'z')
+		.min(-2 * Math.PI)
+		.max(2 * Math.PI)
+		.name('rotation.z')
+		.step(0.001);
+ */
+	//
+	directionalTweaks
+		.add(directionalLight.target.position, 'x')
+		.step(0.001)
+		.name('target.position.x')
+		.min(-10)
+		.max(10)
+		.onChange(() => {
+			// directionalLight.target.updateMatrixWorld();
+			directionalLight.target.updateWorldMatrix(true, false);
+			directionalLightHelper.update();
+		});
+	directionalTweaks
+		.add(directionalLight.target.position, 'y')
+		.step(0.001)
+		.name('target.position.y')
+		.min(-10)
+		.max(10)
+		.onChange(() => {
+			// directionalLight.target.updateMatrixWorld();
+			directionalLight.target.updateWorldMatrix(true, false);
+			directionalLightHelper.update();
+		});
+	directionalTweaks
+		.add(directionalLight.target.position, 'z')
+		.step(0.001)
+		.name('target.position.z')
+		.min(-10)
+		.max(10)
+		.onChange(() => {
+			// directionalLight.target.updateMatrixWorld();
+			directionalLight.target.updateWorldMatrix(true, false);
+			directionalLightHelper.update();
+		});
+
+	// -
+
 	// // // // // // // // // // // // // // // //
+
+	// EXPLAIN: also these tweaks of shadow camera are now important to
+	// set them right
+	// EXPLAIN: did I make any mistakes for the min and max values for the shadow camera settings?
 
 	directionalShadowTweaks
 		.add({ a: '' }, 'a')
@@ -545,67 +666,6 @@ async function init() {
 			directionalLightShadowCameraHelper.update();
 		});
 
-	// // // // // // // // // // // // // // // // // // // // //
-	directionalTweaks
-		.add(directionalLightHelper, 'visible')
-		.name('visualize directional light');
-	directionalTweaks.add(directionalLight, 'castShadow');
-	directionalTweaks
-		.add(directionalLight, 'intensity')
-		.min(0)
-		.max(6)
-		.step(0.001);
-	directionalTweaks
-		.add(directionalLight.position, 'x')
-		.step(0.001)
-		.name('position.x')
-		.min(-5)
-		.max(5);
-	directionalTweaks
-		.add(directionalLight.position, 'y')
-		.step(0.001)
-		.name('position.y')
-		.min(-5)
-		.max(5);
-	directionalTweaks
-		.add(directionalLight.position, 'z')
-		.step(0.001)
-		.name('position.z')
-		.min(-5)
-		.max(5);
-	directionalTweaks.addColor(directionalLight, 'color');
-	directionalTweaks
-		.add(directionalLight.rotation, 'x')
-		.min(-2 * Math.PI)
-		.max(2 * Math.PI)
-		.name('rotation.x')
-		.step(0.001);
-	directionalTweaks
-		.add(directionalLight.rotation, 'y')
-		.min(-2 * Math.PI)
-		.max(2 * Math.PI)
-		.name('rotation.y')
-		.step(0.001);
-	directionalTweaks
-		.add(directionalLight.rotation, 'z')
-		.min(-2 * Math.PI)
-		.max(2 * Math.PI)
-		.name('rotation.z')
-		.step(0.001);
-
-	// -
-
-	directionalTweaks
-		.add(directionalLight, 'visible')
-		.name('show directional light');
-
-	directionalTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			"The arrow direction is computed **once** at creation and never\nupdated. If you move the directional light, the arrow stays where it\nwas. For a dynamic arrow, you'd need to recreate or manually update\nit each frame.",
-		);
-
 	// // // // // // // // // // // // // // // // // // //
 	/* knotTweaks.add(knotMesh, 'visible');
 	knotTweaks.add(knotMesh, 'receiveShadow');
@@ -618,7 +678,7 @@ async function init() {
 
 	// // // // // // // // // // // // // // // // // // //
 
-	ambientTweaks
+	/* ambientTweaks
 		.add(ambientLight, 'intensity')
 		.min(0)
 		.max(5)
@@ -628,7 +688,7 @@ async function init() {
 
 	ambientTweaks
 		.add(ambientLight, 'visible')
-		.name('show ambient light');
+		.name('show ambient light'); */
 
 	// // // // // // // // // // // // // // // // // // //
 
