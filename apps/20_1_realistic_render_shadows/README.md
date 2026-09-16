@@ -1,4 +1,4 @@
-# Realistic render - Shadows
+# Realistic render - Directional light and Shadows
 
 Continuation of previous lesson where we define some settings to have more relistic render; but now we are adding realism to it by dealing with shadows related things.
 

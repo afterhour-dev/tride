@@ -116,3 +116,4 @@
 - [[19.3_env-map-other-formats-and-ai]] — 2026-09-15
 - [[19.4_ground-projected-skybox]] — 2026-09-15
 - [[19.5_real-time-environment-map]] — 2026-09-15
+- [[20.0_realistic-render-tonemapping-and-antialiasing]] — 2026-09-16
