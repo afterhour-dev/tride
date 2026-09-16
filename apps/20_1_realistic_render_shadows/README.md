@@ -26,6 +26,12 @@ Exploring settings we can use to achive realistic render by dealing with shadows
   
   - In tick function I didn't need to call upadating of any matrix and updating of any helpers; why is that?
 
+- when deciding what meshes from our model should receive shadows what should be a strategy when you create scenes; In our case all meshes that have MeshStandardMaterial will both cast and receive shadows, but I'm interested to know when we are doing travesrsing is there specific things in complex model that should only cast and not receive shadows for better look?
+
+- usinf smaller resolution for the shadowMap would result in a blurry shadow; we wull lower it to 512 x 512, this shouldn't look bad if there are enough details on the scene and it'll improve performance (Do you have something against it here? Should I use 1024 x 1024 or bigger? Would that be huge hit for performance)
+
+- Any suggestions from you to make this look even better, in terms of tweaked values. What do you think?
 
 ## Šta samo ukratko pomenuti
 
+- This shouldn't be the end in terms of shadows. I set everything up but maybe more time spend on tweaking the values in gui will produce better result in terms of light position or different kind of intensities etc. So meaybe in some next lesson I might tweak these to look better

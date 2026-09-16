@@ -120,7 +120,9 @@ async function init() {
 	environmentMapAbandonedGarageTexture.mapping =
 		THREE.EquirectangularReflectionMapping;
 
-	scene.environmentIntensity = 2.1; // default is 1.0
+	// EXPLAIN: I think I'll lower it a little bit to better see shadows
+	// scene.environmentIntensity = 2.1; // default is 1.0
+	scene.environmentIntensity = 1.6; // default is 1.0
 
 	// using defaults for now but you can change them with gui
 	// scene.backgroundBlurriness = 0.2; // default is 0.0
@@ -136,6 +138,8 @@ async function init() {
 	);
 
 	// EXPLAIN: flight helmet meshes need to cast the shadow
+	// but only meshes that have MeshStandardMaterial can cast shadows,
+	// so we will check for that
 	flightHelmet.scene.traverse((child) => {
 		// @ts-expect-error isMesh is a property of Object3D, but TypeScript doesn't know that child is a Mesh
 		if (child.isMesh && child.material.isMeshStandardMaterial) {
@@ -143,6 +147,10 @@ async function init() {
 			// console.log(child.material.side); // 2 = THREE.DoubleSide
 
 			child.castShadow = true;
+
+			// EXPLAIN: but this time our meshes should also receive shadows,
+			// to increase realism so we will enable that also
+			child.receiveShadow = true;
 		}
 	});
 
@@ -158,23 +166,33 @@ async function init() {
 
 	// console.log(gamingConsoleModel);
 
-	// EXPLAIN: gaming console needs to cast shadow
+	// EXPLAIN: gaming console needs to cast shadow also
+	// we could isolate this logic in separate function and use it
+	// for all models we load, but we did it here anyway
 	gamingConsoleModel.scene.traverse((child) => {
 		// @ts-expect-error isMesh is a property of Object3D, but TypeScript doesn't know that child is a Mesh
-		if (child.isMesh) {
+		if (child.isMesh && child.material.isMeshStandardMaterial) {
 			// ts-expect-error material is a property of Mesh, but TypeScript doesn't know that child is a Mesh
 			// console.log(child.material.side); // 2 = THREE.DoubleSide
 
 			// enabled shadows here
 			child.castShadow = true;
+
+			// EXPLAIN: but this time our meshes should also receive shadows,
+			// to increase realism so we will enable that also
+			child.receiveShadow = true;
 		}
 	});
 
 	gamingConsoleModel.scene.scale.setScalar(21);
 
-	gamingConsoleModel.scene.position.x = -3;
+	// EXPLAIN: we will place gaming console so shadow of the flight helmet
+	// catches the gaming console,
+	gamingConsoleModel.scene.position.x = -2.1;
 	gamingConsoleModel.scene.position.y = -2;
-	gamingConsoleModel.scene.position.z = 3.5;
+	gamingConsoleModel.scene.position.z = -4.2;
+
+	// gamingConsoleModel.scene.rotation.y = -Math.PI / 3;
 
 	scene.add(gamingConsoleModel.scene);
 	// ------------------------------------------------------
@@ -213,7 +231,8 @@ async function init() {
 	// we can also add position to the gui which we did
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
 	// directionalLight.intensity = 0.4 * Math.PI;
-	directionalLight.intensity = 1.895;
+	// directionalLight.intensity = 1.895;
+	directionalLight.intensity = Math.PI;
 	directionalLight.position.set(6, 10, 6);
 	// directionalLight.visible = false;
 
@@ -242,7 +261,9 @@ async function init() {
 	// and other shadow settings we can change with gui also
 	// directionalLight.shadow.mapSize.width = 1024;
 	// directionalLight.shadow.mapSize.height = 1024;
-	directionalLight.shadow.mapSize.setScalar(1024);
+	// EXPLAIN: to improve performance we will lower shadow map
+	// resolution
+	directionalLight.shadow.mapSize.setScalar(512);
 	// doesn't work with PCFSoftShadowMap
 	directionalLight.shadow.radius = 10;
 	// using defaults anyway
@@ -278,7 +299,9 @@ async function init() {
 	// knotMesh.visible = false;
 
 	scene.add(knotMesh); */
-
+	// EXPLAIN: untill we make better floor and walls
+	// with textures and materials, we will make a simple floor
+	// to test shadows, and we will make it bigger than the default 10x10 plane
 	const floorGeometry = new THREE.PlaneGeometry(10, 10);
 	const floorMaterial = new THREE.MeshStandardMaterial();
 	floorMaterial.roughness = 0.4;
@@ -504,6 +527,7 @@ async function init() {
 		.min(-10)
 		.max(10)
 		.onChange(() => {
+			// EXPLAIN: this kind of update we did here
 			// directionalLight.target.updateMatrixWorld();
 			directionalLight.target.updateWorldMatrix(true, false);
 			directionalLightHelper.update();
@@ -606,6 +630,7 @@ async function init() {
 		.min(0.5)
 		.step(0.001)
 		.onChange(() => {
+			// EXPLAIN: this kind of update we did here
 			directionalLight.shadow.camera.updateProjectionMatrix();
 			directionalLightShadowCameraHelper.update();
 		});
