@@ -48,7 +48,7 @@ Exploring settings we can use to achive realistic render by dealing with texture
     ```
     but it didn't work
   - I noticed more peculiar things; as I move target position of light or move positio of light, on the floor, for some reason sharp ilumination happens, and then shadows work, but when I move it to other spot all of a sudden it darkens and shadow don't work. That sweet spot I can't find for the wall at all, only when I eotate wal and it becomes horizontal it happens
-  - So after some research I found out that this could be the problem because of numerous things, shadow map resolution that is too small, but even I'm setting it back to 1024x1024 instead 512x512, it didn't work; also that this could be the problem of angle of the direction of my directional light, I tried changing that and it didn't work; near and far of the shadow camera, changing that didn't work; trying to change bias or normalBias also didn't work; Tried many things and nothing works
+  - So after some research I found out that this could be the problem because of numerous things, shadow map resolution that is too small, but even I'm setting it back to 1024x1024 instead 512x512, it didn't work; also that this could be the problem of angle of the direction of my directional light, I tried changing that and it didn't work; near and far of the shadow camera, changing that didn't work; trying to change bias or normalBias also didn't work; Tried many things, moving and rotating entire group with wall floor and models, and nothing works; So this is uresolved problem for me
 
 ## Šta samo ukratko pomenuti
 

@@ -106,7 +106,9 @@ const allGroupTweaks = gui.addFolder(
 // and I am only going to use it to remove normal map
 // from wall texture to confirm that shadows on the wall
 // don't work when normal map is there
-const textureTweaks = gui.addFolder('Textures tweaks');
+const textureTweaks = gui.addFolder(
+	"Textures tweaks (for normal map problem we didn't solve)",
+);
 
 // --------------------------------------------------------
 const sizes = {
@@ -301,7 +303,7 @@ async function init() {
 	// directionalLight.shadow.mapSize.width = 1024;
 	// directionalLight.shadow.mapSize.height = 1024;
 
-	directionalLight.shadow.mapSize.setScalar(512);
+	// directionalLight.shadow.mapSize.setScalar(512);
 	// doesn't work with PCFSoftShadowMap
 	directionalLight.shadow.radius = 10;
 	// using defaults anyway
@@ -393,14 +395,14 @@ async function init() {
 	// EXPLAIN: I had a problem where I couldn't see the
 	// shadow on the wall only when normalMap is set, so I
 	// tried to lower the Vector2 values for normalScale, from (1, 1) to
-	//  (0.2, 0.2) and it worked, so I guess the normalMap was too strong
+	//  (0.2, 0.2), and it didn't work
 	wallMaterial.normalScale = new THREE.Vector2(0.2, 0.2);
 	wallMaterial.needsUpdate = true;
 	//
 	const wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
 	wallMesh.scale.setScalar(1.5);
 	wallMesh.position.z = -6;
-	wallMesh.position.y = 3;
+	wallMesh.position.y = 4;
 
 	// EXPLAIN: don't forget that wall also needs to receive
 	// shadows
@@ -683,7 +685,7 @@ async function init() {
 		.min(0)
 		.max(0.5)
 		.step(0.001)
-		.name('directionalLight.shadow.bias');
+		.name('directionalLight.shadow.normalBias');
 
 	directionalShadowTweaks
 		.add({ a: '' }, 'a')
@@ -741,8 +743,8 @@ async function init() {
 		);
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'top')
-		.min(-10)
-		.max(10)
+		.min(-15)
+		.max(15)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.top')
 		.onChange(() => {
@@ -757,8 +759,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'right')
-		.min(-10)
-		.max(10)
+		.min(-15)
+		.max(15)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.right')
 		.onChange(() => {
@@ -769,8 +771,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'bottom')
-		.min(-10)
-		.max(10)
+		.min(-15)
+		.max(15)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.bottom')
 		.onChange(() => {
@@ -781,8 +783,8 @@ async function init() {
 		});
 	directionalShadowTweaks
 		.add(directionalLight.shadow.camera, 'left')
-		.min(-10)
-		.max(10)
+		.min(-15)
+		.max(15)
 		.step(0.001)
 		.name('directionalLight.shadow.camera.left')
 		.onChange(() => {
@@ -814,6 +816,13 @@ async function init() {
 
 	// // // // // // // // // // // // // // // //
 	// EXPLAIN: remove/addd normal map to the wall material
+
+	textureTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'remove normal map from wall material to see if shadow is visible on\n wall texture',
+		);
 	textureTweaks
 		.add(wallMaterial, 'normalMap', {
 			use_map: crackedConcretNormalTexture,
@@ -821,7 +830,8 @@ async function init() {
 		})
 		.onChange(() => {
 			wallMaterial.needsUpdate = true;
-		});
+		})
+		.name('wallMaterial.normalMap');
 
 	// // // // // // // // // // // // // // // // // // //
 	/* knotTweaks.add(knotMesh, 'visible');

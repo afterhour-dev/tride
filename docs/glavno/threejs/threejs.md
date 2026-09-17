@@ -118,3 +118,4 @@
 - [[19.5_real-time-environment-map]] — 2026-09-15
 - [[20.0_realistic-render-tonemapping-and-antialiasing]] — 2026-09-16
 - [[20.1_directional-light-and-shadows-for-realistic-render]] — 2026-09-16
+- [[20.2_realistic-render-textures-and-color-space]] — 2026-09-17
