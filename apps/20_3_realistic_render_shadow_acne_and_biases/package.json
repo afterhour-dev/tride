@@ -12,7 +12,7 @@
 	"devDependencies": {
 		"@td/lint-config": "workspace:*",
 		"@td/ts-config": "workspace:*",
-		"@types/three": "^0.185.1",
+		"@types/three": "^0.186.0",
 		"eslint": "^10.7.0",
 		"typescript": "^7.0.2",
 		"vite": "^8.1.5"
@@ -20,7 +20,7 @@
 	"dependencies": {
 		"gsap": "^3.15.0",
 		"lil-gui": "^0.21.0",
-		"three": "^0.185.1"
+		"three": "^0.186.0"
 	},
 	"keywords": [
 		"webgpu",

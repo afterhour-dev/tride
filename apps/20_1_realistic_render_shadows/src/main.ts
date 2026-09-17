@@ -1,4 +1,6 @@
-import * as THREE from 'three/webgpu';
+// using WEbGL instead of WebGPU because of the problem we
+// covered in 20.2
+import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -92,7 +94,14 @@ async function init() {
 
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
-	const renderer = new THREE.WebGPURenderer({
+	/* const renderer = new THREE.WebGPURenderer({
+		canvas,
+
+		antialias: true,
+	}); */
+	// using WEbGL instead of WebGPU because of the problem we
+	// covered in 20.2
+	const renderer = new THREE.WebGLRenderer({
 		canvas,
 
 		antialias: true,
@@ -104,7 +113,9 @@ async function init() {
 	// renderer.toneMappingExposure = 2;
 	renderer.toneMappingExposure = 3;
 
-	await renderer.init();
+	// using WEbGL instead of WebGPU because of the problem we
+	// covered in 20.2
+	// await renderer.init();
 
 	// -----------------------------------------------------
 	// 1 - Environment

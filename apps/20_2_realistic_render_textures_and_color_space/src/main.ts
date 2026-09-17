@@ -1,4 +1,6 @@
-import * as THREE from 'three/webgpu';
+// using WEbGL instead of WebGPU because of the problem we
+// covered in 20.2
+import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -96,8 +98,6 @@ const directionalShadowTweaks = gui.addFolder(
 	'Directional Light Shadow tweaks',
 );
 
-// textureTweaks.open();
-
 const allGroupTweaks = gui.addFolder(
 	'group with floor, walls, models',
 );
@@ -106,9 +106,10 @@ const allGroupTweaks = gui.addFolder(
 // and I am only going to use it to remove normal map
 // from wall texture to confirm that shadows on the wall
 // don't work when normal map is there
-const textureTweaks = gui.addFolder(
+const textureProblemTweaks = gui.addFolder(
 	"Textures tweaks (for normal map problem we didn't solve)",
 );
+textureProblemTweaks.open();
 
 // --------------------------------------------------------
 const sizes = {
@@ -123,7 +124,14 @@ async function init() {
 
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
-	const renderer = new THREE.WebGPURenderer({
+	/* const renderer = new THREE.WebGPURenderer({
+		canvas,
+
+		antialias: true,
+	}); */
+	// using WEbGL instead of WebGPU because of the problem we
+	// covered in 20.2
+	const renderer = new THREE.WebGLRenderer({
 		canvas,
 
 		antialias: true,
@@ -135,7 +143,9 @@ async function init() {
 	// renderer.toneMappingExposure = 2;
 	renderer.toneMappingExposure = 3;
 
-	await renderer.init();
+	// using WEbGL instead of WebGPU because of the problem we
+	// covered in 20.2
+	// await renderer.init();
 
 	// -----------------------------------------------------
 	// 1 - Environment
@@ -305,7 +315,7 @@ async function init() {
 
 	// directionalLight.shadow.mapSize.setScalar(512);
 	// doesn't work with PCFSoftShadowMap
-	directionalLight.shadow.radius = 10;
+	// directionalLight.shadow.radius = 10;
 	// using defaults anyway
 	directionalLight.shadow.intensity = 1; // default
 	// directionalLight.shadow.bias = 0.0002; // also default
@@ -411,16 +421,7 @@ async function init() {
 	floorAndWallGroup.add(floorMesh, wallMesh);
 
 	floorAndWallGroup.rotation.y = Math.PI / 4;
-	/* gui
-		.add(wallMesh.rotation, 'x')
-		.min(-Math.PI)
-		.max(Math.PI)
-		.step(0.001);
-	gui
-		.add(wallMesh.rotation, 'z')
-		.min(-Math.PI)
-		.max(Math.PI)
-		.step(0.001); */
+
 	//  ------------------------
 	// EXPLAIN: now it is easier to rotate all with gui
 	allGroup.add(
@@ -815,15 +816,15 @@ async function init() {
 		.name('allGroup.rotation.z');
 
 	// // // // // // // // // // // // // // // //
-	// EXPLAIN: remove/addd normal map to the wall material
+	// EXPLAIN: remove/add normal map to the wall material
 
-	textureTweaks
+	textureProblemTweaks
 		.add({ a: '' }, 'a')
 		.disable()
 		.name(
 			'remove normal map from wall material to see if shadow is visible on\n wall texture',
 		);
-	textureTweaks
+	textureProblemTweaks
 		.add(wallMaterial, 'normalMap', {
 			use_map: crackedConcretNormalTexture,
 			do_not_use: null,
@@ -832,6 +833,18 @@ async function init() {
 			wallMaterial.needsUpdate = true;
 		})
 		.name('wallMaterial.normalMap');
+	textureProblemTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'try rotating the wall full circle and chec if shadow shows up',
+		);
+	textureProblemTweaks
+		.add(wallMesh.rotation, 'x')
+		.min(-Math.PI)
+		.max(Math.PI)
+		.step(0.001)
+		.name('wallMesh.rotation.x');
 
 	// // // // // // // // // // // // // // // // // // //
 	/* knotTweaks.add(knotMesh, 'visible');

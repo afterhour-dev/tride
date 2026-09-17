@@ -1,4 +1,7 @@
-import * as THREE from 'three/webgpu';
+// import * as THREE from 'three/webgpu';
+// using WEbGL instead of WebGPU because of the problem we
+// covered in 20.2
+import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -11,8 +14,6 @@ import GUI from 'lil-gui';
 import { getRequiredElement } from './util';
 
 // for loading textures -----------------------------------------
-// EXPLAIN: we are adding our setup for texture loading next
-// to our existing setup for env map loading
 
 const hdrLoadingManager = new THREE.LoadingManager();
 const hdriLoader = new HDRLoader(hdrLoadingManager);
@@ -87,8 +88,6 @@ const toneAntAliasTweaks = gui.addFolder(
 );
 const envMapTweaks = gui.addFolder('Environment Map');
 
-// const floorTweaks = gui.addFolder('floor Mesh');
-// const knotTweaks = gui.addFolder('torus knot Mesh and Material');
 // const ambientTweaks = gui.addFolder('Ambient Light');
 // ambientTweaks.close();
 const directionalTweaks = gui.addFolder('Directional Light');
@@ -96,17 +95,11 @@ const directionalShadowTweaks = gui.addFolder(
 	'Directional Light Shadow tweaks',
 );
 
-// textureTweaks.open();
-
 const allGroupTweaks = gui.addFolder(
 	'group with floor, walls, models',
 );
 
-// EXPLAIN: created only for the problem I mentioned in readme
-// and I am only going to use it to remove normal map
-// from wall texture to confirm that shadows on the wall
-// don't work when normal map is there
-const textureTweaks = gui.addFolder(
+const textureProblemTweaks = gui.addFolder(
 	"Textures tweaks (for normal map problem we didn't solve)",
 );
 
@@ -123,7 +116,14 @@ async function init() {
 
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
-	const renderer = new THREE.WebGPURenderer({
+	/* const renderer = new THREE.WebGPURenderer({
+		canvas,
+
+		antialias: true,
+	}); */
+	// using WEbGL instead of WebGPU because of the problem we
+	// covered in 20.2
+	const renderer = new THREE.WebGLRenderer({
 		canvas,
 
 		antialias: true,
@@ -135,7 +135,9 @@ async function init() {
 	// renderer.toneMappingExposure = 2;
 	renderer.toneMappingExposure = 3;
 
-	await renderer.init();
+	// using WEbGL instead of WebGPU because of the problem we
+	// covered in 20.2
+	// await renderer.init();
 
 	// -----------------------------------------------------
 	// 1 - Environment
@@ -163,7 +165,6 @@ async function init() {
 
 	// ----------------------------------
 	// A. ---- Loading Textures
-	// EXPLAIN: I'm going to load textures here
 	const woodFloorARMTexture = await textureLoader.loadAsync(
 		'/textures/old_wooden_floor_03_1k/old_wooden_floor_03_arm_1k.jpg',
 	);
@@ -206,7 +207,6 @@ async function init() {
 	flightHelmet.scene.scale.setScalar(10);
 	flightHelmet.scene.position.y = -2;
 
-	// EXPLAIN: decided to add this through group
 	// scene.add(flightHelmet.scene);
 
 	// model I created in blender
@@ -237,7 +237,6 @@ async function init() {
 
 	// gamingConsoleModel.scene.rotation.y = -Math.PI / 3;
 
-	// EXPLAIN: decided to add this through group
 	// scene.add(gamingConsoleModel.scene);
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
@@ -251,15 +250,12 @@ async function init() {
 	// 3 -  texture stuff
 	// colorSpace, magFilter and stuff
 	//
-	// EXPLAIN: changing color space for all of our base color textures
-	// also known as diffuse or albedo
+
+	// base color texture should be annotated with
+	//  THREE.SRGBColorSpace or THREE.LinearSRGBColorSpace
 	woodFloorAlbedoTexture.colorSpace = THREE.SRGBColorSpace;
 	crackedConcretAlbedoTexture.colorSpace = THREE.SRGBColorSpace;
-
-	// EXPLAIN: base color texture should be annotated with
-	//  THREE.SRGBColorSpace or THREE.LinearSRGBColorSpace
-
-	// EXPLAIN: default is THREE.NoColorSpace
+	// default is THREE.NoColorSpace
 
 	// ------------------------------------------------------
 	// 4 - Text - font loading, TextGeometry, material, mesh
@@ -282,8 +278,7 @@ async function init() {
 	// directionalLight.intensity = 0.4 * Math.PI;
 	// directionalLight.intensity = 1.895;
 	directionalLight.intensity = 4.8;
-	// EXPLAIN: trying to fix problem with a wall I mention in Readme,
-	// by putting light closer to the floor, wall, and models
+
 	// directionalLight.position.set(6, 10, 6);
 	directionalLight.position.set(5, 6, 5);
 	// directionalLight.visible = false;
@@ -302,24 +297,22 @@ async function init() {
 
 	// directionalLight.shadow.mapSize.width = 1024;
 	// directionalLight.shadow.mapSize.height = 1024;
-
-	// directionalLight.shadow.mapSize.setScalar(512);
-	// doesn't work with PCFSoftShadowMap
-	directionalLight.shadow.radius = 10;
+	directionalLight.shadow.mapSize.setScalar(512);
+	// shadow.radius doesn't work with PCFSoftShadowMap
+	// directionalLight.shadow.radius = 10;
 	// using defaults anyway
 	directionalLight.shadow.intensity = 1; // default
 	// directionalLight.shadow.bias = 0.0002; // also default
 
-	// EXPLAIN: trying to fix the problem of wall texture not getting the
-	// shadow but it didn't work (tweaking normalBias and bias)
+	// tweaking normalBias and bias
 	directionalLight.shadow.bias = -0.0005;
+	// directionalLight.shadow.bias = -0.001;
 	directionalLight.shadow.normalBias = 0.03;
+	// directionalLight.shadow.normalBias = 0.01;
 
 	// directionalLight.shadow.camera.near = 1;
 	directionalLight.shadow.camera.near = 2;
 	// directionalLight.shadow.camera.far = 15;
-	// EXPLAIN: trying to fix the problem of shadow not visible on wall texture
-	// by lowering far and increasing top,left,right,bottom
 	// directionalLight.shadow.camera.far = 25;
 	directionalLight.shadow.camera.far = 20;
 	// directionalLight.shadow.camera.top = 7;
@@ -351,17 +344,16 @@ async function init() {
 
 	scene.add(knotMesh); */
 
-	// EXPLAIN: decided to add floor and wall to the group; to see some
-	// stuff (effect) if I tried to rotate them
 	const floorAndWallGroup = new THREE.Group();
 
-	// EXPLAIN: also decided to add previous group to this group
-	// together with models t ose what happens as I rotate those too
 	const allGroup = new THREE.Group();
 
+	// instead of PlaneGeometry, let's try
+	// box in order to fix the shadow problem
 	const floorGeometry = new THREE.PlaneGeometry(8, 8);
+	// const floorGeometry = new THREE.BoxGeometry(8, 8, 0.2);
+	// floorGeometry.setAttribute('uv2', floorGeometry.attributes.uv);
 	const floorMaterial = new THREE.MeshStandardMaterial();
-	// EXPLAIN: setting floor textures
 	floorMaterial.map = woodFloorAlbedoTexture;
 	floorMaterial.normalMap = woodFloorNormalTexture;
 	floorMaterial.aoMap = woodFloorARMTexture;
@@ -381,10 +373,17 @@ async function init() {
 	floorMesh.receiveShadow = true;
 	// floorMesh.visible = false;
 
+	// instead of PlaneGeometry, let's try
+	// box in order to fix the shadow problem
 	const wallGeometry = new THREE.PlaneGeometry(8, 8);
+	// const wallGeometry = new THREE.BoxGeometry(8, 8, 0.3);
+	// wallGeometry.setAttribute('uv2', wallGeometry.attributes.uv);
+
 	const wallMaterial = new THREE.MeshStandardMaterial();
-	// EXPLAIN: setting wall textures
+	// wallMaterial.shadowSide = THREE.FrontSide;
 	wallMaterial.map = crackedConcretAlbedoTexture;
+	// ignore this flipping, I thought it woul help but it is already set up
+	// crackedConcretNormalTexture.flipY = true;
 	wallMaterial.normalMap = crackedConcretNormalTexture;
 	wallMaterial.aoMap = crackedConcretARMTexture;
 	wallMaterial.roughnessMap = crackedConcretARMTexture;
@@ -392,37 +391,24 @@ async function init() {
 	// wallMaterial.roughness = 0.4;
 	// wallMaterial.metalness = 0.3;
 	// wallMaterial.color = new THREE.Color('#928192');
-	// EXPLAIN: I had a problem where I couldn't see the
+	// I had a problem where I couldn't see the
 	// shadow on the wall only when normalMap is set, so I
 	// tried to lower the Vector2 values for normalScale, from (1, 1) to
 	//  (0.2, 0.2), and it didn't work
-	wallMaterial.normalScale = new THREE.Vector2(0.2, 0.2);
-	wallMaterial.needsUpdate = true;
+	// wallMaterial.normalScale = new THREE.Vector2(0.2, 0.2);
 	//
 	const wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
 	wallMesh.scale.setScalar(1.5);
 	wallMesh.position.z = -6;
 	wallMesh.position.y = 4;
 
-	// EXPLAIN: don't forget that wall also needs to receive
-	// shadows
 	wallMesh.receiveShadow = true;
 
 	floorAndWallGroup.add(floorMesh, wallMesh);
 
 	floorAndWallGroup.rotation.y = Math.PI / 4;
-	/* gui
-		.add(wallMesh.rotation, 'x')
-		.min(-Math.PI)
-		.max(Math.PI)
-		.step(0.001);
-	gui
-		.add(wallMesh.rotation, 'z')
-		.min(-Math.PI)
-		.max(Math.PI)
-		.step(0.001); */
-	//  ------------------------
-	// EXPLAIN: now it is easier to rotate all with gui
+
+	//
 	allGroup.add(
 		floorAndWallGroup,
 		gamingConsoleModel.scene,
@@ -613,9 +599,7 @@ async function init() {
 		.onChange(() => {
 			directionalLight.target.updateWorldMatrix(true, false);
 			directionalLightHelper.update();
-			// EXPLAIN: notiched that shadow camera helper isn't following
-			// this movement so I updated it here and in other
-			// gui on change related to movement of target
+
 			directionalLightShadowCameraHelper.update();
 		});
 	directionalTweaks
@@ -678,8 +662,7 @@ async function init() {
 		.max(0.001)
 		.step(0.00001)
 		.name('directionalLight.shadow.bias');
-	// EXPLAIN: tweaking normal bias in order to fix that problem
-	// about shadow not visible on wall texture
+
 	directionalShadowTweaks
 		.add(directionalLight.shadow, 'normalBias')
 		.min(0)
@@ -688,25 +671,33 @@ async function init() {
 		.name('directionalLight.shadow.normalBias');
 
 	directionalShadowTweaks
-		.add({ a: '' }, 'a')
-		.disable()
-		.name(
-			'keep width and height for mapSize the same --------------------------------',
-		);
-	const shadowMapSizes = {
-		128: 128,
-		256: 256,
-		512: 512,
-		1024: 1024,
-		2048: 2048,
-	};
-	directionalShadowTweaks
-		.add(directionalLight.shadow.mapSize, 'width', shadowMapSizes)
-		.name('directionalLight.shadow.mapSize.width');
+		.add(
+			directionalLight.shadow.mapSize,
+			'width',
+			[128, 256, 512, 1024, 2048, 4096],
+		)
+		.onChange(() => {
+			directionalLight.shadow.mapSize.height =
+				directionalLight.shadow.mapSize.width;
+			directionalLight.shadow.map?.dispose();
+			directionalLight.shadow.map = null; // forces regeneration at new size
+		})
+		.name('directionalLight.shadow.mapSize.width/height');
+
+	/* const shadowMapSizes = {
+			128: 128,
+			256: 256,
+			512: 512,
+			1024: 1024,
+			2048: 2048,
+		};
+		directionalShadowTweaks
+			.add(directionalLight.shadow.mapSize, 'width', shadowMapSizes)
+			.name('directionalLight.shadow.mapSize.width');
 
 	directionalShadowTweaks
 		.add(directionalLight.shadow.mapSize, 'height', shadowMapSizes)
-		.name('directionalLight.shadow.mapSize.height');
+		.name('directionalLight.shadow.mapSize.height'); */
 
 	directionalShadowTweaks
 		.add({ a: '' }, 'a')
@@ -750,11 +741,7 @@ async function init() {
 		.onChange(() => {
 			directionalLight.shadow.camera.updateProjectionMatrix();
 			directionalLightShadowCameraHelper.update();
-			// EXPLAIN: I'm updating light helper here also
-			// am I making mistake for doing it; Why?
-			// Because line representing the directional light that came
-			// from helper gets divided by central line of the
-			// shadow camera helper
+
 			directionalLightHelper.update();
 		});
 	directionalShadowTweaks
@@ -794,7 +781,6 @@ async function init() {
 			directionalLightHelper.update();
 		});
 	// // // // // // // // // // // // // // // //
-	// EXPLAIN: tweaking group
 	allGroupTweaks
 		.add(allGroup.rotation, 'x')
 		.min(-Math.PI)
@@ -815,15 +801,14 @@ async function init() {
 		.name('allGroup.rotation.z');
 
 	// // // // // // // // // // // // // // // //
-	// EXPLAIN: remove/addd normal map to the wall material
 
-	textureTweaks
+	textureProblemTweaks
 		.add({ a: '' }, 'a')
 		.disable()
 		.name(
 			'remove normal map from wall material to see if shadow is visible on\n wall texture',
 		);
-	textureTweaks
+	textureProblemTweaks
 		.add(wallMaterial, 'normalMap', {
 			use_map: crackedConcretNormalTexture,
 			do_not_use: null,
@@ -832,6 +817,19 @@ async function init() {
 			wallMaterial.needsUpdate = true;
 		})
 		.name('wallMaterial.normalMap');
+	textureProblemTweaks
+		.add({ a: '' }, 'a')
+		.disable()
+		.name(
+			'try rotating the wall full circle and chec if shadow shows up',
+		);
+	textureProblemTweaks
+		.add(wallMesh.rotation, 'x')
+		.min(-Math.PI)
+		.max(Math.PI)
+		.step(0.001)
+		.step(0.001)
+		.name('wallMesh.rotation.x');
 
 	// // // // // // // // // // // // // // // // // // //
 	/* knotTweaks.add(knotMesh, 'visible');
