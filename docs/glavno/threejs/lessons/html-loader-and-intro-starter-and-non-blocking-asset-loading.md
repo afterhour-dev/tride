@@ -1,10 +1,15 @@
 ---
-title: 21.0 html-loader-and-intro-starter-and-non-blocking-asset-loading
+title: html-loader-and-intro-starter-and-non-blocking-asset-loading
 topic: threejs
 date: 2026-09-18
-tags: [webgpu, model, loading, bug, normalMap]
+tags:
+  - webgpu
+  - model
+  - loading
+  - bug
+  - normalMap
 difficulty: beginner
-app_path: apps/21_0_html_loader_and_intro_starter
+app_path: apps/html_loader_and_intro_starter_later
 ---
 
 ## Concept
