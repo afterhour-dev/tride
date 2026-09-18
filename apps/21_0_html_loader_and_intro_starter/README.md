@@ -21,12 +21,3 @@ Napravljeno kao starter, dobar za ucenje kako handle-obvati loader i bolji intro
 ## Šta treba objasniti u detalje
 
 - Related to problem I presented do you think I made some errors, or I am using something incorrectly so I'm having mentioned bug?
-
-## Šta samo ukratko pomenuti
-
-- {koncept koji nije fokus lekcije, ali se pojavljuje u kodu}
-
-## Gotchas / Stvari koje lako zeznem
-
-- {stvar 1 — šta je zbunjujuće ili lako pogrešiti}
-- {stvar 2}
