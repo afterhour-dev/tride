@@ -6,8 +6,9 @@ Let me restate problem again:
   - without normalMap everything works, shadows works
   - adding normal map on the wall makes wrong side of the wall to be lit (I used Box instead of plane to show this)
   - floor is lit on the correct side and there is shadow, but shadow is also on the back of the wall and it is stripy
-  - setting bias doesn't have any effect
-  - setting normalBias has effect but it is strange
+  - setting bias doesn't have any effect (I correct myself I works but I don't know how well)
+  - setting normalBias has effect but it is strange (I correct myself I works but I don't know how well)
+  - rotating wall to be horizontal is only way for shadow to show on lit side
 
 What else we have in the scene:
   - Flight Helmet model (2.0) I downloaded from: <https://github.com/KhronosGroup/glTF-Sample-Models>
@@ -19,8 +20,7 @@ Napravljeno kao starter, dobar za ucenje kako handle-obvati loader i bolji intro
 
 ## Šta treba objasniti u detalje
 
-- {koncept 1 — zašto je bitan}
-- {koncept 2 — zašto je bitan}
+- Related to problem I presented do you think I made some errors, or I am using something incorrectly so I'm having mentioned error
 
 ## Šta samo ukratko pomenuti
 
