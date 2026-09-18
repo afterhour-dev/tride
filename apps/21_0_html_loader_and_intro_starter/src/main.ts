@@ -131,6 +131,9 @@ async function init() {
 		antialias: true,
 	});
 
+	// EXPLAIN: somwhere I found out that tone mapping settup neds to happen before
+	// calling awit renderer.init(); so I out it like this; is this
+	// true? And are there other settings that needs to go before calling init
 	// renderer.toneMapping = THREE.NoToneMapping;// default
 	renderer.toneMapping = THREE.ReinhardToneMapping;
 
@@ -148,16 +151,20 @@ async function init() {
 			'/textures/environmentMaps/abandoned_garage/2k.hdr',
 		); */
 
-	const environmentMapAbandonedGarageTexture = await cubeTextureLoader
-		.setPath('/textures/environmentMaps/abandoned_garage/')
-		.loadAsync([
-			'px.png',
-			'nx.png',
-			'py.png',
-			'ny.png',
-			'pz.png',
-			'nz.png',
-		]);
+	// EXPLAIN: loading this cube texture is blocking eather way
+	// so I don't need await and loadAsync
+	const environmentMapAbandonedGarageTexture =
+		/* await */ cubeTextureLoader
+			.setPath('/textures/environmentMaps/abandoned_garage/')
+			// .loadAsync([
+			.load([
+				'px.png',
+				'nx.png',
+				'py.png',
+				'ny.png',
+				'pz.png',
+				'nz.png',
+			]);
 
 	scene.environment = environmentMapAbandonedGarageTexture;
 	scene.background = environmentMapAbandonedGarageTexture;
@@ -177,55 +184,48 @@ async function init() {
 
 	// ----------------------------------
 	// A. ---- Loading Textures
-	const woodFloorARMTexture = await textureLoader.loadAsync(
+	// EXPLAIN: Doing await and loadAsync is blocking, but load
+	// is blocking anyway so I don't need await loadAsync call,
+	// I'll use just load
+	// const woodFloorARMTexture = await textureLoader.loadAsync(
+	// 	'/textures/old_wooden_floor_03_1k/old_wooden_floor_03_arm_1k.jpg',
+	// );
+	// const woodFloorAlbedoTexture = await textureLoader.loadAsync(
+	// 	'/textures/old_wooden_floor_03_1k/old_wooden_floor_03_diff_1k.jpg',
+	// );
+	// const woodFloorNormalTexture = await textureLoader.loadAsync(
+	// 	'/textures/old_wooden_floor_03_1k/old_wooden_floor_03_nor_gl_1k.png',
+	// );
+	// const crackedConcretARMTexture = await textureLoader.loadAsync(
+	// 	'/textures/cracked_concrete_wall_1k/cracked_concrete_wall_arm_1k.jpg',
+	// );
+	// const crackedConcretAlbedoTexture = await textureLoader.loadAsync(
+	// 	'/textures/cracked_concrete_wall_1k/cracked_concrete_wall_diff_1k.jpg',
+	// );
+	// const crackedConcretNormalTexture = await textureLoader.loadAsync(
+	// 	'/textures/cracked_concrete_wall_1k/cracked_concrete_wall_nor_gl_1k.png',
+	// );
+	const woodFloorARMTexture = textureLoader.load(
 		'/textures/old_wooden_floor_03_1k/old_wooden_floor_03_arm_1k.jpg',
 	);
-	const woodFloorAlbedoTexture = await textureLoader.loadAsync(
+	const woodFloorAlbedoTexture = textureLoader.load(
 		'/textures/old_wooden_floor_03_1k/old_wooden_floor_03_diff_1k.jpg',
 	);
-	const woodFloorNormalTexture = await textureLoader.loadAsync(
+	const woodFloorNormalTexture = textureLoader.load(
 		'/textures/old_wooden_floor_03_1k/old_wooden_floor_03_nor_gl_1k.png',
 	);
-	const crackedConcretARMTexture = await textureLoader.loadAsync(
+	const crackedConcretARMTexture = textureLoader.load(
 		'/textures/cracked_concrete_wall_1k/cracked_concrete_wall_arm_1k.jpg',
 	);
-	const crackedConcretAlbedoTexture = await textureLoader.loadAsync(
+	const crackedConcretAlbedoTexture = textureLoader.load(
 		'/textures/cracked_concrete_wall_1k/cracked_concrete_wall_diff_1k.jpg',
 	);
-	const crackedConcretNormalTexture = await textureLoader.loadAsync(
+	const crackedConcretNormalTexture = textureLoader.load(
 		'/textures/cracked_concrete_wall_1k/cracked_concrete_wall_nor_gl_1k.png',
 	);
 
 	// ----------------------------------
-	// B. ---- Loading Models
 
-	// complex model
-	const flightHelmet = await gltfLoader.loadAsync(
-		'/models/FlightHelmet/glTF/FlightHelmet.gltf',
-	);
-	modelSetup(flightHelmet.scene);
-
-	flightHelmet.scene.scale.setScalar(10);
-	flightHelmet.scene.position.y = -1.85;
-
-	// scene.add(flightHelmet.scene);
-
-	// model I created in blender
-	const gamingConsoleModel = await gltfLoader.loadAsync(
-		'/models/1_game_console/console-for-export.gltf',
-	);
-	modelSetup(gamingConsoleModel.scene);
-	// console.log(gamingConsoleModel);
-
-	gamingConsoleModel.scene.scale.setScalar(21);
-
-	gamingConsoleModel.scene.position.x = -2;
-	gamingConsoleModel.scene.position.y = -1.85;
-	gamingConsoleModel.scene.position.z = -3.4;
-
-	// gamingConsoleModel.scene.rotation.y = -Math.PI / 3;
-
-	// scene.add(gamingConsoleModel.scene);
 	// ------------------------------------------------------
 	// 2 - Shadows stuff globaly related
 
@@ -384,12 +384,77 @@ async function init() {
 
 	floorAndWallGroup.rotation.y = Math.PI / 4;
 
-	//
-	allGroup.add(
-		floorAndWallGroup,
-		gamingConsoleModel.scene,
-		flightHelmet.scene,
+	allGroup.add(floorAndWallGroup);
+
+	// ------------------------------------------------------------
+	// B. ---- Loading Models
+
+	// complex model
+
+	// EXPLAIN: here it is important not to await loading of model
+	// so I am not using loadAsync, because result of loading with
+	// load isn't a model, model is available inside callback
+	// const flightHelmet = await gltfLoader.loadAsync(
+	// 	'/models/FlightHelmet/glTF/FlightHelmet.gltf',
+	// );
+	// modelSetup(flightHelmet.scene);
+
+	// flightHelmet.scene.scale.setScalar(10);
+	// flightHelmet.scene.position.y = -1.85;
+
+	gltfLoader.load(
+		'/models/FlightHelmet/glTF/FlightHelmet.gltf',
+		(flightHelmet) => {
+			modelSetup(flightHelmet.scene);
+			flightHelmet.scene.scale.setScalar(10);
+			flightHelmet.scene.position.y = -1.85;
+
+			allGroup.add(flightHelmet.scene);
+		},
 	);
+
+	// scene.add(flightHelmet.scene);
+
+	// model I created in blender
+
+	// EXPLAIN: here it is important not to await loading of model
+	// so I am not using loadAsync, because result of loading with
+	// load isn't a model, model is available inside callback
+	// const gamingConsoleModel = await gltfLoader.loadAsync(
+	// 	'/models/1_game_console/console-for-export.gltf',
+	// );
+	// modelSetup(gamingConsoleModel.scene);
+	// // console.log(gamingConsoleModel);
+
+	// gamingConsoleModel.scene.scale.setScalar(21);
+
+	// gamingConsoleModel.scene.position.x = -2;
+	// gamingConsoleModel.scene.position.y = -1.85;
+	// gamingConsoleModel.scene.position.z = -3.4;
+	gltfLoader.load(
+		'/models/1_game_console/console-for-export.gltf',
+		(gamingConsoleModel) => {
+			modelSetup(gamingConsoleModel.scene);
+			// console.log(gamingConsoleModel);
+
+			gamingConsoleModel.scene.scale.setScalar(21);
+
+			gamingConsoleModel.scene.position.x = -2;
+			gamingConsoleModel.scene.position.y = -1.85;
+			gamingConsoleModel.scene.position.z = -3.4;
+
+			allGroup.add(gamingConsoleModel.scene);
+
+			// gamingConsoleModel.scene.rotation.y = -Math.PI / 3;
+		},
+	);
+
+	// //
+	// allGroup.add(
+	// 	floorAndWallGroup,
+	// 	gamingConsoleModel.scene,
+	// 	flightHelmet.scene,
+	// );
 
 	scene.add(allGroup);
 
@@ -428,7 +493,7 @@ async function init() {
 		directionalLight,
 		0.4,
 	);
-	// directionalLightHelper.visible = false;
+	directionalLightHelper.visible = false;
 
 	scene.add(directionalLightHelper);
 
@@ -436,7 +501,7 @@ async function init() {
 	const directionalLightShadowCameraHelper = new THREE.CameraHelper(
 		directionalLight.shadow.camera,
 	);
-	// directionalLightShadowCameraHelper.visible = false;
+	directionalLightShadowCameraHelper.visible = false;
 
 	scene.add(directionalLightShadowCameraHelper);
 
