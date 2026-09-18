@@ -120,3 +120,4 @@
 - [[20.1_directional-light-and-shadows-for-realistic-render]] — 2026-09-16
 - [[20.2_realistic-render-textures-and-color-space]] — 2026-09-17
 - [[20.3_shadow-acne-and-biases-and-where-to-go-further]] — 2026-09-17
+- [[21.0_html-loader-and-intro-starter-and-non-blocking-asset-loading]] — 2026-09-18
