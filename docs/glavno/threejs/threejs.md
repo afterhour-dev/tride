@@ -6,6 +6,8 @@
 
 [[0.0.1 Webgpu dev setup]]
 
+[[html-loader-and-intro-starter-and-non-blocking-asset-loading]] — 2026-09-18
+
 - [[0.0_vite-starter]] — 2026-07-25
 - [[0.1_vite-webgpu-starter]]  — 2026-07-26
 - [[1.0_starter]]  — 2026-07-26
@@ -120,4 +122,4 @@
 - [[20.1_directional-light-and-shadows-for-realistic-render]] — 2026-09-16
 - [[20.2_realistic-render-textures-and-color-space]] — 2026-09-17
 - [[20.3_shadow-acne-and-biases-and-where-to-go-further]] — 2026-09-17
-- [[html-loader-and-intro-starter-and-non-blocking-asset-loading]] — 2026-09-18
+
