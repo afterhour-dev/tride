@@ -1,20 +1,21 @@
 # Shader Language - Intro
 
-<!-- initialized with:
-
-`npm create vite@latest` -->
-
-> Kratak opis šta ova aplikacija radi, u jednoj-dve rečenice.
+We are exploring GLSL here for the first time.
 
 ## Namera / Intent
 
-{Zašto je ovaj app napravljen — koji koncept se vežba, šta je cilj lekcije.
-Ovo je važan deo za docmaker skill — koristi se da razume kontekst.}
+Getting familiar with GLSL.
 
 ## Šta treba objasniti u detalje
 
-- {koncept 1 — zašto je bitan}
-- {koncept 2 — zašto je bitan}
+- What is GLSL, OpenGL Shading language?
+  - Imperative
+  - C style
+  - strongly typed
+
+
+
+
 
 ## Šta samo ukratko pomenuti
 
