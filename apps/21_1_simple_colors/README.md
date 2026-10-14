@@ -1,44 +1,39 @@
 # Simple colors
 
-Learning about fragment shader.
+Learning some basics about color and fragment shader.
 
 ## Namera / Intent
 
-Learning basics about fragment shader.
+Learning basics about color and fragment shader.
 
 ## Šta treba objasniti u detalje
 
-- {koncept 1 — zašto je bitan}
-- {koncept 2 — zašto je bitan}
+- How colors is represented in GLSL?
 
-## Šta samo ukratko pomenuti
+- Common way in CSS, Photoshop, etc is ether:
+  - HEX  ->    `0xFF0FF`
+  - RGB  ->    `rgb(255,0,255)`
 
-- {koncept koji nije fokus lekcije, ali se pojavljuje u kodu}
+- But in shader is different, GLSL typically deals with colorss in the range between 0.0 and 1.0; so in floating point nubers betwen 0.0 and 1.0
 
-## Gotchas / Stvari koje lako zeznem
+- Red (0xff0000 or rgb(255,0,0)) in GLSL is:
+  - `vec3(1.0,0.0,0.0)`
 
-- {stvar 1 — šta je zbunjujuće ili lako pogrešiti}
-- {stvar 2}
+- So this is the concersion:
+  - glslColor = rgbColor / 255.0
 
-## Za revisit (vratiti se kasnije)
+- some examples:
+  - 0x800000
+    - rgb(128,0,0)
+    - vec3(0.501,0.0,0.0)
+  - 0xFF8000
+    - rgb(255,128,0)
+      - vec3(1.0,0.501,0.0)
 
-- {stvar koju treba dodatno uvežbati ili produbiti}
+- vec4
+  - red green blue, alpha
+  - alpha is useful for blending later
+    - not used currently in our example
 
-## Concerns / Nisam siguran za
+- don't forget to document shader examples from shader files; you can skip documenting code from `main.ts` since it will be the same for this and a lot of examples in the future so I don't need that code documented; we need to be concentrated on shaders code 
 
-- {bilo šta nejasno ili sumnjivo u pristupu}
-
-## Korisni linkovi
-
-- {url} — {kratak razlog zašto je koristan}
-
-## Napomena o komentarima u kodu
-
-Komentari u `src/` su deo dokumentacije procesa — koristi ih da označiš:
-- `// EXPLAIN:` — nešto što docmaker treba detaljno da objasni
-- `// GOTCHA:` — lako mesto za grešku
-- `// REVISIT:` — nešto što treba ponovo vežbati/produbiti
-- `// TODO:` / `// NOTE:` — ostale napomene
-
----
-*Ovaj README čita docmaker skill radi konteksta pre generisanja lekcije — popuni sekcije koje su ti relevantne, ostale slobodno izbriši ili ostavi prazne.*
