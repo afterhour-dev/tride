@@ -67,3 +67,5 @@ switch(i){
   break;
   
 }
+
+// EXPLAIN: are ther other types of loops like for in
