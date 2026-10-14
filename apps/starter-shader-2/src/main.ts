@@ -5,9 +5,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
 
-// EXPLAIN: loading shaders, the vite plugin way
-import vsh from './shaders/vertex-shader.glsl';
-import fsh from './shaders/fragment-shader.glsl';
+import vsh from './shaders/shader.vert';
+import fsh from './shaders/shader.frag';
 
 import { getRequiredElement } from './util';
 
@@ -47,8 +46,7 @@ async function init() {
 	// ------------------------------------------------------
 	// 0.1 - Renderer (first part)
 	// const renderer = new THREE.WebGPURenderer({ canvas });
-	// EXPLAIN: using WebGL because I want to learn glsl
-	// before trying TSL
+
 	const renderer = new THREE.WebGLRenderer({ canvas });
 	// await renderer.init();
 	// const adapter = await navigator.gpu?.requestAdapter();
@@ -101,9 +99,6 @@ async function init() {
 	// 	100,
 	// );
 
-	// EXPLAIN: using Orthographic camera, and trying out
-	// some values because I forgot how orthographic
-	// camera works
 	const camera = new THREE.OrthographicCamera(
 		// 0,
 		// 1,
@@ -261,7 +256,7 @@ async function init() {
 		sizes.width = window.innerWidth;
 		sizes.height = window.innerHeight;
 
-		// EXPLAIN: does not exist on Orthographic camera
+		//
 		// camera.aspect = sizes.width / sizes.height;
 
 		camera.updateProjectionMatrix();

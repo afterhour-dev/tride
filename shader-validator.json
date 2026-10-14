@@ -1,0 +1,6 @@
+{
+	"glsl": {
+		"dialect": "gl",
+		"version": "300 es"
+	}
+}
