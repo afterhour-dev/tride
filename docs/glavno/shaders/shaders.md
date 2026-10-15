@@ -8,3 +8,4 @@
 - [[0.1_simple-colors]] — 2026-10-14
 - [[0.2_shader-inputs-varyings-uv]] — 2026-10-15
 - [[0.3_shader-inputs-uniforms]] — 2026-10-15
+- [[0.4_shader-inputs-attributes]] — 2026-10-15
