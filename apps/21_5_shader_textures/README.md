@@ -55,3 +55,6 @@ is called `Multiplicative Blending` or also called "modulate" or "modulation" bl
   // vec4(c1x*c2.x, c1.y * c2.y, c1.z *c2.z, c1.w * c2.w)
 
   ```
+
+
+- don't forget to document and explain shader code, all examples from shader files. Doesn't matter if they are commented out or not. Just follow the info and explain and document code.
