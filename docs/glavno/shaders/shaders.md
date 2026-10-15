@@ -6,3 +6,4 @@
 
 - [[0.0_shader-language-intro]] — 2026-10-14
 - [[0.1_simple-colors]] — 2026-10-14
+- [[0.2_shader-inputs-varyings-uv]] — 2026-10-15
