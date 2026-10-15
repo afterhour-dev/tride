@@ -6,6 +6,8 @@ void main(){
   
   gl_Position=projectionMatrix*modelViewMatrix*localPosition;
   
+  // uv is attribute but here we are passing it as varying
+  // to frag shader
   vUvs=uv;
   
 }

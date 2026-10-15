@@ -77,7 +77,11 @@ async function init() {
 	const planeGreometry = new THREE.PlaneGeometry(1, 1);
 
 	const material = new THREE.ShaderMaterial({
-		uniforms: {},
+		uniforms: {
+			// EXPLAIN: setting our uniforms
+			color_1: { value: new THREE.Vector3(1, 0, 0) },
+			color_2: { value: new THREE.Vector3(0, 0, 1) },
+		},
 		vertexShader: vsh,
 		fragmentShader: fsh,
 	});

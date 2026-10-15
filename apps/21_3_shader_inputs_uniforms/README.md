@@ -15,6 +15,8 @@ We will also learn about mix function
 ## Šta treba objasniti u detalje
 
 - uniforms
+  - what are they
+    - well we will use those since we don't want to hardcode our constants
 
 - mix function
   - from what I understand mix is linear interpolation or LERP
@@ -25,4 +27,4 @@ We will also learn about mix function
       - so in esence it smootlhly interpolates between a nd b
     - and from my memory I know that we can linaerly interpolate vectors which we did in fragment shader
 
-- don't forget to document shader examples from shader files; you can skip documenting code from `main.ts` since it will be the same for current and a lot of examples in the future so I don't need that code documented every time; we need to be concentrated on shaders code. 
+- don't forget to document and explain shader code, all examples from shader files
