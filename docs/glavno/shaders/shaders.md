@@ -10,3 +10,4 @@
 - [[0.3_shader-inputs-uniforms]] — 2026-10-15
 - [[0.4_shader-inputs-attributes]] — 2026-10-15
 - [[0.5_textures-and-multiplicative-blending]] — 2026-10-15
+- [[0.6_blending-two-textures-and-alpha-problem]] — 2026-10-16
