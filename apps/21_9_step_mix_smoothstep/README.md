@@ -1,4 +1,4 @@
-# Starters - Step, Mix and Smoothstep
+# Shaders - Step, Mix and Smoothstep
 
 Exploring Mix (this is LERP, we alredy used onec in previous lessons), Step and Smoothstep.
 
