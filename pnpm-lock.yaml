@@ -2470,7 +2470,7 @@ importers:
         specifier: ^1.6.2
         version: 1.6.2(vite@8.1.5)
 
-  apps/21_10_step_mix_smoothstep_2:
+  apps/21_10_comparing_mix_and_smoothstep:
     dependencies:
       gsap:
         specifier: ^3.15.0
