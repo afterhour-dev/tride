@@ -3,6 +3,39 @@ varying vec2 vUvs;
 
 void main(){
   
+  // ---------------------------------------------------------
+  // EXPLAIN: what we did in previous lesson?
+  // I want to leave this here to show you what we di in previous lesson
+  // so far
+  /*
+  vec3 color=vec3(0.);// black
+  
+  vec3 red=vec3(1.,0.,0.);
+  vec3 blue=vec3(0.,0.,1.);
+  vec3 white=vec3(1.);
+  vec3 black=vec3(0.);
+  
+  float line=smoothstep(0.,.005,abs(vUvs.y-.5));
+  // float line=step(.005,abs(vUvs.y-.5));
+  
+  // EXPLAIN: we don't need to change anything here
+  // these are gradients for top and bottom side
+  // of the plain
+  if(vUvs.y>.5){
+    color=mix(red,blue,vUvs.x);
+  }else{
+    color=mix(red,blue,smoothstep(0.,1.,vUvs.x));
+  }
+  
+  // color=mix(white,color,line);
+  color=mix(black,color,line);
+  
+  gl_FragColor=vec4(color,1.);
+  
+  */
+  // ---------------------------------------------------------
+  // ---------------------------------------------------------
+  
   vec3 color=vec3(0.);// black
   
   vec3 red=vec3(1.,0.,0.);
