@@ -14,33 +14,44 @@ void main(){
   float value2=smoothstep(0.,1.,vUvs.x);
   //
   
-  float line=smoothstep(0.,.005,abs(vUvs.y-.5));
+  float line=smoothstep(
+    0.,
+    .005,
+    abs(vUvs.y-.5)
+  );
   // EXPLAIN: next line
   // float linearLine=smoothstep(0.,.0075,abs(vUvs.y-mix(.5,1.,vUvs.x)));
   
   // EXPLAIN: next line
-  float linearLine=smoothstep(0.,.0075,abs(vUvs.y-mix(.5,1.,value1)));
+  float linearLine=smoothstep(
+    0.,
+    .0075,
+    abs(vUvs.y-mix(.5,1.,value1))
+  );
   
   // EXPLAIN: next line
-  float smoothLine=smoothstep(0.,.0075,abs(vUvs.y-mix(0.,.5,value2)));
-  
-  if(vUvs.y>.5){
+  float smoothLine=smoothstep(
+    0.,
+    .0075,
+    abs(vUvs.y-mix(0.,.5,value2)));
     
-    color=mix(red,blue,vUvs.x);
-  }else{
+    if(vUvs.y>.5){
+      
+      color=mix(red,blue,vUvs.x);
+    }else{
+      
+      color=mix(red,blue,smoothstep(0.,1.,vUvs.x));
+    }
     
-    color=mix(red,blue,smoothstep(0.,1.,vUvs.x));
+    color=mix(white,color,line);
+    
+    // EXPLAIN: next line
+    color=mix(white,color,linearLine);
+    
+    color=mix(white,color,smoothLine);
+    
+    // EXPLAIN: just to see linear line only
+    // color=vec3(linearLine);
+    
+    gl_FragColor=vec4(color,1.);
   }
-  
-  color=mix(white,color,line);
-  
-  // EXPLAIN: next line
-  color=mix(white,color,linearLine);
-  
-  color=mix(white,color,smoothLine);
-  
-  // EXPLAIN: just to see linear line only
-  // color=vec3(linearLine);
-  
-  gl_FragColor=vec4(color,1.);
-}
