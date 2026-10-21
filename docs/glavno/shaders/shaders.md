@@ -14,5 +14,3 @@
 - [[0.7_texture-coordinates-addressing-modes]] — 2026-10-16
 - [[0.8_filtering-and-mipmapping]] — 2026-10-19
 - [[0.9_step-mix-smoothstep]] — 2026-10-20
-- [[0.10_step-mix-smoothstep-2]] — 2026-10-20
-- [[0.11_drawing_mix_and_smoothstep]] — 2026-10-20

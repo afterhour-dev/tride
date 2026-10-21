@@ -25,16 +25,15 @@ Maybe we would understand everything better if we draw curves represented by jus
   - line for interpolation with smoothstep in lower part of plain
     - as you know this line is curvy
       - which means line is for certain amount of values very near x axis, maning y isn't chaning for certain amount of values, then we have more even grow and close to the ende we also have slow change of y
+      - for smoothstep curve (since our gradient is with smoothstep is on the bottom, e want to draw it on the bottom) and range there is (0.0, 0.0) to (1.0, 0.5)
 
 - step1 --> drawing a linear line for linear intepolation
+- step2 --> drawing a smooth line for smoothstep intepolation
 
-- we need to introduce linearline for top part, and we are making it fater so it can be seen better
-
-- think what mix does
+- thinking what mix does, and you can explain this better
   - when things are black the first parameter gets returned
   - when things are white the second parameter gets returned
   - whaen things are gray, you get the mix
-
 
 - examine and explain the lines we got
 

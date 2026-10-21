@@ -1,4 +1,4 @@
-# Shaders - Comparing Mix and Smoothstep
+# Shaders - Drawing Mix and Smoothstep
 
 Exploring mix, smoothstep with a little bit more imerssed example.
 
