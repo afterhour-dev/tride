@@ -24,6 +24,4 @@ Learning mentioned function
 
 - what we did is we reused code from previous lesson and we tried using some of these mentioned functions in our code
 
-## Šta samo ukratko pomenuti
-
-- {koncept koji nije fokus lekcije, ali se pojavljuje u kodu}
+- don't forget to document and explain shader code, all examples from shader files. Doesn't matter if they are commented out or not. Just follow the info and explain and document code.
