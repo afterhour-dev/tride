@@ -19,3 +19,4 @@
 - [[0.12_min-max-clamp-saturate]] — 2026-10-22
 - [[0.13_common-math-functions]] — 2026-10-22
 - [[0.14_grid-and-cell]] — 2026-10-22
+- [[0.15_tweaking-cells-and-centering-grid]] — 2026-10-22
