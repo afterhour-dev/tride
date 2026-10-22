@@ -21,3 +21,4 @@
 - [[0.14_grid-and-cell]] — 2026-10-22
 - [[0.15_tweaking-cells-and-centering-grid]] — 2026-10-22
 - [[0.16_what_is_center]] — 2026-10-22
+- [[0.17_drawing-axis-and-other-functions]] — 2026-10-22
