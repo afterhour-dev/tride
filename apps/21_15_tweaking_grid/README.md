@@ -18,3 +18,5 @@ To learn how to tweak grid.
   - make sure that you update resolution uniform on resize of the window
 
 - our grid or our cells aren't center to the screen, we fix this by finding center which is uv coordinates being subtracted by 0.5
+
+- I'm stopping this lesson here, and in next lesson we will examine what we did maybe more and try more things
