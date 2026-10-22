@@ -21,8 +21,7 @@ we want to learn how to create grid, and manipulate with cells.
 - put mentioned fract in separate variable, because if we decide to modify it we ca ndo from single place
 
 - next we want to manipulate every single cell
-  - in order to have grdient in cell where certain tickness of cell will have one color and other side close to center will have different color. Well how to calculate that tickness? Let me show you from the image
-![distance](/apps/21_14_grid_and_cell/doc_images/ticknessfract.png)
+  - in order to have grdient in cell where certain tickness of cell will have one color and other side close to center will have different color. Well how to calculate that tickness?
   - when you look at the image it makes sense `d = 0.5 - max(d1, d2)`
 
 - then ve use mentioned distance as rgb
