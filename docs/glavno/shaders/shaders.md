@@ -23,3 +23,4 @@
 - [[0.16_what_is_center]] — 2026-10-22
 - [[0.17_drawing-axis-and-other-functions]] — 2026-10-22
 - [[0.18_inverse-lerp-and-remap]] — 2026-10-23
+- [[0.19_derivative-functions]] — 2026-10-23

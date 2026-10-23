@@ -1,5 +1,5 @@
 {
-	"name": "@td/inverse-lerp-and-remap",
+	"name": "@td/shaders-derivatives",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
