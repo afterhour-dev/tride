@@ -3,9 +3,12 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 // import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-
 import GUI from 'lil-gui';
 // import gsap from 'gsap';
+
+// EXPLAIN: next two lines
+import vertShader from './shaders/shader.vert';
+import fragShader from './shaders/shader.frag';
 
 import { getRequiredElement } from './util';
 
@@ -107,6 +110,13 @@ async function init() {
 		'/models/monkey/monkey.glb',
 	);
 
+	// EXPLAIN: since we wil ladd shader Material
+	// to the model we are going to create it here
+	const modelMaterial = new THREE.ShaderMaterial({
+		vertexShader: vertShader,
+		fragmentShader: fragShader,
+	});
+
 	// console.log(monkeyModel);
 
 	scene.add(monkeyModel.scene);
@@ -118,6 +128,10 @@ async function init() {
 		if (child.isMesh) {
 			// @ts-expect-error material is a property of Mesh, but TypeScript doesn't know that child is a Mesh
 			console.log(child.material.side); // 2 = THREE.DoubleSide
+
+			// EXPLAIN: here we can add ShaderMaterial
+			// @ts-expect-error for some reason material is yelling at me
+			child.material = modelMaterial;
 
 			// I also enabled shadows here
 			child.castShadow = true;
