@@ -1,7 +1,6 @@
 // import * as THREE from 'three/webgpu';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// EXPLAIN: provided all the loaders
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 // import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
@@ -22,8 +21,6 @@ loadingManager.onProgress = (textureFilePath: string) => {
 };
 
 // for loading models ----------------------------------------
-
-// EXPLAIN: using all the loaders we need
 
 const modelLoadingManager = new THREE.LoadingManager();
 const gltfLoader = new GLTFLoader(modelLoadingManager);
@@ -87,8 +84,8 @@ async function init() {
 	// -----------------------------------------------------
 	// 1 - Environment
 
-	const environmentMapTextureStudio = await cubeTextureLoader
-		.setPath('/textures/environmentMaps/studio/')
+	const environmentMapTextureSkys = await cubeTextureLoader
+		.setPath('/textures/environmentMaps/skys/')
 		.loadAsync([
 			'px.png',
 			'nx.png',
@@ -98,15 +95,13 @@ async function init() {
 			'nz.png',
 		]);
 
-	scene.environment = environmentMapTextureStudio;
+	scene.environment = environmentMapTextureSkys;
 
-	scene.background = environmentMapTextureStudio;
+	scene.background = environmentMapTextureSkys;
 	// ------------------------------------------------------
 
 	// ----------------------------------
 	// A. ---- Loading Models
-
-	// EXPLAIN: loading the model and adding it to the scene
 
 	const monkeyModel = await gltfLoader.loadAsync(
 		'/models/monkey/monkey.glb',
@@ -116,7 +111,7 @@ async function init() {
 
 	scene.add(monkeyModel.scene);
 
-	// EXPLAIN: checking if I didn't export my model correctly
+	// checking if I didn't export my model correctly
 	// and it has double face which I don't want
 	monkeyModel.scene.traverse((child) => {
 		// @ts-expect-error isMesh is a property of Object3D, but TypeScript doesn't know that child is a Mesh
@@ -124,7 +119,7 @@ async function init() {
 			// @ts-expect-error material is a property of Mesh, but TypeScript doesn't know that child is a Mesh
 			console.log(child.material.side); // 2 = THREE.DoubleSide
 
-			// EXPLAIN: I also enabled shadows here
+			// I also enabled shadows here
 			child.castShadow = true;
 		}
 	});
@@ -207,6 +202,7 @@ async function init() {
 	floorMesh.rotation.x = -Math.PI / 2;
 
 	floorMesh.receiveShadow = true;
+	floorMesh.visible = false;
 	//  ------------------------
 
 	scene.add(floorMesh);
@@ -224,7 +220,7 @@ async function init() {
 	// camera.position.y = 1;
 	// camera.position.x = 2;
 
-	camera.position.set(-1, 2, 3);
+	camera.position.set(-1, 1.5, 3);
 
 	scene.add(camera);
 
@@ -314,7 +310,7 @@ async function init() {
 	// // // // // // // // // // ---------------------------------
 
 	const envMapTextures = {
-		studio: environmentMapTextureStudio,
+		skys: environmentMapTextureSkys,
 
 		none: null,
 	};
@@ -536,6 +532,7 @@ async function init() {
 
 	// // // // // // // // // // // // // // // // // // //
 	floorTweaks.add(floorMesh, 'receiveShadow');
+	floorTweaks.add(floorMesh, 'visible');
 
 	// // // // // // // // // // // // // // // // // // //
 
