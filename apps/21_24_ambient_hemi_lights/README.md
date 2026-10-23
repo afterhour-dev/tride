@@ -9,4 +9,6 @@
   - and we have cube map both as background and environment
   - shaders aren't hooked yet
 
-- First thing we are doing is using ShaderMaterial for model and hokking up vertex and fragment shader 
+- First thing we are doing is using ShaderMaterial for model and hokking up vertex and fragment shader
+
+- first thing to do in fragment shader we can declare two vec3, one should be for the color and other one for the lighting

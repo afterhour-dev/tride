@@ -17,5 +17,8 @@ float remap(
 }
 
 void main(){
-  gl_FragColor=vec4(1.,0.,0.,1.);
+  
+  vec3 color=vec3(0.)
+  
+  gl_FragColor=vec4(color,1.);
 }
