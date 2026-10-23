@@ -11,4 +11,5 @@
 
 - First thing we are doing is using ShaderMaterial for model and hokking up vertex and fragment shader
 
-- first thing to do in fragment shader we can declare two vec3, one should be for the color and other one for the lighting
+- first thing to do in fragment shader we can declare two vec3, one should be for the base color and other one for the lighting
+- color vec3 should be hadamard product of base color and lighting 
