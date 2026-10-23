@@ -2,9 +2,11 @@
 
 Exploring more math operations. We will draw couple of them
 
+We are continuing the example 21_11_drawing_linear_mix_and_smoothstep, because it is convinient to draw other math operations,
+
 ## Namera / Intent
 
-Learnin about some more math operations and how to draw them
+Learnin about some more math operations and how to draw them.
 
 ## Šta treba objasniti u detalje
 
