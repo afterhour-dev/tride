@@ -27,3 +27,4 @@
 - [[0.20_sin-and-cos]] — 2026-10-23
 - [[0.21_grid_with_sin_or_cos]] — 2026-10-23
 - [[0.22_more-math-operations]] — 2026-10-23
+- [[0.23_swizzling_and_vector_operations]] — 2026-10-23

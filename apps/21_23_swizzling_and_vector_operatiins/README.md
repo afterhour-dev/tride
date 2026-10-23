@@ -42,3 +42,5 @@ To learn vector operations, methods and swizzling.
     - present example
 
 - why is explanations above the second vector called `normal`? Why for dot product, doesn't make sense since if it is normal it would be dot product of 0? Why that naming here by the workshop author?
+
+- the point is that you should know that glsl does offer a lot of these as built in functions for you. So your first instinct shouldn't be to go implemnt it, better check if function already is built into glsl and use it
