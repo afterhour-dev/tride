@@ -24,3 +24,4 @@
 - [[0.17_drawing-axis-and-other-functions]] — 2026-10-22
 - [[0.18_inverse-lerp-and-remap]] — 2026-10-23
 - [[0.19_derivative-functions]] — 2026-10-23
+- [[0.20_sin-and-cos]] — 2026-10-23
