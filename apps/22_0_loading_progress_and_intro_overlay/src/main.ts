@@ -1,6 +1,7 @@
 // import * as THREE from 'three';
 // using WebGPU instead of WebGL anyway even it has a bug I mentioned in readme
 import * as THREE from 'three/webgpu';
+
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -12,6 +13,13 @@ import GUI from 'lil-gui';
 
 import { getRequiredElement, modelSetup } from './util';
 
+// EXPLAIN: importing TSL stuff
+import {
+	colorNode,
+	// positionNode,
+	vertexNode,
+} from './shaders';
+
 // for loading textures -----------------------------------------
 
 // const hdrLoadingManager = new THREE.LoadingManager();
@@ -22,32 +30,32 @@ const cubeTextureLoader = new THREE.CubeTextureLoader(
 );
 
 envMapTextureLoadingManager.onProgress = (filePaths: string) => {
-	console.log('progess ', filePaths);
+	// console.log('progess ', filePaths);
 };
 envMapTextureLoadingManager.onLoad = () => {
-	console.log('environment map cube texture loaded');
+	// console.log('environment map cube texture loaded');
 };
 envMapTextureLoadingManager.onError = (e) => {
 	console.error(e);
 };
 envMapTextureLoadingManager.onStart = (filePath) => {
-	console.log('loading started ', filePath);
+	// console.log('loading started ', filePath);
 };
 
 const textureLoadingManger = new THREE.LoadingManager();
 const textureLoader = new THREE.TextureLoader(textureLoadingManger);
 
 textureLoadingManger.onProgress = (filePaths: string) => {
-	console.log('progess ', filePaths);
+	// console.log('progess ', filePaths);
 };
 textureLoadingManger.onLoad = () => {
-	console.log('texture loaded');
+	// console.log('texture loaded');
 };
 textureLoadingManger.onError = (e) => {
 	console.error(e);
 };
 textureLoadingManger.onStart = (filePath) => {
-	console.log('loading started ', filePath);
+	// console.log('loading started ', filePath);
 };
 
 //
@@ -70,7 +78,7 @@ modelLoadingManager.onError = (e) => {
 	console.error(e);
 };
 modelLoadingManager.onStart = (filePath) => {
-	console.log('loading started ', filePath);
+	// console.log('loading started ', filePath);
 };
 
 // ---------------------------------------------------------
@@ -131,7 +139,6 @@ async function init() {
 	}); */
 	const renderer = new THREE.WebGPURenderer({
 		canvas,
-
 		antialias: true,
 	});
 
@@ -311,17 +318,38 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	// EXPLAIN: I wil ladd overlay here
-	const overlayGeometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+	// EXPLAIN: I will add overlay here
+	const overlayGeometry = new THREE.PlaneGeometry(
+		// EXPLAIN: filling the clip space
+		// 1,
+		// 1.9
+		2,
+		// 1,
+		// 1.9
+		2,
+		1,
+		1,
+	);
 	// const overlayMaterial = new THREE.MeshBasicMaterial({
 	// 	color: 0xff0000,
 	// });
-	const overlayMaterial = new THREE.MeshBasicMaterial({
-		color: 0xff0000,
+
+	const overlayMaterial = new THREE.MeshBasicNodeMaterial({
+		// EXPLAIN: using wireframe to have some insight
+		// whe nsetting the size of the overlay that needs to cover
+		// entire screen, we ca ndisable wireframe after we
+		// get the right size of the overlay
+		// wireframe: true,
 	});
+	// EXPLAIN: adding shaders like this
+	overlayMaterial.vertexNode = vertexNode;
+	// overlayMaterial.positionNode = positionNode;
+	overlayMaterial.colorNode = colorNode;
+	//
+
 	const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial);
 	scene.add(overlay);
-	// -----------------------
+	//
 
 	const floorAndWallGroup = new THREE.Group();
 
