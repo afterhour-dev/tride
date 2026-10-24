@@ -23,10 +23,16 @@ void main(){
   vec3 baseColor=vec3(.5);
   vec3 lighting=vec3(0.);
   
+  // EXPLAIN: adding ambient light
+  vec3 ambient=vec3(.5);
+  
+  // EXPLAIN: and then lighting is sum of all lighting
+  // sources
+  lighting+=ambient;
+  
   // EXPLAIN: instead of this
   // vec3 color=vec3(0.);
   // we multiply baseColor anf lighting
-  
   vec3 color=baseColor*lighting;
   
   gl_FragColor=vec4(color,1.);

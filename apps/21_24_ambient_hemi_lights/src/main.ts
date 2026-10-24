@@ -99,7 +99,7 @@ async function init() {
 			'nz.png',
 		]);
 
-	scene.environment = environmentMapTextureSkys;
+	// scene.environment = environmentMapTextureSkys;
 
 	scene.background = environmentMapTextureSkys;
 	// ------------------------------------------------------
@@ -140,7 +140,7 @@ async function init() {
 	});
 
 	// monkeyModel.scene.scale.setScalar(20);
-	monkeyModel.scene.position.y = 1;
+	monkeyModel.scene.position.y = 0;
 	// ----------------------------------
 
 	// 2 - Shadows stuff globaly related
@@ -163,7 +163,7 @@ async function init() {
 	ambientLight.color = new THREE.Color(0xffffff);
 	// ambientLight.intensity = 0.3;
 	ambientLight.intensity = 2.1;
-	// ambientLight.visible = false;
+	ambientLight.visible = false;
 
 	scene.add(ambientLight);
 
@@ -172,7 +172,7 @@ async function init() {
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
 	directionalLight.intensity = 0.4 * Math.PI;
 	directionalLight.position.set(5, 5, 5);
-	// directionalLight.visible = false;
+	directionalLight.visible = false;
 
 	// ----------------------------------------------------------
 	//  5.1 - Shadow stuff related to directional light
@@ -214,6 +214,7 @@ async function init() {
 	floorMaterial.color = new THREE.Color('#928192');
 	const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 
+	floorMesh.position.y = -1;
 	floorMesh.rotation.x = -Math.PI / 2;
 
 	floorMesh.receiveShadow = true;
