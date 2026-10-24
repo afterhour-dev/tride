@@ -1,4 +1,4 @@
-# HTML loader and better intro - Starter
+# Starter - Realistic rendering
 
 Why Starter? I am using here partially changed app that we built in lesson related to realistic rendering, where there we have currently unfixable problem related to handling shadows, light, normalMap texture in case of only WebGPU (everything worked perfectly in WebGL, but not in WebGPU meaning it's not problem on our side it is problem with the library in case of WebGPU, and also I 'm using currently latest version of three.js: 0.186.0), but since we are WebGPU oriented I am using WebGPU in this starter and leaving problems visible since mentioned problems aren't affecting what we want to learn in this lesson/app (hope threejs will fix this problem in the future but now it is what it is) and also we will be using cube map instead hdri. Also I rewrite starter not to use `await loadAsync` since I don't want blocking code, I don't want loading of textures to block other things related to the scene, since for starter I want to avoid that white screen where texture or model loading blocks rendering which is the case in almost every of previous apps in this monorepo.
 
@@ -16,7 +16,7 @@ What else we have in the scene:
 
 ## Namera / Intent
 
-Napravljeno kao starter, dobar za ucenje kako handle-obvati loader i bolji intro za app.
+Napravljeno kao starter, koji moze biti odskocna daska za ucenje kako handle-obvati loader i bolji intro za app ili nesto drugo.
 
 ## Šta treba objasniti u detalje
 
