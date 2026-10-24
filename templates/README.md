@@ -1,5 +1,7 @@
 # {App Name}
 
+- don't forget to document and explain shader code, all examples from shader files. Doesn't matter if they are commented out or not. Just follow the info and explain and document code.
+
 <!-- initialized with:
 
 `npm create vite@latest` -->
