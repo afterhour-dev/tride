@@ -311,19 +311,17 @@ async function init() {
 	// -----------------------------------------------------
 	// 6 - Geometries Materials Meshes
 
-	/* const knotGeometry = new THREE.TorusKnotGeometry(1.5, 0.5, 100, 16);
-	const knotMaterial = new THREE.MeshStandardMaterial();
-	knotMaterial.color = new THREE.Color(0xaaaaaa);
-	knotMaterial.roughness = 0.1;
-	knotMaterial.metalness = 1;
-	const knotMesh = new THREE.Mesh(knotGeometry, knotMaterial);
-
-	knotMesh.position.set(8, 4);
-
-	knotMesh.castShadow = true;
-	// knotMesh.visible = false;
-
-	scene.add(knotMesh); */
+	// EXPLAIN: I wil ladd overlay here
+	const overlayGeometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+	// const overlayMaterial = new THREE.MeshBasicMaterial({
+	// 	color: 0xff0000,
+	// });
+	const overlayMaterial = new THREE.MeshBasicMaterial({
+		color: 0xff0000,
+	});
+	const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial);
+	scene.add(overlay);
+	// -----------------------
 
 	const floorAndWallGroup = new THREE.Group();
 
